@@ -47,7 +47,7 @@ export const login = (credential) => {
 
   
 
-  // need to modify
+  // need to modify based on backend API
   export const getMenus = (restId) => {
     return fetch(`/restaurant/${restId}/menu`).then((response) => {
       if (response.status < 200 || response.status >= 300) {
@@ -58,8 +58,8 @@ export const login = (credential) => {
     });
   };
   
-  export const getRestaurants = () => {
-    return fetch("/restaurants").then((response) => {
+  export const getAnnouncements = () => {
+    return fetch("/announcements").then((response) => {
       if (response.status < 200 || response.status >= 300) {
         throw Error("Fail to get restaurants");
       }

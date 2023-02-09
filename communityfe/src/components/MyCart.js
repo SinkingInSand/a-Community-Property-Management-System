@@ -1,3 +1,5 @@
+// this page is just for reference
+
 import { Button, Drawer, List, message, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { checkout, getCart } from "../utils";
@@ -54,8 +56,12 @@ const MyCart = () => {
   return (
     <>
       <Button type="primary" shape="round" onClick={onOpenDrawer}>
-        Cart
+        Post
       </Button>
+      <Button type="secondary" shape="round">
+        Logout
+      </Button>
+      {/* drawer should be the post pop up form */}
       <Drawer
         title="My Shopping Cart"
         onClose={onCloseDrawer}

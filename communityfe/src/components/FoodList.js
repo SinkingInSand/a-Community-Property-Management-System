@@ -1,3 +1,5 @@
+// this page is just for reference
+
 import { Button, Card, List, message, Select, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 import { addItemToCart, getMenus, getRestaurants } from "../utils";
