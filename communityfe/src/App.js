@@ -1,80 +1,41 @@
-// import {
-//   LaptopOutlined,
-//   NotificationOutlined,
-//   UserOutlined,
-// } from "@ant-design/icons";
-import { Breadcrumb, Button, Layout, Menu } from "antd";
-import Paragraph from "antd/lib/typography/Paragraph";
-import React from "react";
-const { Header, Content, Sider } = Layout;
-// const items1 = ["1", "2", "3"].map((key) =>
-//   key,
-//   label: `nav ${key}`,
-// }));
+import { Layout, Typography } from "antd";
+import { useState } from "react";
 
-const items = [
-  { label: "Announcement" },
-  { label: "Discussion" },
-  { label: "Chat" },
-  { label: "Maintenance" },
-  { label: "Pay" },
-  { label: "Announcement" },
-];
+import LoginForm from "./components/LoginForm";
+import MyCart from "./components/MyCart";
+import Home from "./components/Home"
+import SignupForm from "./components/SignupForm";
 
-const App = () => (
-  <Layout>
-    <Header style={{ display: "flex", justifyContent: "space-between" }}>
-      <div className="logo" />
-      <div style={{ fontSize: 16, fontWeight: 600, color: "white" }}>
-        Community Property Management
-      </div>
-      <Button type="secondary" shape="round" style={{ margin: "auto 0" }}>
-        Logout
-      </Button>
-    </Header>
-    <Layout>
-      <Sider width={200} className="site-layout-background">
-        <Menu
-          mode="inline"
-          defaultSelectedKeys={["1"]}
-          defaultOpenKeys={["sub1"]}
-          style={{
-            height: "100%",
-            borderRight: 0,
-          }}
-          items={items}
-        />
-      </Sider>
-      {/* the layout below should changed depend on authorization */}
-      <Layout
-        style={{
-          padding: "0 24px 24px",
-        }}
+const { Header, Content } = Layout;
+const { Title } = Typography;
+
+function App() {
+  // const [authed, setAuthed] = useState(false);
+  const [authed, setAuthed] = useState(true); //uncomment previous line. temp solution for testing.
+
+  return (
+    <Layout style={{ height: "100vh" }}>
+      <Header>
+        <div className="header" style={{ display: "flex", justifyContent: "space-between" }}>
+          <Title
+            level={2}
+            style={{ color: "white", lineHeight: "inherit", marginBottom: 0 }}
+          >
+            Community Management System
+          </Title>
+          <div>{authed ? <MyCart /> : <SignupForm />}</div>
+        </div>
+      </Header>
+      <Content
       >
-        <Breadcrumb
-          style={{
-            margin: "16px 0",
-          }}
-        >
-          <Breadcrumb.Item>Event</Breadcrumb.Item>
-          <Breadcrumb.Item>Alert</Breadcrumb.Item>
-          <Breadcrumb.Item>Newsletter</Breadcrumb.Item>
-          <Breadcrumb.Item>Policy</Breadcrumb.Item>
-        </Breadcrumb>
-        <Content
-          className="site-layout-background"
-          style={{
-            padding: 24,
-            margin: 0,
-            minHeight: 280,
-          }}
-        >
-          <Paragraph style={{ color: "red" }}>
-            Content varies upon 1. the tab on the left, 2. authorization
-          </Paragraph>
-        </Content>
-      </Layout>
+        {authed ? (
+          <Home />
+        ) : (
+          <LoginForm onSuccess={() => setAuthed(true)} />
+        )}
+      </Content>
     </Layout>
-  </Layout>
-);
+  );
+}
+
 export default App;
