@@ -17,7 +17,7 @@ public class Post implements Serializable{
 
     @ManyToOne
     private Users user;
-    private String Content;
+    private String content;
     @DateTimeFormat(pattern = "yyyy/MM/dd hh:mm:ss")
     private LocalDateTime timestamp;
 
@@ -42,11 +42,11 @@ public class Post implements Serializable{
     }
 
     public String getContent() {
-        return Content;
+        return content;
     }
 
     public void setContent(String content) {
-        Content = content;
+        this.content = content;
     }
 
     public LocalDateTime getTimestamp() {
