@@ -1,5 +1,7 @@
 package com.team1.communitymanagementsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 import java.util.*;
 import javax.persistence.*;
@@ -7,6 +9,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "amenity")
 public class Amenity implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     private int id;
@@ -15,6 +18,7 @@ public class Amenity implements Serializable {
     private String imageUrl;
 
     @OneToMany(mappedBy = "amenity",  cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<Reservation> reservation;
 
     public int getId() {
