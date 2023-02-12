@@ -3,7 +3,6 @@ import { useState } from "react";
 
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
-import MyCart from "./components/MyCart";
 import AdminHome from "./components/AdminHome";
 import ResidentHome from "./components/ResidentHome";
 import TopBar from "./components/TopBar";
