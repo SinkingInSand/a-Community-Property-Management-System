@@ -21,10 +21,12 @@ public class PostController {
     public void sendPost(
             @RequestParam("content") String content,
             @RequestParam("parentPostId") int parentPostId,
+            @RequestParam("timeStamp") LocalDateTime timestamp,
             Principal principal){
         Post post = new Post();
         post.setContent(content);
         post.setParentPostId(parentPostId);
+        post.setTimestamp(timestamp);
         post.setVisible(true);
         Users user = new Users();
         //user.setEmail("Team1@gmail.com");
@@ -34,6 +36,7 @@ public class PostController {
     }
 
     @RequestMapping(value = "/viewPosts/{post_id}", method = RequestMethod.DELETE)
+    
     @ResponseStatus(value = HttpStatus.OK)
     public void deletePost(@PathVariable int post_id, Principal principal){
         postService.deletePost(post_id, principal.getName());

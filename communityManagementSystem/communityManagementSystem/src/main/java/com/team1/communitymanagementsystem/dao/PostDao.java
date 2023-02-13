@@ -46,7 +46,8 @@ public class PostDao {
             if(email == post.getUser().getEmail()){
                 user.getPostList().remove(post);
                 session.beginTransaction();
-                session.delete(post);
+                session.update(user);
+                //session.delete(post);
                 session.getTransaction().commit();
             }
 
