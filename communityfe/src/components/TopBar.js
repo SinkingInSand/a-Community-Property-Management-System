@@ -11,41 +11,19 @@ const {Title} = Typography;
 const {Header, Content } = Layout;
 
 
-class ChatModal extends React.Component {
-    state = {
-        visible: false
-    }
-
-    showChatModal = () => {
-        this.setState({
-            visible: true
-        });
-    }
-
-    handleCancel = () => {
-        this.setState({ visible: false });
-    }
-
-    render() {
-        return (
-            <Modal
-                visible={this.state.visible}
-                title="Chat"
-                onCancel={this.handleCancel}
-                footer={null}
-            >
-                <p>Placeholder for chat window</p>
-            </Modal>
-        );
-    }
-}
-
-
-
 function TopBar(props) {
     // const { isLoggedIn, asAdmin, handleLogout } = props;
     const [authed, setAuthed] = useState(true); //uncomment previous line. temp solution for testing.
     const [asAdmin, setAdmin] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const handleOk = () => {
+        setIsModalOpen(false);
+      };
+    
+      const handleCancel = () => {
+        setIsModalOpen(false);
+      };
 
     const renderTopbarButton = () => {
         if (asAdmin) {
@@ -60,7 +38,7 @@ function TopBar(props) {
             <Button type='secondary' shape='round' size='large'style={{margin:"24px", }}>Logout</Button>
             <Button type='primary' shape="round" size="large" style={{margin:"24px"}} onClick={props.showChatModal}>Chat</Button>
         </div>
-    }
+    };
 
 
     
@@ -82,7 +60,15 @@ function TopBar(props) {
             
 
         </div>
-        <ChatModal showChatModal={this.showChatModal} />
+        <Modal
+        title="Chat"
+        visible={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <p>Placeholder for chat window</p>
+      </Modal>
     </header>
     );
 }
