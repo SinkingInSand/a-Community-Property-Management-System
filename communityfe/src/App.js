@@ -14,21 +14,41 @@ function App() {
   // const [authed, setAuthed] = useState(false);
   const [authed, setAuthed] = useState(true); //uncomment previous line. temp solution for testing.
   const [asAdmin, setAdmin] = useState(true); //uncomment previous line. temp solution for testing.
+  const [isLoggedIn, setLogin] = useState(false);
+  console.log("islogged in", isLoggedIn)
+
+  const handelTempLogin =(loginStatus) => {
+    
+    setLogin(loginStatus);
+    // console.log("after handle", loginStatus)
+  };
+  console.log("after handle", isLoggedIn)
+
+  const handleAdmin = (admin) =>{
+    setAdmin(admin);
+  }
+
 
   const renderContent = () => {
-    if (authed & asAdmin) {
+    // const handelTempLogin =(loginStatus) => {
+    //   console.log(loginStatus)
+    //   setLogin(loginStatus);
+    // };
+
+    if (isLoggedIn & authed & asAdmin) {
       return <AdminHome />;
     }
-    if (authed & !asAdmin){
+    if (isLoggedIn & authed & !asAdmin){
       return <ResidentHome/>
     } //might not be necessary to have this component
-    return <LoginForm />;
+    return <LoginForm handelTempLogin = {handelTempLogin}/>;
   };
 
   return (
     <Layout style={{ height: "100vh" }}>
       <TopBar />
       <Content>{renderContent()}</Content>
+      {/* <LoginForm handelTempLogin = {handelTempLogin} /> */}
     </Layout>
   );
 }
