@@ -19,9 +19,9 @@ function App() {
     if (authed & asAdmin) {
       return <AdminHome />;
     }
-    // if (authed & !asAdmin){
-    //   return <ResidentHome/>
-    // } //might not be necessary to have this component
+    if (authed & !asAdmin){
+      return <ResidentHome/>
+    } //might not be necessary to have this component
     return <LoginForm />;
   };
 

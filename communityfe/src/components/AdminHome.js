@@ -1,34 +1,14 @@
-// import {
-//   LaptopOutlined,
-//   NotificationOutlined,
-//   UserOutlined,
-// } from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu, Drawer } from "antd";
-import Paragraph from "antd/lib/typography/Paragraph";
+
+import { Breadcrumb, Layout, Menu} from "antd";
 import React from "react";
 import { useState, useEffect } from 'react';
 import ReservationForm from "./ReservationForm";
 import ChatForm from "./ChatForm";
-const { Content, Sider } = Layout;
-// const items1 = ["1", "2", "3"].map((key) =>
-//   key,
-//   label: `nav ${key}`,
-// }));
+const { Sider } = Layout;
 
-const items = [
-  { label: "Announcement",
-    key:'1' },
-  { label: "Discussion",
-  key:'2' },
-  { label: "Chat" },
-  { label: "Maintenance" },
-  // { label: "Pay" },
-  // { label: "Announcement" },
-];
 
 const AdminHome = () => {
   const [Reservation, setReservation] = useState(false);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   
 
   const handleAnnouncement = () => {
@@ -44,12 +24,7 @@ const AdminHome = () => {
     setReservation(true)
   }
 
-  const handleCancel = () => {
-    setIsDrawerOpen(false);
-  };
-const showChatDrawer = () => {
-    setIsDrawerOpen(true)
-}
+
 
   return (
     <>
@@ -74,7 +49,7 @@ const showChatDrawer = () => {
             >
             <Menu.Item label="Announcement" key={1} onClick={handleAnnouncement}>Announcement</Menu.Item>
             <Menu.Item label="Discussion Board" key={2} onClick={handleDiscussionBoard}>Discussion Board</Menu.Item>
-            <Menu.Item label="Chat Thread" key={3} onClick={showChatDrawer}>Chat</Menu.Item>
+            {<ChatForm />}
             <Menu.Item label="Reservation" key={4} onClick={showReservation}>Reservation</Menu.Item>
           </Menu>
  
@@ -88,9 +63,9 @@ const showChatDrawer = () => {
         { Reservation && <ReservationForm /> }
        
         <div>
-        <Drawer open={isDrawerOpen} onClose={handleCancel}>
+        {/* <Drawer open={isDrawerOpen} onClose={handleCancel}>
             <p style={{color:"red"}}>Pop up chat. UI is underdevelopement.</p>
-        </Drawer>
+        </Drawer> */}
       </div>
           {/* <Breadcrumb
             style={{
