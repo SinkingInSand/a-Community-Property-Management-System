@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import logo from "../assets/images/logo.svg";
-import { Button, Layout, Typography} from "antd";
+import { Button, Drawer, Layout, Typography} from "antd";
 import { LogoutOutlined } from '@ant-design/icons';
 import getAnnouncements from "../utils";
 import { Modal } from 'antd';
@@ -21,10 +21,12 @@ function TopBar(props) {
         setIsModalOpen(false);
       };
     
-      const handleCancel = () => {
+    const handleCancel = () => {
         setIsModalOpen(false);
       };
-
+    const showChatDrawer = () => {
+        setIsModalOpen(true)
+    }
     const renderTopbarButton = () => {
         if (asAdmin) {
             return <div className='adminPost'>
@@ -36,7 +38,7 @@ function TopBar(props) {
         return <div>
             Resident: XXXX 
             <Button type='secondary' shape='round' size='large'style={{margin:"24px", }}>Logout</Button>
-            <Button type='primary' shape="round" size="large" style={{margin:"24px"}} onClick={props.showChatModal}>Chat</Button>
+            {/* <Button type='primary' shape="round" size="large" style={{margin:"24px"}} onClick={showChatDrawer}>Chat</Button> */}
         </div>
     };
 
@@ -60,7 +62,7 @@ function TopBar(props) {
             
 
         </div>
-        <Modal
+        {/* <Modal
         title="Chat"
         visible={isModalOpen}
         onOk={handleOk}
@@ -68,8 +70,10 @@ function TopBar(props) {
         footer={null}
       >
         <p>Placeholder for chat window</p>
-      </Modal>
+      </Modal> */}
+
     </header>
+    
     );
 }
 

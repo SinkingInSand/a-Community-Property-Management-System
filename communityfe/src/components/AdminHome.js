@@ -3,11 +3,12 @@
 //   NotificationOutlined,
 //   UserOutlined,
 // } from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu } from "antd";
+import { Breadcrumb, Layout, Menu, Drawer } from "antd";
 import Paragraph from "antd/lib/typography/Paragraph";
 import React from "react";
 import { useState, useEffect } from 'react';
 import ReservationForm from "./ReservationForm";
+import ChatForm from "./ChatForm";
 const { Content, Sider } = Layout;
 // const items1 = ["1", "2", "3"].map((key) =>
 //   key,
@@ -26,7 +27,9 @@ const items = [
 ];
 
 const AdminHome = () => {
-  const [Reservation, setReservation] = useState(true);
+  const [Reservation, setReservation] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  
 
   const handleAnnouncement = () => {
     setReservation(false)
@@ -36,13 +39,17 @@ const AdminHome = () => {
     setReservation(false)
     alert("Dicussion Board is under development")
   }
-  const handleChat = () => {
-    setReservation(false)
-    alert("Chat is under development")
-  }
+
   const showReservation = () => {
     setReservation(true)
   }
+
+  const handleCancel = () => {
+    setIsDrawerOpen(false);
+  };
+const showChatDrawer = () => {
+    setIsDrawerOpen(true)
+}
 
   return (
     <>
@@ -67,9 +74,10 @@ const AdminHome = () => {
             >
             <Menu.Item label="Announcement" key={1} onClick={handleAnnouncement}>Announcement</Menu.Item>
             <Menu.Item label="Discussion Board" key={2} onClick={handleDiscussionBoard}>Discussion Board</Menu.Item>
-            <Menu.Item label="Chat Thread" key={3} onClick={handleChat}>Chat</Menu.Item>
+            <Menu.Item label="Chat Thread" key={3} onClick={showChatDrawer}>Chat</Menu.Item>
             <Menu.Item label="Reservation" key={4} onClick={showReservation}>Reservation</Menu.Item>
           </Menu>
+ 
         </Sider>
         {/* the layout below should changed depend on authorization */}
         <Layout
@@ -78,6 +86,12 @@ const AdminHome = () => {
           }}
         >
         { Reservation && <ReservationForm /> }
+       
+        <div>
+        <Drawer open={isDrawerOpen} onClose={handleCancel}>
+            <p style={{color:"red"}}>Pop up chat. UI is underdevelopement.</p>
+        </Drawer>
+      </div>
           {/* <Breadcrumb
             style={{
               margin: "16px 0",
