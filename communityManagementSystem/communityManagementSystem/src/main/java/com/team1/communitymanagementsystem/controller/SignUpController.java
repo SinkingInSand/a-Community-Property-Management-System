@@ -27,4 +27,10 @@ public class SignUpController {
         usersService.signUp(user);
     }
 
+    @RequestMapping(value = "/signup/admin", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public void adminRegister(@RequestBody Users user) {
+        usersService.adminRegister(user);
+    }
+
 }

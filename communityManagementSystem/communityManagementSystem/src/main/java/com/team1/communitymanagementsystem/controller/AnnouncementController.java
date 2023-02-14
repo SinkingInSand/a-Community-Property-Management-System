@@ -30,14 +30,19 @@ public class AnnouncementController {
         return announcementService.getAnnouncementById(announcementId);
     }
 
+
+
+    /*@ModelAttribute("announcement") if use ModelAttribute*/
     @RequestMapping(value = "/announcements/create", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void addAnnouncement(@ModelAttribute("announcement") Announcement newAnnouncement) {
+    public void addAnnouncement(@RequestBody Announcement newAnnouncement) {
         announcementService.addAnnouncement(newAnnouncement);
     }
 
-    @GetMapping(value = "/announcements/delete")
-    public void deleteAnnouncement(@RequestParam(value = "announcementId") int announcementId) {
+    //@GetMapping(value = "/announcements/{announcementId}/delete")
+    @RequestMapping(value = "/announcements/{announcementId}/delete", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.ACCEPTED)
+    public void deleteAnnouncement(@PathVariable(value = "announcementId") int announcementId) {
         announcementService.deleteAnnouncement(announcementId);
     }
 

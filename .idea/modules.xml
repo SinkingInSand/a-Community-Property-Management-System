@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/a-Community-Property-Management-System.iml" filepath="$PROJECT_DIR$/.idea/a-Community-Property-Management-System.iml" />
+      <module fileurl="file://$PROJECT_DIR$/communityManagementSystem/communityManagementSystem/communityManagementSystem.iml" filepath="$PROJECT_DIR$/communityManagementSystem/communityManagementSystem/communityManagementSystem.iml" />
+    </modules>
+  </component>
+</project>

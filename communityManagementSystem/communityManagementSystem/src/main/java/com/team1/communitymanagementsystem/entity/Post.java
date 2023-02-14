@@ -14,16 +14,14 @@ public class Post implements Serializable{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String subject;
-
-    @ManyToOne
-    private Users user;
+    private String user; //email
     private String content;
-    @DateTimeFormat(pattern = "yyyy/MM/dd hh:mm:ss")
+
     private LocalDateTime timestamp;
 
     //In MySql id starts from1, so we can set the root post id as 0.
     private int parentPostId;
-    private boolean visible;
+    private boolean visible; //public:false, private:true
 
     public int getId() {
         return id;
@@ -72,11 +70,11 @@ public class Post implements Serializable{
     public void setParentPostId(int parentPostId) {
         this.parentPostId = parentPostId;
     }
-    public Users getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(String user) {
         this.user = user;
     }
 }

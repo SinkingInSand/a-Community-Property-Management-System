@@ -1,5 +1,5 @@
 package com.team1.communitymanagementsystem.entity;
-import org.springframework.format.annotation.DateTimeFormat;
+//import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,8 +12,7 @@ public class Announcement {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @ManyToOne
-    private Users user;
+    private String user; //email
 
     @Enumerated(EnumType.STRING)
     private Categories category;
@@ -21,10 +20,10 @@ public class Announcement {
     private String title;
 
     private String Content;
-    @DateTimeFormat(pattern = "yyyy/MM/dd hh:mm:ss")
+    //@DateTimeFormat(pattern = "yyyy/MM/dd hh:mm:ss")
     private LocalDateTime timestamp;
 
-    private boolean visible;
+    private boolean visible; //Default value is false, means it is open to all. If true, announcement is invisible by users.
 
     public int getId() {
         return id;
@@ -74,11 +73,11 @@ public class Announcement {
         this.visible = visible;
     }
 
-    public Users getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(Users user) {
+    public void setUser(String user) {
         this.user = user;
     }
 

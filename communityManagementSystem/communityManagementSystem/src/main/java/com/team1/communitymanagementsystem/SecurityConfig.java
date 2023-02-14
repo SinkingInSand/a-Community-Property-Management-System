@@ -6,7 +6,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
@@ -27,11 +26,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .formLogin()
+                .defaultSuccessUrl("/announcements")
                 .failureForwardUrl("/login?error=true");
         http
                 .authorizeRequests()
-                .antMatchers("/order/*", "/cart", "/checkout").hasAuthority("RESIDENT")
-                .anyRequest().permitAll();
+                .antMatchers("/announcements/create","/announcements/*/delete").hasAuthority("ADMIN");
+                //.anyRequest().permitAll();
         //Need to be modified after deciding the certain url pattern
     }
 
@@ -42,13 +42,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .jdbcAuthentication()
                 .dataSource(dataSource)
                 .passwordEncoder(passwordEncoder)
-                .usersByUsernameQuery("SELECT email, password, authority FROM users WHERE email=?")
+                //.withUser(User.withUsername("user"))
+                .usersByUsernameQuery("SELECT email, password, enabled FROM users WHERE email=?")
                 .authoritiesByUsernameQuery("SELECT email, authorities FROM authorities WHERE email=?");
 
     }
 
-    @Bean
-    public static NoOpPasswordEncoder passwordEncoder() {
-        return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
-    }
 }

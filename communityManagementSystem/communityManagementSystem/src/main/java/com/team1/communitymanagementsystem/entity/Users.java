@@ -20,11 +20,19 @@ public class Users implements Serializable{
     //if true, user is admin; or user is resident.
     //The default value of boolean type data is false. As we don't have a setter for admin,
     //the new registered users are all residents.
-    private String authority; //"RESIDENT","ADMIN","THIRD_PARTY_COMPANY"
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     //one user can have N announcements
-    @OneToMany(mappedBy = "user",  cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private boolean enabled;
+    /*@OneToMany(mappedBy = "user",  cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
-    private List<Announcement> announcementList;
+    private List<Announcement> announcementList;*/
     //one user can have N posts
     @OneToMany(mappedBy = "user",  cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
@@ -59,15 +67,9 @@ public class Users implements Serializable{
         this.password = password;
     }
 
-    public void setAuthority(String authority) { this.authority = authority; }
+    /*public void setAnnouncementList(List<Announcement> announcementList) { this.announcementList = announcementList; }
 
-    public String getAuthority() {
-        return authority;
-    }
-
-    public void setAnnouncementList(List<Announcement> announcementList) { this.announcementList = announcementList; }
-
-    public List<Announcement> getAnnouncementList() { return announcementList;}
+    public List<Announcement> getAnnouncementList() { return announcementList;}*/
 
     public List<Post> getPostList() { return postList; }
 

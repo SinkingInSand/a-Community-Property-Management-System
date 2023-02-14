@@ -19,12 +19,15 @@ public class UsersService {
     }
 
     public void signUp(Users user) {
-        //Announcement dashboard = new Announcement();
-        //Users.getAnnouncement(dashboard);
-
-        //customer.setEnabled(true);
+        user.setEnabled(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         usersDao.signUp(user);
+    }
+
+    public void adminRegister(Users user){
+        user.setEnabled(true);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        usersDao.adminRegister(user);
     }
 
     public Users getUser(String email) {

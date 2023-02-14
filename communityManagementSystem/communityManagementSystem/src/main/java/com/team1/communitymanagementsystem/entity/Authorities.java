@@ -15,7 +15,7 @@ public class Authorities implements Serializable {
     @Id
     private String email;
 
-    private String authorities;
+    private String authorities; //"RESIDENT","ADMIN","THIRD_PARTY_COMPANY"
 
     public String getEmail() {
         return email;
