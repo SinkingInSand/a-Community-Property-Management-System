@@ -113,6 +113,9 @@ const LoginForm =(props)=>{
 
       <Form.Item>
         {/* <Checkbox onChange={onChange}>Admin</Checkbox> */}
+        <Button type="link" htmlType="submit" loading={loading} style={{}}>
+          Register
+        </Button>
         <Button type="primary" htmlType="submit" loading={loading}>
           Login
         </Button>
