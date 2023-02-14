@@ -24,16 +24,10 @@ function App() {
   };
   console.log("after handle", isLoggedIn)
 
-  const handleAdmin = (admin) =>{
-    setAdmin(admin);
-  }
 
 
   const renderContent = () => {
-    // const handelTempLogin =(loginStatus) => {
-    //   console.log(loginStatus)
-    //   setLogin(loginStatus);
-    // };
+
 
     if (isLoggedIn & authed & asAdmin) {
       return <AdminHome />;
@@ -46,7 +40,7 @@ function App() {
 
   return (
     <Layout style={{ height: "100vh" }}>
-      <TopBar />
+      <TopBar isLoggedIn={isLoggedIn} asAdmin={asAdmin}/>
       <Content>{renderContent()}</Content>
       {/* <LoginForm handelTempLogin = {handelTempLogin} /> */}
     </Layout>

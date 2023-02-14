@@ -12,15 +12,19 @@ const {Header, Content } = Layout;
 
 
 function TopBar(props) {
+    console.log("is topbar show login", props.isLoggedIn)
     // const { isLoggedIn, asAdmin, handleLogout } = props;
-    const [authed, setAuthed] = useState(true); //uncomment previous line. temp solution for testing.
-    const [asAdmin, setAdmin] = useState(true);
-    const [isLogin, setLogin] = useState(true);
+    // const [authed, setAuthed] = useState(true); //uncomment previous line. temp solution for testing.
+    // const [asAdmin, setAdmin] = useState(true);
+    // const [isLogin, setLogin] = useState(props);
+    const isLogin = props.isLoggedIn;
+    const asAdmin = props.asAdmin;
 
-
+    console.log(isLogin)
     const renderTopbarButton = () => {
+        console.log("isLogin in Topbar", isLogin)
         if (asAdmin && isLogin) {
-            return <div className='adminPost'>
+            return <div>
                 Admin: XXXX 
                 <Button type='secondary' shape='round' size='large'style={{margin:"24px", }} >Logout</Button>
                 </div>

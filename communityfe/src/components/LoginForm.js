@@ -9,7 +9,7 @@ const LoginForm =(props)=>{
 
   const handleLogin = () => {
     setLogin(true);
-    console.log("login form, isloggedin ", isLoggedIn)
+    // console.log("login form, isloggedin ", isLoggedIn)
     props.handelTempLogin(true);
   }
   
@@ -40,7 +40,7 @@ const LoginForm =(props)=>{
         </Form.Item>
 
         <Form.Item> 
-          <Checkbox>Admin</Checkbox>
+          {/* <Checkbox>Admin</Checkbox> */}
           <Button type="primary" onClick={handleLogin}>Login</Button>
           </Form.Item>
    

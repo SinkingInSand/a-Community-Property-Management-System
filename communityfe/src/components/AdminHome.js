@@ -1,14 +1,33 @@
-
+// import {
+//   LaptopOutlined,
+//   NotificationOutlined,
+//   UserOutlined,
+// } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu} from "antd";
 import React from "react";
 import { useState, useEffect } from 'react';
 import ReservationForm from "./ReservationForm";
 import ChatForm from "./ChatForm";
-const { Sider } = Layout;
+const { Content, Sider } = Layout;
+// const items1 = ["1", "2", "3"].map((key) =>
+//   key,
+//   label: `nav ${key}`,
+// }));
 
+const items = [
+  { label: "Announcement",
+    key:'1' },
+  { label: "Discussion",
+  key:'2' },
+  { label: "Chat" },
+  { label: "Maintenance" },
+  // { label: "Pay" },
+  // { label: "Announcement" },
+];
 
 const AdminHome = () => {
   const [Reservation, setReservation] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   
 
   const handleAnnouncement = () => {
@@ -24,7 +43,12 @@ const AdminHome = () => {
     setReservation(true)
   }
 
-
+  const handleCancel = () => {
+    setIsDrawerOpen(false);
+  };
+const showChatDrawer = () => {
+    setIsDrawerOpen(true)
+}
 
   return (
     <>
@@ -62,33 +86,7 @@ const AdminHome = () => {
         >
         { Reservation && <ReservationForm /> }
        
-        <div>
-        {/* <Drawer open={isDrawerOpen} onClose={handleCancel}>
-            <p style={{color:"red"}}>Pop up chat. UI is underdevelopement.</p>
-        </Drawer> */}
-      </div>
-          {/* <Breadcrumb
-            style={{
-              margin: "16px 0",
-            }}
-          >
-            <Breadcrumb.Item>Event</Breadcrumb.Item>
-            <Breadcrumb.Item>Alert</Breadcrumb.Item>
-            <Breadcrumb.Item>Newsletter</Breadcrumb.Item>
-            <Breadcrumb.Item>Policy</Breadcrumb.Item>
-          </Breadcrumb>
-          <Content
-            className="site-layout-background"
-            style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 580,
-            }}
-          >
-            <Paragraph style={{ color: "red" }}>
-              Content varies upon 1. the tab on the left, 2. authorization
-            </Paragraph>
-          </Content> */}
+
         </Layout>
       </Layout>
     </>
