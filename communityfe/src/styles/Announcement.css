@@ -10,3 +10,10 @@
 	text-align:center;
 	box-shadow: 2px 2px 3px #999;
 }
+
+.postItem{
+    background-color: #999;
+    margin: auto;
+    margin-top: 24px;
+    padding: 8px;
+}
