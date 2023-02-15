@@ -26,10 +26,12 @@ const items = [
   // { label: "Announcement" },
 ];
 
-const AdminHome = () => {
+const AdminHome = (props) => {
   const [Reservation, setReservation] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [showAnnouncement, setAnouncement] = useState(true)
+  const [asAdmin, setAdmin] = useState(props);
+  console.log("Amin Home, is Admin = ", asAdmin)
   
 
   const handleAnnouncement = () => {
@@ -87,7 +89,7 @@ const showChatDrawer = () => {
           }}
         >
         { Reservation && <ReservationForm /> }
-        {showAnnouncement && <AnnouncementForm />}
+        { showAnnouncement && <AnnouncementForm isAdmin={asAdmin}/>}
        
 
         </Layout>

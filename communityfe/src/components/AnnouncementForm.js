@@ -1,15 +1,34 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Button, Form} from "antd";
+import { Button, Form, Typography, Layout} from "antd";
 import { FileTextOutlined } from "@ant-design/icons";
+import Sider from "antd/lib/layout/Sider";
+const { Title } = Typography;
+const {Content} = Layout;
 
-
-const AnnouncementForm = (data) => {
+const AnnouncementForm = (props) => {
+  console.log("Announcement Form Is Admin? = ", props.isAdmin);
+  const [isAdmin, setAdmin] = useState(props.isAdmin.isAdmin);
+  const renderDeletButton = () => {
+    if (isAdmin) {
+      return <Button type="" style={{display:"inline"}}>Delete</Button>;
+    }
+  };
   return (
     // <p>Announcement Form</p>
     <>
       <Form>
-        <Form.Item className="postItem">Post 1</Form.Item>
+        <Form.Item className="postItem">
+
+            <Title level={3}>Title</Title>
+
+            <p>Content</p>
+
+            {renderDeletButton()}
+
+          
+        
+        </Form.Item>
       </Form>
       <Button
         className="floatPost"

@@ -1,2 +1,2 @@
 export const TOKEN_KEY = 'token';
-export const BASE_URL = '<use your backend url>'; 
+export const BASE_URL = 'http://localhost:8080/'; 

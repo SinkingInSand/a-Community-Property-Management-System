@@ -33,12 +33,12 @@ function App() {
   const renderContent = () => {
 
 
-    if (isLoggedIn & authed & asAdmin) {
-      return <AdminHome />;
+    if (isLoggedIn) {
+      return <AdminHome isAdmin = {asAdmin}/>;
     }
-    if (isLoggedIn & authed & !asAdmin){
-      return <ResidentHome/>
-    } //might not be necessary to have this component
+    // if (isLoggedIn& !asAdmin){
+    //   return <ResidentHome/>
+    // } //might not be necessary to have this component
     return <LoginForm handelTempLogin = {handelTempLogin}/>;
   };
 
