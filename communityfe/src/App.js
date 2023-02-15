@@ -24,6 +24,10 @@ function App() {
   };
   console.log("after handle", isLoggedIn)
 
+  const onSuccess = () => {
+    setLogin(true);
+  }
+
 
 
   const renderContent = () => {

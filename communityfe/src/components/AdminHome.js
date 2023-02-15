@@ -8,11 +8,12 @@ import React from "react";
 import { useState, useEffect } from 'react';
 import ReservationForm from "./ReservationForm";
 import ChatForm from "./ChatForm";
+import { getAnnouncements } from "../utils";
+import AnnouncementForm from "./AnnouncementForm";
 const { Content, Sider } = Layout;
-// const items1 = ["1", "2", "3"].map((key) =>
-//   key,
-//   label: `nav ${key}`,
-// }));
+
+
+
 
 const items = [
   { label: "Announcement",
@@ -28,11 +29,12 @@ const items = [
 const AdminHome = () => {
   const [Reservation, setReservation] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [showAnnouncement, setAnouncement] = useState(true)
   
 
   const handleAnnouncement = () => {
+    setAnouncement(true);
     setReservation(false)
-    alert("Announcement is under development")
   }
   const handleDiscussionBoard = () => {
     setReservation(false)
@@ -85,6 +87,7 @@ const showChatDrawer = () => {
           }}
         >
         { Reservation && <ReservationForm /> }
+        {showAnnouncement && <AnnouncementForm />}
        
 
         </Layout>

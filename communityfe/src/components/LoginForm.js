@@ -2,7 +2,7 @@ import { Button, Checkbox, Form, Input, message } from "antd";
 import React, { useState } from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { login } from "../utils";
-
+import SignupForm from "./SignupForm";
 
 // const LoginForm =(props)=>{
 //   const [isLoggedIn, setLogin] = useState(false);
@@ -12,9 +12,6 @@ import { login } from "../utils";
 //     // console.log("login form, isloggedin ", isLoggedIn)
 //     props.handelTempLogin(true);
 //   }
-  
-
-
 
 //   return (
 //     <Form
@@ -39,31 +36,28 @@ import { login } from "../utils";
 //           <Input.Password prefix={<LockOutlined />} placeholder="Password" />
 //         </Form.Item>
 
-//         <Form.Item> 
+//         <Form.Item>
 //           {/* <Checkbox>Admin</Checkbox> */}
 //           <Button type="primary" onClick={handleLogin}>Login</Button>
 //           </Form.Item>
-   
+
 //     </Form>
 //   )
 // }
 // export default LoginForm;
 
-
-const LoginForm =(props)=>{
+const LoginForm = (props) => {
   const [isLoggedIn, setLogin] = useState(false);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    setLogin(true);
-    // console.log("login form, isloggedin ", isLoggedIn)
-    props.handelTempLogin(true);
-  }
-
-
+  // const handleLogin = () => {
+  //   // setLogin(true);
+  //   // console.log("login form, isloggedin ", isLoggedIn)
+  //   props.handelTempLogin(true);
+  // };
 
   const onFinish = (data) => {
-
+    props.handelTempLogin(true); //temp solution for testing
     setLoading(true);
 
     login(data)
@@ -79,50 +73,46 @@ const LoginForm =(props)=>{
       });
   };
 
-  // const onChange = (e) => {
-  //   console.log('checked = ', e.target.checked);
-
-  //   this.state = {isAdmin: !this.state.isAdmin}
-  //   // this.state.isAdmin(e.target.checked);
-  //   console.log("isAdmin? ", this.state.isAdmin);
-  // };
-
-
   return (
-    <Form
-      name="normal_login"
-      onFinish={onFinish}
-      style={{
-        width: 300,
-        margin: "auto",
-        paddingTop: "100px"
-      }}
-    >
-      <Form.Item
-        name="username"
-        rules={[{ required: true, message: "Please input your Username!" }]}
+    <>
+      <Form
+        name="normal_login"
+        onFinish={onFinish}
+        style={{
+          width: 300,
+          margin: "auto",
+          paddingTop: "100px",
+          visibility: true,
+        }}
       >
-        <Input prefix={<UserOutlined />} placeholder="Username" />
-      </Form.Item>
-      <Form.Item
-        name="password"
-        rules={[{ required: true, message: "Please input your Password!" }]}
-      >
-        <Input.Password prefix={<LockOutlined />} placeholder="Password" />
-      </Form.Item>
+        <Form.Item
+          name="username"
+          rules={[{ required: true, message: "Please input your Username!" }]}
+        >
+          <Input prefix={<UserOutlined />} placeholder="Username" />
+        </Form.Item>
+        <Form.Item
+          name="password"
+          rules={[{ required: true, message: "Please input your Password!" }]}
+        >
+          <Input.Password prefix={<LockOutlined />} placeholder="Password" />
+        </Form.Item>
 
-      <Form.Item>
-        {/* <Checkbox onChange={onChange}>Admin</Checkbox> */}
-        <Button type="link" htmlType="submit" loading={loading} style={{}}>
-          Register
-        </Button>
-        <Button type="primary" htmlType="submit" loading={loading}>
-          Login
-        </Button>
-      </Form.Item>
-    </Form>
+        <Form.Item>
+          {/* <Checkbox onChange={onChange}>Admin</Checkbox> */}
+          <SignupForm />
+          <Button
+            type="primary"
+            shape="round"
+            htmlType="submit"
+            loading={loading}
+          >
+            Login
+          </Button>
+        </Form.Item>
+      </Form>
+    </>
   );
-
-}
+};
 
 export default LoginForm;

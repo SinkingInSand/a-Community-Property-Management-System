@@ -36,7 +36,7 @@ class SignupForm extends React.Component {
   render = () => {
     return (
       <>
-        <Button shape="round" type="primary" onClick={this.signupOnClick}>
+        <Button shape="round" type="link" onClick={this.signupOnClick}>
           Register
         </Button>
         <Modal
@@ -59,6 +59,12 @@ class SignupForm extends React.Component {
               <Input prefix={<UserOutlined />} placeholder="Email" />
             </Form.Item>
             <Form.Item
+              name="userName"
+              rules={[{ required: true, message: "Please input your user name!" }]}
+            >
+              <Input prefix={<UserOutlined />} placeholder="User Name" />
+            </Form.Item>
+            <Form.Item
               name="password"
               rules={[
                 { required: true, message: "Please input your password!" },
@@ -67,21 +73,14 @@ class SignupForm extends React.Component {
               <Input prefix={<LockOutlined />} placeholder="Password" />
             </Form.Item>
             <Form.Item
-              name="firstName"
+              name="unitNumber"
               rules={[
-                { required: true, message: "Please input your first name!" },
+                { required: true, message: "Please input your unit number!" },
               ]}
             >
-              <Input placeholder="firstname" />
+              <Input placeholder="Unit Number" />
             </Form.Item>
-            <Form.Item
-              name="lastName"
-              rules={[
-                { required: true, message: "Please input your last name!" },
-              ]}
-            >
-              <Input placeholder="lastname" />
-            </Form.Item>
+      
 
             <Form.Item>
               <Button type="primary" htmlType="submit">

@@ -3,6 +3,7 @@
 @import "./styles/Main.css";
 @import "./styles/Register.css";
 @import "./styles/Home.css";
+@import "./styles/Announcement.css";
 
 body {
   margin: 0;
