@@ -27,7 +27,11 @@ function App() {
   // const onSuccess = () => {
   //   setLogin(true);
   // }
+//   const handleLogout = () => {
+//     // isLogin = false;
+//     setLogin(false);
 
+// }
 
 
   const renderContent = () => {
@@ -36,6 +40,7 @@ function App() {
     if (isLoggedIn) {
       return <AdminHome isAdmin = {asAdmin}/>;
     }
+    // return <AdminHome isAdmin ={asAdmin} />;
     // if (isLoggedIn& !asAdmin){
     //   return <ResidentHome/>
     // } //might not be necessary to have this component

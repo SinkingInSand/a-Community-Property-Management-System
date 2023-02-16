@@ -61,7 +61,7 @@ export const login = (credential) => {
   export const getAnnouncements = () => {
     return fetch("/announcements").then((response) => {
       if (response.status < 200 || response.status >= 300) {
-        throw Error("Fail to get restaurants");
+        throw Error("Fail to get announcements");
       }
   
       return response.json();
