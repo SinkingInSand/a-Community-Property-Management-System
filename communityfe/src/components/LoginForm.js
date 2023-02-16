@@ -57,7 +57,7 @@ const LoginForm = (props) => {
   // };
 
   const onFinish = (data) => {
-    props.handelTempLogin(true); //temp solution for testing
+    // props.handelTempLogin(true); //temp solution for testing
     setLoading(true);
 
     login(data)

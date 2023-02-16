@@ -4,7 +4,7 @@ export const login = (credential) => {
     return fetch(loginUrl, { //发出指令//from window, global function
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
       },
       credentials: "include", //accept cookies which save session id / token //need to tell browser.
     }).then((response) => {

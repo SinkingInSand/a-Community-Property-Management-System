@@ -24,9 +24,9 @@ function App() {
   };
   console.log("after handle", isLoggedIn)
 
-  const onSuccess = () => {
-    setLogin(true);
-  }
+  // const onSuccess = () => {
+  //   setLogin(true);
+  // }
 
 
 
@@ -39,7 +39,7 @@ function App() {
     // if (isLoggedIn& !asAdmin){
     //   return <ResidentHome/>
     // } //might not be necessary to have this component
-    return <LoginForm handelTempLogin = {handelTempLogin}/>;
+    return <LoginForm handelTempLogin = {handelTempLogin} onSuccess={() => setLogin(true)}/>;
   };
 
   return (
