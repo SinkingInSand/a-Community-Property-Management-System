@@ -1,31 +1,26 @@
 import { Button, Form, Input, message, Modal } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { signup } from "../utils";
 
-class SignupForm extends React.Component {
-  state = {
-    displayModal: false,
+const SignupForm = (props) => {
+
+  const [displayModal, setDisplayModal] = useState(false);
+
+  const handleCancel = () => {
+    setDisplayModal(false);
   };
 
-  handleCancel = () => {
-    this.setState({
-      displayModal: false,
-    });
+  const signupOnClick = () => {
+
+    setDisplayModal(true);
   };
 
-  signupOnClick = () => {
-    this.setState({
-      displayModal: true,
-    });
-  };
-
-  onFinish = (data) => {
+  const onFinish = (data) => {
     signup(data)
       .then(() => {
-        this.setState({
-          displayModal: false,
-        });
+
+        setDisplayModal(false);
         message.success(`Successfully signed up`);
       })
       .catch((err) => {
@@ -33,23 +28,23 @@ class SignupForm extends React.Component {
       });
   };
 
-  render = () => {
+
     return (
       <>
-        <Button shape="round" type="link" onClick={this.signupOnClick}>
+        <Button shape="round" type="link" onClick={signupOnClick}>
           Register
         </Button>
         <Modal
           title="Register"
-          visible={this.state.displayModal}
-          onCancel={this.handleCancel}
+          open={displayModal}
+          onCancel={handleCancel}
           footer={null}
           destroyOnClose={true} //destroy the content inside modal
         >
           <Form
             name="normal_register"
             initialValues={{ remember: true }}
-            onFinish={this.onFinish}
+            onFinish={onFinish}
             preserve={false}
           >
             <Form.Item
@@ -91,7 +86,7 @@ class SignupForm extends React.Component {
         </Modal>
       </>
     );
-  };
+
 }
 
 export default SignupForm;

@@ -99,7 +99,6 @@ const LoginForm = (props) => {
         </Form.Item>
 
         <Form.Item>
-          {/* <Checkbox onChange={onChange}>Admin</Checkbox> */}
           <SignupForm />
           <Button
             type="primary"
