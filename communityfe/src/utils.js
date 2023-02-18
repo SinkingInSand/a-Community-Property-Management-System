@@ -67,6 +67,16 @@ export const login = (credential) => {
       return response.json();
     });
   };
+
+  export const getDiscussions = () => {
+    return fetch("/discussion").then((response) => {
+      if (response.status < 200 || response.status >= 300) {
+        throw Error("Fail to get discussions");
+      }
+  
+      return response.json();
+    });
+  };
   
   export const getCart = () => {
     return fetch("/cart").then((response) => {
