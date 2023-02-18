@@ -18,6 +18,7 @@ public class Reservation implements Serializable {
     private Users user;
 
     @ManyToOne
+    @JoinColumn(name ="amenity_id", nullable = false)
     private Amenity amenity;
 
     private short timeSlot; //8:00 - 8:59 encoded to 1, 9:00-9:59 encoded to 2, ..., 19:00 - 19:59 encoded to 12

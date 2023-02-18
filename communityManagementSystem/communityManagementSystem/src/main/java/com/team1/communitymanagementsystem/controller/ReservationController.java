@@ -4,12 +4,14 @@ import com.team1.communitymanagementsystem.entity.Amenity;
 import com.team1.communitymanagementsystem.entity.Reservation;
 import com.team1.communitymanagementsystem.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -30,13 +32,25 @@ public class ReservationController {
         @ResponseBody
         public List<Reservation> getMyReservations(){return reservationService.getMyReservations();}
 
-        //see what timeslots are available, return an array of byte[10]
+        //delete reservation
 
-        @RequestMapping(value = "/amenity/{amenity_id}", method = RequestMethod.GET)
-        public byte[] checkAvailability(@PathVariable("amenity_id") int id,
-                                        @RequestParam(name = "date") LocalDate date){
-                return new byte[]{};
+        @RequestMapping(value="deletereserv", method = RequestMethod.POST)
+        @ResponseBody
+        public String deleteAReservation(@RequestParam(name ="reservation_id") int id){
+
+                return reservationService.deleteAReservation(id) ? "Successful" : "Failed";
         }
+
+
+        //see what timeslots are available, return a string of 10 numbers (0 or 1)
+        @RequestMapping(value = "/check", method = RequestMethod.GET)
+        @ResponseBody
+        public String checkAvailability(@RequestParam(name ="amenity_id") int id,
+                                        @RequestParam(name = "date") LocalDate date){
+
+                return Arrays.toString(reservationService.getAvailability(id, date));
+        }
+
         //reserve a reservation, with user/amenity_ID/date/timeslot
         @RequestMapping(value = "/reserve", method = RequestMethod.POST)
         @ResponseStatus(value = HttpStatus.CREATED)
@@ -45,6 +59,7 @@ public class ReservationController {
                                      @RequestParam(name = "timeslot") short timeslot){
 
                 //consistency and transactional
+                reservationService.makeAReservation(id, date,timeslot);
         }
 
 }

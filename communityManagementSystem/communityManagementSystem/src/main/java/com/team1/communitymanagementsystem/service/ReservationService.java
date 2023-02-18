@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,62 @@ public class ReservationService {
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
+    public byte[] getAvailability (int amenityId, LocalDate date){
+
+        //validate date and amenityId (simple check for now)
+        if(date.isBefore(LocalDate.now(ZoneId.of("America/New York"))) || amenityId > 4 || amenityId < 1){
+            return null;
+        }
+
+        List<Reservation> reservationList= reservationDao.getReservationByDateByAmenity(amenityId,date);
+
+        if(reservationList.isEmpty()){
+            return new byte[]{0,0,0,0,0,0,0,0,0,0};
+        } else {
+            byte[] result = new byte[10];
+            for(Reservation res : reservationList){
+                short timeslot = res.getTimeSlot();
+                result[timeslot - 1] = 1;
+            }
+            return result;
+        }
+    }
+
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public void makeAReservation(int amenity_id, LocalDate date, short timeslot){
-        //authenticate and then save reservation
+        Reservation reservation = new Reservation();
+
+        //authenticate to get user
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = loggedInUser.getName();
+        Users user = usersService.getUser(userEmail);
+
+        //get Amenity
+        Amenity amenity = reservationDao.getAmenity(amenity_id);
+
+        reservation.setReservationDate(date);
+        reservation.setAmenity(amenity);
+        reservation.setUser(user);
+        reservation.setTimeSlot(timeslot);
+        reservationDao.saveAReservation(reservation);
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public boolean deleteAReservation(int reserv_id){
+        //authenticate to get user
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = loggedInUser.getName();
+        Users user = usersService.getUser(userEmail);
+
+        //check if user is owner, if true, then proceed with delete, if false return not deleted
+        //admin?
+        if(user != null && reservationDao.canDelete(reserv_id, user)){
+            reservationDao.deleteAReservation(reserv_id);
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }
