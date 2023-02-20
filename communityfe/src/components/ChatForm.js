@@ -1,65 +1,105 @@
-
 import React from "react";
-import { useState,} from 'react';
+import { useState } from "react";
 import { Drawer, Menu, Input, Form, Button } from "antd";
 
+const { TextArea } = Input;
 
-const ChatForm = () =>{
-    const [isDrawerOpen, setOpen] = useState(false);
-    const [messages, setMessages] = useState([]);
-    const [form] = Form.useForm();
+const ChatForm = () => {
+  const [isDrawerOpen, setOpen] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [form] = Form.useForm();
 
-    const handleCancel = () => {
-        setOpen(false);
-    };
-    const showChatDrawer = () => {
-        setOpen(true)
-    };
+  const handleCancel = () => {
+    setOpen(false);
+  };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        form.validateFields((err, values) => {
-          if (!err) {
-            const newMessage = {
-              text: values.message,
-              timestamp: new Date().toLocaleString(),
-            };
-            setMessages([...messages, newMessage]);
-            form.resetFields();
-          }
-        });
-      };
+  const showChatDrawer = () => {
+    setOpen(true);
+  };
 
-return(
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    form.validateFields((err, values) => {
+      if (!err) {
+        const newMessage = {
+          text: values.message,
+          timestamp: new Date().toLocaleString(),
+        };
+        setMessages([...messages, newMessage]);
+        form.resetFields();
+      }
+    });
+  };
+
+  return (
     <>
-    <Menu.Item label="Chat Thread" key={3} onClick={showChatDrawer}>Chat</Menu.Item>
+      <Menu.Item key={3} onClick={showChatDrawer}>
+        Chat
+      </Menu.Item>
 
+      <Drawer
+        title="Chat"
+        width={400}
+        visible={isDrawerOpen}
+        onClose={handleCancel}
+      >
+        <h2>XXX Apartment</h2>
+        <p>xxx address</p>
+        {messages.map((message, index) => (
+          <div key={index}>
+            <p>{message.timestamp}</p>
+            <p>{message.text}</p>
+          </div>
+        ))}
+        <Form
+          name="chat_form"
+          onFinish={handleSubmit}
+          style={{ marginTop: "2rem" }}
+          labelCol={{ span: 6 }}
+          wrapperCol={{ span: 16 }}
+        >
+          <h2>Contact Us</h2>
+          <Form.Item
+            name="email"
+            label="Email"
+            rules={[
+              {
+                required: true,
+                message: "Please input your email address",
+              },
+              {
+                type: "email",
+                message: "Please enter a valid email address",
+              },
+            ]}
+          >
+            <Input placeholder="Email" />
+          </Form.Item>
 
-    <Drawer title="Chat" width={400} open={isDrawerOpen} onClose={handleCancel}>
-        <div style={{ height: 300, overflowY: "scroll" }}>
-          {messages.map((message, index) => (
-            <div key={index} style={{ marginBottom: 10 }}>
-              <p style={{ fontWeight: "bold" }}>{message.text}</p>
-              <p>{message.timestamp}</p>
-            </div>
-          ))}
-        </div>
+          <Form.Item
+            name="subject"
+            label="Subject"
+            rules={[{ required: true, message: "Please enter a subject" }]}
+          >
+            <Input placeholder="Subject" />
+          </Form.Item>
 
-        <Form form={form} layout="inline" onSubmit={handleSubmit}>
           <Form.Item
             name="message"
+            label="Message"
             rules={[{ required: true, message: "Please enter a message" }]}
           >
-            <Input placeholder="Type a message" />
+            <TextArea placeholder="Type a message" rows={5} />
           </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" style={{ marginLeft: 10 }}>
+          <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
+            <Button type="primary" htmlType="submit">
               Send
             </Button>
           </Form.Item>
         </Form>
-    </Drawer>
+      </Drawer>
     </>
-    )
+  );
 };
+
 export default ChatForm;
