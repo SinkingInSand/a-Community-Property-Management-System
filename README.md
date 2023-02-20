@@ -1,6 +1,3 @@
-# a-Community-Property-Management-System
-A Full-stack web app for users to communicate with property management companies.
-
 前后端同学如果想得到所有branch
 可以先在git bash terminal，cd进一个干净目录
 然后
