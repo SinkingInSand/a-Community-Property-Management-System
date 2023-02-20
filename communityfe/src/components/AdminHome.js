@@ -66,7 +66,7 @@ const showChatDrawer = () => {
         
         >
           <Menu
-            mode="inline"
+            // mode="inline"
             defaultSelectedKeys={["1"]}
             defaultOpenKeys={["sub1"]}
             style={{

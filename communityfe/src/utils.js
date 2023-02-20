@@ -34,7 +34,23 @@ export const login = (credential) => {
   };
   
 
+  export const createPost = (data) => {
+    const signupUrl = "/announcements/create";
+  
+    return fetch(signupUrl, {
+      method: "POST",
+      headers: { //request header
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }).then((response) => { 
+      if (response.status < 200 || response.status >= 300) { 
+        throw Error("Fail to make a post");
+      }
+    });
 
+  };
+  
 
 
 

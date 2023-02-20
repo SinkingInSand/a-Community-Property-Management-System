@@ -1,10 +1,10 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Button, Form, Typography, Layout, message} from "antd";
-import { FileTextOutlined } from "@ant-design/icons";
 import Sider from "antd/lib/layout/Sider";
 import { getAnnouncements,getDiscussions } from "../utils";
 import Paragraph from "antd/lib/skeleton/Paragraph";
+import PostForm from "./PostForm";
 const { Title } = Typography;
 const {Content} = Layout;
 
@@ -70,7 +70,7 @@ const AnnouncementForm = (props) => {
     <>
       <Form
       >
-        <h1>Annoucements: </h1>
+        <Title level={3}>Annoucements: </Title>
         {announcements.map(
           (item) => {
             return <><Form.Item className="postItem">
@@ -83,7 +83,7 @@ const AnnouncementForm = (props) => {
           }
         )}
         <p></p>
-        <h1>Discussions: </h1>
+        <Title level={3}>Discussions: </Title>
         {discussions.map(
           (item) => {
             return <><Form.Item className="postItem">
@@ -99,12 +99,13 @@ const AnnouncementForm = (props) => {
         )}
 
       </Form>
-      <Button
+      {/* <Button
         className="floatPost"
         icon={<FileTextOutlined />}
         description="Create Post"
-        shape="square"
-      />
+        // shape="square"
+      >Create Post</Button> */}
+      {<PostForm />}
     </>
   );
 };
