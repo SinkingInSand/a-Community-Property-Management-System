@@ -36,7 +36,7 @@ public class ReservationDao {
     }
 
     public Amenity getAmenity(int id){
-        Amenity amenity = null;
+        Amenity amenity;
         try(Session session = sessionFactory.openSession()){
 
             amenity = session.get(Amenity.class, id);
@@ -45,20 +45,31 @@ public class ReservationDao {
         } catch (Exception ex){
             ex.printStackTrace();
         }
-        return amenity;
+        return new Amenity();
     }
 
     public List<Reservation> getReservationByDateByAmenity(int amenityId, LocalDate date){
         // deal with invalid amenityId and Date in the service level
         try(Session session = sessionFactory.openSession()){
-            CriteriaBuilder builder = session.getCriteriaBuilder();
+             Amenity amenity = session.get(Amenity.class, amenityId);
+             List<Reservation> result = new ArrayList<>();
+             List<Reservation> all = amenity.getReservation();
+             for(Reservation reserv : all){
+                 if(reserv.getReservationDate().equals(date)){
+                     result.add(reserv);
+                 }
+             }
+             return result;
+            /*CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<Reservation> criteriaQuery = builder.createQuery(Reservation.class);
         // get all reservations by amenity_id and date
             Root<Reservation> root = criteriaQuery.from(Reservation.class);
 
-            criteriaQuery.select(root).where(builder.equal(root.get("amenity_id"), amenityId)).where(builder.equal(root.get("reservationDate"), date));
+            criteriaQuery.select(root)
+                    .where(builder.equal(root.get("amenity_id"), amenityId))
+                    .where(builder.equal(root.get("reservationDate"), date));
 
-            return session.createQuery(criteriaQuery).getResultList();
+            return session.createQuery(criteriaQuery).getResultList();*/
 
         } catch(Exception ex){
             ex.printStackTrace();
@@ -97,6 +108,10 @@ public class ReservationDao {
             Reservation reservation = session.get(Reservation.class, id);
             Users user = reservation.getUser();
             user.getReservation().remove(reservation);
+            Amenity amenity = reservation.getAmenity();
+            amenity.getReservation().remove(reservation);
+            reservation.setAmenity(null);
+            reservation.setUser(null);
 
             session.beginTransaction();
             session.delete(reservation);
@@ -114,12 +129,12 @@ public class ReservationDao {
     }
 
     public boolean canDelete(int reserv_id, Users user){
-        Reservation reservation = null;
+        Reservation reservation;
 
         try(Session session = sessionFactory.openSession()){
             reservation = session.get(Reservation.class, reserv_id);
             Users owner = reservation.getUser();
-            return owner.equals(user);
+            return owner.getEmail().equals(user.getEmail());
         } catch (Exception ex){
             ex.printStackTrace();
         }

@@ -62,7 +62,20 @@ public class PostDao {
             }
         }
     }
+    public void deletePost(int id){
+        try (Session session = sessionFactory.openSession()) {
+            Post post = session.get(Post.class, id);
+            Users user = session.get(Users.class, post.getUser());
+            user.getPostList().remove(post);
+            post.setUser(null);
+            session.beginTransaction();
+            session.delete(post);
+            session.getTransaction().commit();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
+    }
     public Post getPostById(int postId){
         try (Session session = sessionFactory.openSession()) {
             return session.get(Post.class, postId);

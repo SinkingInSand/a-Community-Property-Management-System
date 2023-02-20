@@ -1,6 +1,7 @@
 package com.team1.communitymanagementsystem.dao;
 
 import com.team1.communitymanagementsystem.entity.Authorities;
+import com.team1.communitymanagementsystem.entity.Post;
 import com.team1.communitymanagementsystem.entity.Users;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -37,6 +38,18 @@ public class UsersDao {
             }
         }
 
+    }
+    public String[] getUserInfo(Users user){
+        try (Session session = sessionFactory.openSession()) {
+            Authorities role = session.get(Authorities.class, user.getEmail());
+            String[] info = new String[2];
+            info[0] = user.getEmail();
+            info[1] = role.getAuthorities();
+            return info;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
     public void adminRegister(Users user) {
         Authorities authorities = new Authorities();

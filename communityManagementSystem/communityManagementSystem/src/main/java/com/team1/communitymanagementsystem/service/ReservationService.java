@@ -44,7 +44,7 @@ public class ReservationService {
             return myReservations;
         }
 
-        return new ArrayList<Reservation>();
+        return new ArrayList<>();
 
     }
 
@@ -52,7 +52,7 @@ public class ReservationService {
     public byte[] getAvailability (int amenityId, LocalDate date){
 
         //validate date and amenityId (simple check for now)
-        if(date.isBefore(LocalDate.now(ZoneId.of("America/New York"))) || amenityId > 4 || amenityId < 1){
+        if(date.isBefore(LocalDate.now(ZoneId.of("America/New_York"))) || amenityId > 4 || amenityId < 1){
             return null;
         }
 
@@ -87,6 +87,7 @@ public class ReservationService {
         reservation.setAmenity(amenity);
         reservation.setUser(user);
         reservation.setTimeSlot(timeslot);
+        //user.getReservation().add(reservation);
         reservationDao.saveAReservation(reservation);
     }
 
@@ -107,4 +108,6 @@ public class ReservationService {
         }
 
     }
+
+
 }

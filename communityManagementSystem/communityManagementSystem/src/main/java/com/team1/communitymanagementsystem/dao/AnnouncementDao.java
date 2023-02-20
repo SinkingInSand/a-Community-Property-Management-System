@@ -74,18 +74,6 @@ public class AnnouncementDao {
             ex.printStackTrace();
         }
     }
-    /*public void addAnnouncement(Announcement newAnnouncement) {
-        try (Session session = sessionFactory.openSession()) {
-            LocalDateTime timestamp = LocalDateTime.now();
-            newAnnouncement.setTimestamp(timestamp);
-            session.beginTransaction();
-            session.save(newAnnouncement);
-            session.getTransaction().commit();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }*/
-
 
     public void deleteAnnouncement(int announcementId) {
         try (Session session = sessionFactory.openSession()) {

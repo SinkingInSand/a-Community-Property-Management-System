@@ -14,8 +14,11 @@ public class Users implements Serializable{
     private static final long serialVersionUID = 1L;
     @Id
     private String email;
+    @JsonIgnore
     private String userName;
+    @JsonIgnore
     private String password;
+    @JsonIgnore
     private String unit;
     //if true, user is admin; or user is resident.
     //The default value of boolean type data is false. As we don't have a setter for admin,
@@ -29,6 +32,7 @@ public class Users implements Serializable{
     }
 
     //one user can have N announcements
+    @JsonIgnore
     private boolean enabled;
     /*@OneToMany(mappedBy = "user",  cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
@@ -36,10 +40,12 @@ public class Users implements Serializable{
     //one user can have N posts
     @OneToMany(mappedBy = "user",  cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
+    @JsonIgnore
     private List<Post> postList;
 
     @OneToMany(mappedBy = "user",  cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
+    @JsonIgnore
     private List<Reservation> reservation;
     public String getEmail() {
         return email;

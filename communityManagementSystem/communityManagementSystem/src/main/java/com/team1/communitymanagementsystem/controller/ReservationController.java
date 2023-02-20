@@ -34,7 +34,7 @@ public class ReservationController {
 
         //delete reservation
 
-        @RequestMapping(value="deletereserv", method = RequestMethod.POST)
+        @RequestMapping(value="/deletereservations", method = RequestMethod.POST)
         @ResponseBody
         public String deleteAReservation(@RequestParam(name ="reservation_id") int id){
 
@@ -43,10 +43,11 @@ public class ReservationController {
 
 
         //see what timeslots are available, return a string of 10 numbers (0 or 1)
-        @RequestMapping(value = "/check", method = RequestMethod.GET)
+        @RequestMapping(value = "/checkAvailability", method = RequestMethod.GET)
         @ResponseBody
         public String checkAvailability(@RequestParam(name ="amenity_id") int id,
-                                        @RequestParam(name = "date") LocalDate date){
+                                        @RequestParam(name = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                        LocalDate date){
 
                 return Arrays.toString(reservationService.getAvailability(id, date));
         }
@@ -55,7 +56,7 @@ public class ReservationController {
         @RequestMapping(value = "/reserve", method = RequestMethod.POST)
         @ResponseStatus(value = HttpStatus.CREATED)
         public void makeAReservation(@RequestParam(name = "amenity_id") int id,
-                                     @RequestParam(name = "date") LocalDate date,
+                                     @RequestParam(name = "date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
                                      @RequestParam(name = "timeslot") short timeslot){
 
                 //consistency and transactional

@@ -3,6 +3,8 @@ package com.team1.communitymanagementsystem.service;
 import com.team1.communitymanagementsystem.dao.UsersDao;
 import com.team1.communitymanagementsystem.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,12 @@ public class UsersService {
 
     public Users getUser(String email) {
         return usersDao.getUser(email);
+    }
+    public String[] getUserInfo(){
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = loggedInUser.getName();
+        Users user = getUser(userEmail);
+        return usersDao.getUserInfo(user);
     }
     //get all reservation list
     //display all announcement and posts announcementService.display();

@@ -53,30 +53,18 @@ public class PostController {
     public void createComment(@RequestBody Post comment, @PathVariable(value = "postId") int postId) {
         postService.createComment(comment, postId);
     }
-
-    /*@RequestMapping(value = "/sendPost", method = RequestMethod.POST)
-    @ResponseStatus(value = HttpStatus.CREATED)
-    public void sendPost(
-            @RequestParam("content") String content,
-            @RequestParam("parentPostId") int parentPostId,
-            @RequestParam("timeStamp") LocalDateTime timestamp,
-            Principal principal){
-        Post post = new Post();
-        post.setContent(content);
-        post.setParentPostId(parentPostId);
-        post.setTimestamp(timestamp);
-        post.setVisible(true);
-        Users user = new Users();
-        //user.setEmail("Team1@gmail.com");
-        user.setEmail(principal.getName());
-        post.setUser(user);
-        postService.addPost(post);
+    @RequestMapping(value= "/discussion/{postId}/comment", method= RequestMethod.POST)
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void deleteComment(@RequestParam(name = "conmentId") int commentId) {
+         postService.deletePost(commentId);
     }
 
-    @RequestMapping(value = "/viewPosts/{post_id}", method = RequestMethod.DELETE)
-    
-    @ResponseStatus(value = HttpStatus.OK)
-    public void deletePost(@PathVariable int post_id, Principal principal){
-        postService.deletePost(post_id, principal.getName());
-    }*/
+    @RequestMapping(value= "/discussion/{postId}/*", method= RequestMethod.POST)
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void deletePost(@PathVariable(value = "postId") int postId) {
+         postService.deletePost(postId);
+    }
+
+
+
 }

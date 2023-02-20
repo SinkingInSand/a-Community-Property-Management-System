@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,12 +28,21 @@ public class PostService {
         String userName = loggedInUser.getName();
         postDao.addPost(post, userName);
     }
+    public void deletePost(int id){
+        postDao.deletePost(id);
+    }
     public List<Post> getOwnPosts(){
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String userName = loggedInUser.getName();
         Users user = usersDao.getUser(userName);
         List<Post> ownPosts = user.getPostList();
-        return ownPosts;
+        List<Post> result = new ArrayList<>();
+        for(Post post : ownPosts){
+            if(post.getParentPostId() == 0){
+                result.add(post);
+            }
+        }
+        return result;
     }
 
     public Post getPostById(int postId){

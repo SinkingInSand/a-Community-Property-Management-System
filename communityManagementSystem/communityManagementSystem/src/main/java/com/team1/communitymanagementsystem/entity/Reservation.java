@@ -5,6 +5,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "reservation")
 public class Reservation implements Serializable {
@@ -15,6 +17,7 @@ public class Reservation implements Serializable {
     private int id;
 
     @ManyToOne
+    @JoinColumn(name ="user_email", nullable = false)
     private Users user;
 
     @ManyToOne

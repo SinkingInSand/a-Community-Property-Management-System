@@ -26,12 +26,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .formLogin()
-                .defaultSuccessUrl("/announcements")
+                //.defaultSuccessUrl("/announcements")
                 .failureForwardUrl("/login?error=true");
         http
                 .authorizeRequests()
-                .antMatchers("/announcements/create","/announcements/*/delete").hasAuthority("ADMIN");
-                //.anyRequest().permitAll();
+                .antMatchers("/announcements/create","/announcements/*/delete").hasAuthority("ADMIN")
+                //.antMatchers().hasAuthority("RESIDENT")
+                .anyRequest().permitAll();
         //Need to be modified after deciding the certain url pattern
     }
 
