@@ -10,7 +10,7 @@ const {Content} = Layout;
 
 const AnnouncementForm = (props) => {
   console.log("Announcement Form Is Admin? = ", props.isAdmin);
-  const [isAdmin, setAdmin] = useState(props.isAdmin.isAdmin);
+  const [isAdmin, setAdmin] = useState(props.isAdmin);
   const [announcements, setAnnouncements] = useState([]);
   const [loadingAnnouncements, setLoadingAnnouncements] = useState(false);
   const [discussions, setDiscussions] = useState([]);
@@ -107,7 +107,7 @@ const AnnouncementForm = (props) => {
         description="Create Post"
         // shape="square"
       >Create Post</Button> */}
-      {isAdmin && <PostForm asAdmin ={isAdmin}/>}
+      {isAdmin && <PostForm />}
     </>
   );
 };

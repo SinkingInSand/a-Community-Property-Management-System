@@ -72,7 +72,6 @@ const showChatDrawer = () => {
             // items={items}
             >
             <Menu.Item onClick={handleAnnouncement}>Announcement</Menu.Item>
-            {/* <Menu.Item label="Discussion Board" key={2} onClick={handleDiscussionBoard}>Discussion Board</Menu.Item> */}
             {<ChatForm />}
             <Menu.Item onClick={showReservation}>Reservation</Menu.Item>
           </Menu>

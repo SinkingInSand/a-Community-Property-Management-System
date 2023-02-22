@@ -5,8 +5,8 @@ import { FileTextOutlined } from "@ant-design/icons";
 import { createPost } from "../utils";
 
 
-const PostForm = (props) => {
-    const [asAdmin, setAdmin] = useState(props);
+const PostForm = () => {
+    // const [asAdmin, setAdmin] = useState(props);
 
     const [displayModal, setDisplayModal] = useState(false);
 

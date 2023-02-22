@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
 import AdminHome from "./components/AdminHome";
-import ResidentHome from "./components/ResidentHome";
 import TopBar from "./components/TopBar";
 import { getUser } from "./utils";
 
