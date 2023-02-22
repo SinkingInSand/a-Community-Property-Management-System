@@ -1,8 +1,8 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Button, Form, Typography, Layout, message} from "antd";
+import { Button, Form, Typography, Layout, message, Modal, Input} from "antd";
 import Sider from "antd/lib/layout/Sider";
-import { getAnnouncements,getDiscussions } from "../utils";
+import { getAnnouncements,getDiscussions,createPost } from "../utils";
 import Paragraph from "antd/lib/skeleton/Paragraph";
 import PostForm from "./PostForm";
 const { Title } = Typography;
@@ -15,15 +15,80 @@ const AnnouncementForm = (props) => {
   const [loadingAnnouncements, setLoadingAnnouncements] = useState(false);
   const [discussions, setDiscussions] = useState([]);
   const [loadingDiscussions, setLoadingDiscussions, isRepliable] = useState(false);
+  const [displayModal, setDisplayModal] = useState(false);
+  const [displayEditModal, setEditDisplayModal] = useState(false);
+
+  const handleCancel = () => {
+    setDisplayModal(false);
+  };
+
+  const handleCancel_edit = () => {
+    setEditDisplayModal(false);
+  };
+
+  const deletePostOnClick = () => {
+
+    setDisplayModal(true);
+  };
+
+  const editPostOnClick = () => {
+    setEditDisplayModal(true);
+  };
 
 
+  const onFinish = () => {
+    createPost()
+      .then(() => {
+
+        setDisplayModal(false);
+        message.success(`Your announcement just posted!`);
+      })
+      .catch((err) => {
+        message.error(err.message);
+      });
+  };
 
   const renderDeletButton = () => {
     if (isAdmin) {
       return (
       <div>
-      <Button type="" style={{background:"lightblue"}}>Edit</Button>
-      <Button type="" style={{background:"pink"}}>Delete</Button>
+      <Button type="" style={{background:"lightblue"}} onClick={editPostOnClick}>Edit</Button>
+      <Button type="" style={{background:"pink"}} onClick={deletePostOnClick}>Delete </Button >
+      <Modal
+          title="Delete Post"
+          open={displayModal}
+          onCancel={handleCancel}
+          destroyOnClose={true} //destroy the content inside modal
+          footer={[
+            <Button key="back" onClick={handleCancel}>
+              No
+            </Button>,
+            <Button key="submit" type="primary" onClick={onFinish}>
+              Yes
+            </Button>
+          ]}
+        >
+        <p>Are you sure you want to delete this post?</p>
+
+        </Modal>
+
+        <Modal
+          title="Edit Post"
+          open={displayEditModal}
+          onCancel={handleCancel_edit}
+          destroyOnClose={true} //destroy the content inside modal
+          footer={[
+            <Button key="back" onClick={handleCancel_edit}>
+              No
+            </Button>,
+            <Button key="submit" type="primary" onClick={onFinish}>
+              Yes
+            </Button>
+          ]}
+        >
+        <p>Are you sure you want to edit this post?</p>
+
+        </Modal>
 
       </div>
       )
@@ -115,124 +180,3 @@ const AnnouncementForm = (props) => {
 
 export default AnnouncementForm;
 
-/*import { Button, Card, List, message, Select, Tooltip } from "antd";
-import { useEffect, useState } from "react";
-import { addItemToCart, getMenus, getRestaurants } from "../utils";
-import { PlusOutlined } from "@ant-design/icons";
-
-const { Option } = Select;
-
-const AddToCartButton = ({ itemId }) => {
-  const [loading, setLoading] = useState(false);
-
-  const AddToCart = () => {
-    setLoading(true);
-    addItemToCart(itemId)
-      .then(() => message.success(`Successfully add item`))
-      .catch((err) => message.error(err.message))
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-
-  return (
-    <Tooltip title="Add to shopping cart">
-      <Button
-        loading={loading}
-        type="primary"
-        icon={<PlusOutlined />}
-        onClick={AddToCart}
-      />
-    </Tooltip>
-  );
-};
-
-const FoodList = () => {
-  const [foodData, setFoodData] = useState([]);
-  const [curRest, setCurRest] = useState();
-  const [restaurants, setRestaurants] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [loadingRest, setLoadingRest] = useState(false);
-
-  useEffect(() => {
-    setLoadingRest(true);
-    getRestaurants()
-      .then((data) => {
-        setRestaurants(data);
-      })
-      .catch((err) => {
-        message.error(err.message);
-      })
-      .finally(() => {
-        setLoadingRest(false);
-      });
-  }, []);
-
-  useEffect(() => {
-    if (curRest) {
-      setLoading(true);
-      getMenus(curRest)
-        .then((data) => {
-          setFoodData(data);
-        })
-        .catch((err) => {
-          message.error(err.message);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-  }, [curRest]);
-
-  return (
-    <>
-      <Select
-        value={curRest}
-        onSelect={(value) => setCurRest(value)}
-        placeholder="Select a restaurant"
-        loading={loadingRest}
-        style={{ width: 300 }}
-        onChange={() => {}}
-      >
-        {restaurants.map((item) => {
-          return <Option value={item.id}>{item.name}</Option>;
-        })}
-      </Select>
-      {curRest && (
-        <List
-          style={{ marginTop: 20 }}
-          loading={loading}
-          grid={{
-            gutter: 16,
-            xs: 1,
-            sm: 2,
-            md: 4,
-            lg: 4,
-            xl: 3,
-            xxl: 3,
-          }}
-          dataSource={foodData}
-          renderItem={(item) => (
-            <List.Item>
-              <Card
-                title={item.name}
-                extra={<AddToCartButton itemId={item.id} />}
-              >
-                <img
-                  src={item.imageUrl}
-                  alt={item.name}
-                  style={{ height: 340, width: "100%", display: "block" }}
-                />
-                {`Price: ${item.price}`}
-              </Card>
-            </List.Item>
-          )}
-        />
-      )}
-    </>
-  );
-};
-
-export default FoodList;
-
-*/
