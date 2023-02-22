@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Button, Form, Typography, Layout, message, Modal, Input} from "antd";
+import { Button, Form, Typography, Layout, message, Modal, Space} from "antd";
 import Sider from "antd/lib/layout/Sider";
 import { getAnnouncements,getDiscussions,createPost } from "../utils";
 import Paragraph from "antd/lib/skeleton/Paragraph";
@@ -14,7 +14,7 @@ const AnnouncementForm = (props) => {
   const [announcements, setAnnouncements] = useState([]);
   const [loadingAnnouncements, setLoadingAnnouncements] = useState(false);
   const [discussions, setDiscussions] = useState([]);
-  const [loadingDiscussions, setLoadingDiscussions, isRepliable] = useState(false);
+  const [loadingDiscussions, setLoadingDiscussions] = useState(false);
   const [displayModal, setDisplayModal] = useState(false);
   const [displayEditModal, setEditDisplayModal] = useState(false);
 
@@ -51,9 +51,9 @@ const AnnouncementForm = (props) => {
   const renderDeletButton = () => {
     if (isAdmin) {
       return (
-      <div>
-      <Button type="" style={{background:"lightblue"}} onClick={editPostOnClick}>Edit</Button>
-      <Button type="" style={{background:"pink"}} onClick={deletePostOnClick}>Delete </Button >
+      <Space wrap>
+      <Button type="primary" /*style={{background:"lightblue"}}*/ onClick={editPostOnClick}>Edit</Button>
+      <Button type="primary" style={{background:"pink"}} onClick={deletePostOnClick}>Delete </Button >
       <Modal
           title="Delete Post"
           open={displayModal}
@@ -90,7 +90,7 @@ const AnnouncementForm = (props) => {
 
         </Modal>
 
-      </div>
+      </Space>
       )
     }
   };
