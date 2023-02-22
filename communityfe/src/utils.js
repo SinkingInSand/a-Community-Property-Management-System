@@ -55,24 +55,40 @@ export const login = (credential) => {
 
 
 
+  // export const getUser = () => {
+  //   return fetch("/home").then((response) => {
+  //     if (response.status < 200 || response.status >= 300) {
+  //       throw Error("Fail to get user");
+  //     }
+  
+  //     return response.json();
+  //   });
+  // };
 
-
-
+  export const getUser = () => {
+    return fetch("/home").then((response) => {
+      if (response.status < 200 || response.status >= 300) {
+        throw Error("Fail to get user");
+      }
+  
+      return response.json();
+    });
+  };
 
 
 
   
 
   // need to modify based on backend API
-  export const getMenus = (restId) => {
-    return fetch(`/restaurant/${restId}/menu`).then((response) => {
-      if (response.status < 200 || response.status >= 300) {
-        throw Error("Fail to get menus");
-      }
+  // export const getMenus = (restId) => {
+  //   return fetch(`/restaurant/${restId}/menu`).then((response) => {
+  //     if (response.status < 200 || response.status >= 300) {
+  //       throw Error("Fail to get menus");
+  //     }
   
-      return response.json();
-    });
-  };
+  //     return response.json();
+  //   });
+  // };
   
   export const getAnnouncements = () => {
     return fetch("/announcements").then((response) => {

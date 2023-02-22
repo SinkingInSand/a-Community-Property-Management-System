@@ -10,27 +10,21 @@ import ReservationForm from "./ReservationForm";
 import ChatForm from "./ChatForm";
 import { getAnnouncements } from "../utils";
 import AnnouncementForm from "./AnnouncementForm";
+import TopBar from "./TopBar";
 const { Content, Sider } = Layout;
-
-
-
-
-const items = [
-  { label: "Announcement",
-    key:'1' },
-  { label: "Discussion",
-  key:'2' },
-  { label: "Chat" },
-  { label: "Maintenance" },
-  // { label: "Pay" },
-  // { label: "Announcement" },
-];
 
 const AdminHome = (props) => {
   const [Reservation, setReservation] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [showAnnouncement, setAnouncement] = useState(true)
-  const [asAdmin, setAdmin] = useState(props);
+  
+  const [userInfo, setUserInfo] = useState(props.userInfo);
+  const [isLoggedIn, setLogin] = useState(props.isLoggedIn);
+
+  console.log("user info on AdminHome: ", userInfo);
+  const [asAdmin, setAdmin] = useState(props.asAdmin);
+  
+  
   console.log("Amin Home, is Admin = ", asAdmin)
   
 
@@ -38,13 +32,11 @@ const AdminHome = (props) => {
     setAnouncement(true);
     setReservation(false)
   }
-  const handleDiscussionBoard = () => {
-    setReservation(false)
-    alert("Dicussion Board is under development")
-  }
+
 
   const showReservation = () => {
     setReservation(true)
+    setAnouncement(false)
   }
 
   const handleCancel = () => {
@@ -56,11 +48,13 @@ const showChatDrawer = () => {
 
   return (
     <>
+    <TopBar isLoggedIn={isLoggedIn} userInfo={userInfo} asAdmin={asAdmin}/>
       <Layout>
         <Sider className="site-layout-background"
         style={
           { width: "200",
             minHeight: "100%",
+            background: "#011529",
           }
         }
         
@@ -70,15 +64,17 @@ const showChatDrawer = () => {
             defaultSelectedKeys={["1"]}
             defaultOpenKeys={["sub1"]}
             style={{
-              height: "100vh",
+              // height: "100vh",
+              height: "auto",
+              height:"100%",
               borderRight: 0,
             }}
             // items={items}
             >
-            <Menu.Item label="Announcement" key={1} onClick={handleAnnouncement}>Announcement</Menu.Item>
-            <Menu.Item label="Discussion Board" key={2} onClick={handleDiscussionBoard}>Discussion Board</Menu.Item>
+            <Menu.Item onClick={handleAnnouncement}>Announcement</Menu.Item>
+            {/* <Menu.Item label="Discussion Board" key={2} onClick={handleDiscussionBoard}>Discussion Board</Menu.Item> */}
             {<ChatForm />}
-            <Menu.Item label="Reservation" key={4} onClick={showReservation}>Reservation</Menu.Item>
+            <Menu.Item onClick={showReservation}>Reservation</Menu.Item>
           </Menu>
  
         </Sider>

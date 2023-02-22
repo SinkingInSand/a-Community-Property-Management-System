@@ -1,57 +1,56 @@
-import { Layout, Typography } from "antd";
-import { useState } from "react";
+import { Layout, Typography, message } from "antd";
+import { useState, useEffect } from "react";
 
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
 import AdminHome from "./components/AdminHome";
 import ResidentHome from "./components/ResidentHome";
 import TopBar from "./components/TopBar";
+import { getUser } from "./utils";
 
 const { Content } = Layout;
 const { Title } = Typography;
 
 function App() {
-  // const [authed, setAuthed] = useState(false);
-  const [authed, setAuthed] = useState(true); //uncomment previous line. temp solution for testing.
-  const [asAdmin, setAdmin] = useState(true); //uncomment previous line. temp solution for testing.
+  const [asAdmin, setAdmin] = useState(false); //uncomment previous line. temp solution for testing.
   const [isLoggedIn, setLogin] = useState(false);
-  console.log("islogged in", isLoggedIn)
+  const [userInfo, setUserInfo] = useState([]);
 
-  const handelTempLogin =(loginStatus) => {
-    
+  console.log("Launch the website, is logged in", isLoggedIn);
+  console.log("Launch the website, is admin", asAdmin);
+  console.log("Launch the website, get user information: ", userInfo);
+
+  const handelTempLogin = (loginStatus) => {
     setLogin(loginStatus);
+    // setAdmin();
     // console.log("after handle", loginStatus)
   };
-  console.log("after handle", isLoggedIn)
+  // console.log("user is: ", getUser());
+  // console.log("after handle", isLoggedIn)
 
-  // const onSuccess = () => {
-  //   setLogin(true);
-  // }
-//   const handleLogout = () => {
-//     // isLogin = false;
-//     setLogin(false);
+  const onSuccess = (userInfo) => {
+    console.log("after handle, user info = ", userInfo)
+    setUserInfo(userInfo);
 
-// }
+    if (userInfo[1] === 'ADMIN'){
+      setAdmin(true);//set the admin is true
+    }
+   
+    
+  } 
+  console.log("If Admin after login: ", asAdmin);
 
 
   const renderContent = () => {
-
-
     if (isLoggedIn) {
-      return <AdminHome isAdmin = {asAdmin}/>;
-    }
-    // return <AdminHome isAdmin ={asAdmin} />;
-    // if (isLoggedIn& !asAdmin){
-    //   return <ResidentHome/>
-    // } //might not be necessary to have this component
-    return <LoginForm handelTempLogin = {handelTempLogin} onSuccess={() => setLogin(true)}/>;
+      return <AdminHome isLoggedIn={isLoggedIn} userInfo={userInfo[0]} asAdmin={asAdmin}/>;
+    };
+    return <LoginForm handelTempLogin={handelTempLogin} onSuccess={onSuccess}/>;
   };
 
   return (
     <Layout style={{ height: "100vh" }}>
-      <TopBar isLoggedIn={isLoggedIn} asAdmin={asAdmin}/>
       <Content>{renderContent()}</Content>
-      {/* <LoginForm handelTempLogin = {handelTempLogin} /> */}
     </Layout>
   );
 }

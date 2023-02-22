@@ -34,6 +34,7 @@ const AnnouncementForm = (props) => {
 
 //   const announcements = () => {
 //     console.log(getAnnouncements())
+
   useEffect(() => {
       setLoadingAnnouncements(true);
       getAnnouncements()
@@ -49,6 +50,7 @@ const AnnouncementForm = (props) => {
         });
 
     }, []);
+
     useEffect(() => {
       setLoadingDiscussions(true);
       getDiscussions()
@@ -61,7 +63,7 @@ const AnnouncementForm = (props) => {
         .finally(() => {
           setLoadingDiscussions(false);
         });
-    },[])
+    },[]) //can we get discussion and announcement at once
 
     console.log("Announcements: ", announcements[0]);
 // ;  }
@@ -105,7 +107,7 @@ const AnnouncementForm = (props) => {
         description="Create Post"
         // shape="square"
       >Create Post</Button> */}
-      {<PostForm />}
+      {isAdmin && <PostForm asAdmin ={isAdmin}/>}
     </>
   );
 };

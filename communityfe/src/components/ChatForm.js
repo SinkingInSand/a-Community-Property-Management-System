@@ -40,7 +40,7 @@ const ChatForm = () => {
       <Drawer
         title="Chat"
         width={400}
-        visible={isDrawerOpen}
+        open={isDrawerOpen}
         onClose={handleCancel}
       >
         <h2>XXX Apartment</h2>
