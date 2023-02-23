@@ -3,61 +3,55 @@
 //   NotificationOutlined,
 //   UserOutlined,
 // } from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu} from "antd";
+import { Breadcrumb, Layout, Menu } from "antd";
 import React from "react";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import ReservationForm from "./ReservationForm";
 import ChatForm from "./ChatForm";
 import { getAnnouncements } from "../utils";
 import AnnouncementForm from "./AnnouncementForm";
+import AdminChat from "./AdminChat";
 import TopBar from "./TopBar";
 const { Content, Sider } = Layout;
 
 const AdminHome = (props) => {
   const [Reservation, setReservation] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [showAnnouncement, setAnouncement] = useState(true)
-  
+  const [showAnnouncement, setAnouncement] = useState(true);
+  const [showAdminChat, setAdminChat] = useState(true);
+
   const [userInfo, setUserInfo] = useState(props.userInfo);
   const [isLoggedIn, setLogin] = useState(props.isLoggedIn);
 
   console.log("user info on AdminHome: ", userInfo);
   const [asAdmin, setAdmin] = useState(props.asAdmin);
-  
-  
-  console.log("Amin Home, is Admin = ", asAdmin)
-  
+
+  console.log("Amin Home, is Admin = ", asAdmin);
 
   const handleAnnouncement = () => {
     setAnouncement(true);
-    setReservation(false)
-  }
-
+    setReservation(false);
+    setAdminChat(false);
+  };
+  const handleAdminChat = () => {
+    setAnouncement(false);
+    setReservation(false);
+    setAdminChat(true);
+  };
 
   const showReservation = () => {
-    setReservation(true)
-    setAnouncement(false)
-  }
-
-  const handleCancel = () => {
-    setIsDrawerOpen(false);
+    setReservation(true);
+    setAnouncement(false);
+    setAdminChat(false);
   };
-const showChatDrawer = () => {
-    setIsDrawerOpen(true)
-}
 
   return (
     <>
-    <TopBar isLoggedIn={isLoggedIn} userInfo={userInfo} asAdmin={asAdmin}/>
+      <TopBar isLoggedIn={isLoggedIn} userInfo={userInfo} asAdmin={asAdmin} />
       <Layout>
-        <Sider className="site-layout-background"
-        style={
-          { width: "200",
-            minHeight: "100%",
-            background: "#011529",
-          }
-        }
-        
+        <Sider
+          className="site-layout-background"
+          style={{ width: "200", minHeight: "100%", background: "#011529" }}
         >
           <Menu
             // mode="inline"
@@ -66,16 +60,18 @@ const showChatDrawer = () => {
             style={{
               // height: "100vh",
               height: "auto",
-              height:"100%",
+              height: "100%",
               borderRight: 0,
             }}
             // items={items}
-            >
+          >
             <Menu.Item onClick={handleAnnouncement}>Announcement</Menu.Item>
-            {<ChatForm />}
+            {asAdmin && isLoggedIn ? <ChatForm /> : null}
+            <Menu.Item onClick={handleAdminChat}>Chat</Menu.Item>
+            {/* {<ChatForm />}
+            <Menu.Item onClick={handleAdminChat}>Chat</Menu.Item> */}
             <Menu.Item onClick={showReservation}>Reservation</Menu.Item>
           </Menu>
- 
         </Sider>
         {/* the layout below should changed depend on authorization */}
         <Layout
@@ -83,14 +79,12 @@ const showChatDrawer = () => {
             padding: "0 24px 24px",
           }}
         >
-        { Reservation && <ReservationForm /> }
-        { showAnnouncement && <AnnouncementForm isAdmin={asAdmin}/>}
-       
-
+          {Reservation && <ReservationForm />}
+          {showAnnouncement && <AnnouncementForm isAdmin={asAdmin} />}
+          {showAdminChat && <AdminChat />}
         </Layout>
       </Layout>
     </>
   );
-
 };
 export default AdminHome;
