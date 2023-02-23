@@ -51,9 +51,10 @@ const AnnouncementForm = (props) => {
   const renderDeletButton = () => {
     if (isAdmin) {
       return (
-      <Space wrap>
-      <Button type="primary" /*style={{background:"lightblue"}}*/ onClick={editPostOnClick}>Edit</Button>
-      <Button type="primary" style={{background:"pink"}} onClick={deletePostOnClick}>Delete </Button >
+      <Space>
+      <Button type="primary" size = "middle" style={{background:"lightblue"}} onClick={editPostOnClick }>Edit</Button>
+      <Button type="primary" size = "middle" style={{background:"pink"}} onClick={deletePostOnClick}>Delete </Button >
+
       <Modal
           title="Delete Post"
           open={displayModal}
@@ -143,7 +144,7 @@ const AnnouncementForm = (props) => {
             return <><Form.Item className="postItem">
               <Title level={3}>{item.title}</Title>
               <p>{item.content}</p>
-              <p>{item.timestamp.month}</p>
+              <p>{item.timestamp.month + ' ' + item.timestamp.dayOfMonth + ' ' + item.timestamp.dayOfWeek}</p>
               {renderDeletButton(false)}
             </Form.Item>
             </>
@@ -156,9 +157,10 @@ const AnnouncementForm = (props) => {
             return <><Form.Item className="postItem">
               <Title level={3}>{"Subject: " + item.subject}</Title>
               <p>{item.content}</p>
-              <p>{item.timestamp.month}</p>
+              <p>{item.timestamp.month + ' ' + item.timestamp.dayOfMonth + ' ' + item.timestamp.dayOfWeek}</p>
               {renderDeletButton()}
-              <Button type="" style={{background:"lightgreen"}}>Reply</Button>
+              <Button type="primary" style={{background:"lightgreen"}}>Reply</Button>
+              
     
             </Form.Item>
             </>
