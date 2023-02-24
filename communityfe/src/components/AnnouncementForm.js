@@ -1,12 +1,29 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Button, Form, Typography, Layout, message, Modal, Space} from "antd";
+import {
+  Button,
+  Form,
+  Typography,
+  Layout,
+  message,
+  Modal,
+  Space,
+  List,
+} from "antd";
 import Sider from "antd/lib/layout/Sider";
-import { getAnnouncements,getDiscussions,deleteAnnoucement } from "../utils";
+import {
+  getAnnouncements,
+  getDiscussions,
+  createPost,
+  getComments,
+} from "../utils";
 import Paragraph from "antd/lib/skeleton/Paragraph";
 import PostForm from "./PostForm";
+import ReplyForm from "./ReplyForm";
+import { append } from "domutils";
+import TextArea from "antd/lib/input/TextArea";
 const { Title } = Typography;
-const {Content} = Layout;
+const { Content } = Layout;
 
 const AnnouncementForm = (props) => {
   console.log("Announcement Form Is Admin? = ", props.isAdmin);
@@ -17,6 +34,10 @@ const AnnouncementForm = (props) => {
   const [loadingDiscussions, setLoadingDiscussions] = useState(false);
   const [displayModal, setDisplayModal] = useState(false);
   const [displayEditModal, setEditDisplayModal] = useState(false);
+  // const [ReplyArea, setReplyAreaVisible] = useState()
+  const [replyId, setReplyID] = useState(-1);
+  const [commentId, setCommentId] = useState(-1);
+  const [comments, setComments] = useState([]);
 
   const handleCancel = () => {
     setDisplayModal(false);
@@ -26,8 +47,12 @@ const AnnouncementForm = (props) => {
     setEditDisplayModal(false);
   };
 
-  const deletePostOnClick = () => {
+  const handleCancelReply = () => {
+    // setReplyAreaVisible(false);
+    setReplyID(-1);
+  };
 
+  const deletePostOnClick = () => {
     setDisplayModal(true);
   };
 
@@ -35,15 +60,11 @@ const AnnouncementForm = (props) => {
     setEditDisplayModal(true);
   };
 
-  
-  const onSuccess = () => {
-    let j = 18
-    console.log(j)
-    deleteAnnoucement(j)
+  const onFinish = () => {
+    createPost()
       .then(() => {
-
         setDisplayModal(false);
-        message.success('Your annoucement has been deleted!');
+        message.success(`Your announcement just posted!`);
       })
       .catch((err) => {
         message.error(err.message);
@@ -53,134 +74,211 @@ const AnnouncementForm = (props) => {
   const renderDeletButton = () => {
     if (isAdmin) {
       return (
-      <Space>
-      <Button type="primary" size = "middle" style={{background:"lightblue"}} onClick={editPostOnClick }>Edit</Button>
-      <Button type="primary" size = "middle" style={{background:"pink"}} onClick={deletePostOnClick}>Delete </Button >
+        <Space>
+          <Button
+            type="primary"
+            size="middle"
+            style={{ background: "lightblue" }}
+            onClick={editPostOnClick}
+          >
+            Edit
+          </Button>
+          <Button
+            type="primary"
+            size="middle"
+            style={{ background: "pink" }}
+            onClick={deletePostOnClick}
+          >
+            Delete{" "}
+          </Button>
 
-      <Modal
-          title="Delete Post"
-          open={displayModal}
-          onCancel={handleCancel}
-          destroyOnClose={true} //destroy the content inside modal
-          footer={[
-            <Button key="back" onClick={handleCancel}>
-              No
-            </Button>,
-            <Button key="submit" type="primary" onClick={onSuccess}>
-              Yes
-            </Button>
-          ]}
-        >
-        <p>Are you sure you want to delete this post?</p>
+          <Modal
+            title="Delete Post"
+            open={displayModal}
+            onCancel={handleCancel}
+            destroyOnClose={true} //destroy the content inside modal
+            footer={[
+              <Button key="back" onClick={handleCancel}>
+                No
+              </Button>,
+              <Button key="submit" type="primary" onClick={onFinish}>
+                Yes
+              </Button>,
+            ]}
+          >
+            <p>Are you sure you want to delete this post?</p>
+          </Modal>
 
-        </Modal>
-
-        <Modal
-          title="Edit Post"
-          open={displayEditModal}
-          onCancel={handleCancel_edit}
-          destroyOnClose={true} //destroy the content inside modal
-          footer={[
-            <Button key="back" onClick={handleCancel_edit}>
-              No
-            </Button>,
-            <Button key="submit" type="primary" onClick={onSuccess}>
-              Yes
-            </Button>
-          ]}
-        >
-        <p>Are you sure you want to edit this post?</p>
-
-        </Modal>
-
-      </Space>
-      )
+          <Modal
+            title="Edit Post"
+            open={displayEditModal}
+            onCancel={handleCancel_edit}
+            destroyOnClose={true} //destroy the content inside modal
+            footer={[
+              <Button key="back" onClick={handleCancel_edit}>
+                No
+              </Button>,
+              <Button key="submit" type="primary" onClick={onFinish}>
+                Yes
+              </Button>,
+            ]}
+          >
+            <p>Are you sure you want to edit this post?</p>
+          </Modal>
+        </Space>
+      );
     }
   };
-  console.log(getAnnouncements())
-
-
-//   const announcements = () => {
-//     console.log(getAnnouncements())
 
   useEffect(() => {
-      setLoadingAnnouncements(true);
-      getAnnouncements()
-      
-        .then((data) => {
-          setAnnouncements(data);
-        })
-        .catch((err) => {
-          message.error(err.message);
-        })
-        .finally(() => {
-          setLoadingAnnouncements(false);
-        });
+    setLoadingAnnouncements(true);
+    getAnnouncements()
+      .then((data) => {
+        setAnnouncements(data);
+      })
+      .catch((err) => {
+        message.error(err.message);
+      })
+      .finally(() => {
+        setLoadingAnnouncements(false);
+      });
+  }, []);
 
-    }, []);
+  useEffect(() => {
+    setLoadingDiscussions(true);
+    getDiscussions()
+      .then((data) => {
+        setDiscussions(data);
+      })
+      .catch((err) => {
+        message.error(err.message);
+      })
+      .finally(() => {
+        setLoadingDiscussions(false);
+      });
+  }, []); //can we get discussion and announcement at once
 
-    useEffect(() => {
-      setLoadingDiscussions(true);
-      getDiscussions()
-        .then((data) => {
-          setDiscussions(data);
-        })
-        .catch((err) => {
-          message.error(err.message);
-        })
-        .finally(() => {
-          setLoadingDiscussions(false);
-        });
-    },[]) //can we get discussion and announcement at once
+  const handleReply = (props) => {
+    if (replyId === -1) {
+      console.log("onclick reply ", props.id);
+      // windows.DOM.getElementById(id)
+      setReplyID(props.id);
+    } else {
+      setReplyID(-1);
+    }
+  };
 
-    console.log("Announcements: ", announcements[0]);
-// ;  }
+  const handleGetComments = (id) => {
+    if (commentId === -1) {
+      console.log("Getting comments from post ", id);
+      setCommentId(id);
+      getComments(id).then((data) => {
+        setComments(data);
+      });
+
+      console.log("Comments is ", comments);
+    } else {
+      setCommentId(-1);
+    }
+  };
+
+  const Parent = ({ item }) => {
+    return (
+      <>
+        <Form.Item id={item.id}>
+          <Title level={5}>{"Subject: " + item.subject}</Title>
+          <p>{item.content}</p>
+          <p>
+            {item.timestamp.month +
+              " " +
+              item.timestamp.dayOfMonth +
+              " " +
+              item.timestamp.dayOfWeek}
+          </p>
+          {renderDeletButton()}
+          <Button
+            type="primary"
+            style={{ background: "lightgreen" }}
+            onClick={() => handleReply(item)}
+          >
+            Reply
+          </Button>
+          <Button onClick={() => handleGetComments(item.id)}>
+            Check Comments
+          </Button>
+          {addChildren(item.id)}
+        </Form.Item>
+        {addComments(item.id)}
+      </>
+    );
+  };
+
+  const addChildren = (id) => {
+    if (id === replyId) {
+      console.log("reply ID is ", replyId);
+
+      return <ReplyForm postId={id} />;
+    }
+  };
+
+  const addComments = (id) => {
+    if (id === commentId) {
+      console.log("reply ID is ", replyId);
+      return <Comment />;
+    }
+  };
+  const Comment = () => {
+    return (
+      <List>
+        {comments.map((item) => {
+          return (
+            <List.Item style={{ color: "black" }}>
+              Reply: {item.content}
+            </List.Item>
+          );
+        })}
+      </List>
+    );
+  };
+
+  
+
   return (
-    // <p>Announcement Form</p>
     <>
-      <Form
-      >
+      <Form>
         <Title level={3}>Annoucements: </Title>
-        {announcements.map(
-          (item) => {
-            return <><Form.Item className="postItem">
-              <Title level={3}>{item.title}</Title>
-              <p>{item.content}</p>
-              <p>{item.timestamp.month + ' ' + item.timestamp.dayOfMonth + ' ' + item.timestamp.dayOfWeek}</p>
-              {renderDeletButton(false)}
-            </Form.Item>
+        {announcements.map((item) => {
+          return (
+            <>
+              <Form.Item className="postItem">
+                <Title level={5}>{item.title}</Title>
+                <p>{item.content}</p>
+                <p>
+                  {item.timestamp.month +
+                    " " +
+                    item.timestamp.dayOfMonth +
+                    " " +
+                    item.timestamp.dayOfWeek}
+                </p>
+                {renderDeletButton(false)}
+              </Form.Item>
             </>
-          }
-        )}
+          );
+        })}
         <p></p>
-        <Title level={3}>Discussions: </Title>
-        {discussions.map(
-          (item) => {
-            return <><Form.Item className="postItem">
-              <Title level={3}>{"Subject: " + item.subject}</Title>
-              <p>{item.content}</p>
-              <p>{item.timestamp.month + ' ' + item.timestamp.dayOfMonth + ' ' + item.timestamp.dayOfWeek}</p>
-              {renderDeletButton()}
-              <Button type="primary" style={{background:"lightgreen"}}>Reply</Button>
-              
-    
-            </Form.Item>
-            </>
-          }
-        )}
-
       </Form>
-      {/* <Button
-        className="floatPost"
-        icon={<FileTextOutlined />}
-        description="Create Post"
-        // shape="square"
-      >Create Post</Button> */}
+      <Title level={3}>Discussions: </Title>
+      {discussions.map((item) => {
+        return (
+          <>
+            <Parent item={item} addChildren={addChildren(item.id)} />
+          </>
+        );
+      })}
+
       {isAdmin && <PostForm />}
     </>
   );
 };
 
-
 export default AnnouncementForm;
-

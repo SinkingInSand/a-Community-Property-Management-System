@@ -57,7 +57,7 @@ const PostForm = () => {
           destroyOnClose={true} //destroy the content inside modal
         >
           <Form
-            name="normal_register"
+            // name="normal_register"
             initialValues={{ remember: true }}
             onFinish={onFinish}
             preserve={false}

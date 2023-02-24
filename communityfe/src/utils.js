@@ -50,6 +50,7 @@ export const login = (credential) => {
     });
 
   };
+
   
 
 
@@ -110,37 +111,37 @@ export const login = (credential) => {
     });
   };
   
-  export const getCart = () => {
-    return fetch("/cart").then((response) => {
-      if (response.status < 200 || response.status >= 300) {
-        throw Error("Fail to get shopping cart data");
-      }
+  // export const getCart = () => {
+  //   return fetch("/cart").then((response) => {
+  //     if (response.status < 200 || response.status >= 300) {
+  //       throw Error("Fail to get shopping cart data");
+  //     }
   
-      return response.json();
-    });
-  };
+  //     return response.json();
+  //   });
+  // };
   
-  export const checkout = () => {
-    return fetch("/checkout").then((response) => {
-      if (response.status < 200 || response.status >= 300) {
-        throw Error("Fail to checkout");
-      }
-    });
-  };
+  // export const checkout = () => {
+  //   return fetch("/checkout").then((response) => {
+  //     if (response.status < 200 || response.status >= 300) {
+  //       throw Error("Fail to checkout");
+  //     }
+  //   });
+  // };
   
-  export const addItemToCart = (itemId) => {
-    return fetch(`/order/${itemId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    }).then((response) => {
-      if (response.status < 200 || response.status >= 300) {
-        throw Error("Fail to add menu item to shopping cart");
-      }
-    });
-  };
+  // export const addItemToCart = (itemId) => {
+  //   return fetch(`/order/${itemId}`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     credentials: "include",
+  //   }).then((response) => {
+  //     if (response.status < 200 || response.status >= 300) {
+  //       throw Error("Fail to add menu item to shopping cart");
+  //     }
+  //   });
+  // };
 
   export const deleteAnnoucement = (aId) => {
 
@@ -154,5 +155,33 @@ export const login = (credential) => {
       if (response.status < 200 || response.status >= 300) {
         throw Error("Fail to delete annoucement");
       }
+    });
+  };
+
+    
+  export const reply = (data, pid) => {
+    const signupUrl = `/discussion/${pid}/createComment`;
+  
+    return fetch(signupUrl, {
+      method: "POST",
+      headers: { //request header
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }).then((response) => { 
+      if (response.status < 200 || response.status >= 300) { 
+        throw Error("Fail to make a post");
+      }
+    });
+
+  };
+
+  export const getComments = (pid) => {
+    return fetch(`discussion/${pid}/comment`).then((response) => {
+      if (response.status < 200 || response.status >= 300) {
+        throw Error("Fail to get comments");
+      }
+  
+      return response.json();
     });
   };
