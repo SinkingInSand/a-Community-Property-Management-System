@@ -204,7 +204,7 @@ const AnnouncementForm = (props) => {
             Reply
           </Button>
           <Button onClick={() => handleGetComments(item.id)}>
-            Check Comments
+            Check Replys
           </Button>
           {addChildren(item.id)}
         </Form.Item>
