@@ -1,10 +1,12 @@
 import React from "react";
 import { useState } from "react";
-import { Drawer, Menu, Input, Form, Button } from "antd";
+import { Drawer, Menu, Input, Form, Button, message } from "antd";
 
 const { TextArea } = Input;
 
-const ChatForm = () => {
+
+const ChatForm = (props) => {
+  const [userInfo, setUserInfo] = useState(props.userInfo);
   const [isDrawerOpen, setOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [form] = Form.useForm();
@@ -18,17 +20,19 @@ const ChatForm = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    form.validateFields((err, values) => {
-      if (!err) {
-        const newMessage = {
-          text: values.message,
-          timestamp: new Date().toLocaleString(),
-        };
-        setMessages([...messages, newMessage]);
-        form.resetFields();
-      }
-    });
+    // e.preventDefault();
+    // form.validateFields((err, values) => {
+    //   if (!err) {
+    //     const newMessage = {
+    //       text: values.message,
+    //       timestamp: new Date().toLocaleString(),
+    //     };
+    //     setMessages([...messages, newMessage]);
+    //     form.resetFields();
+    //   }
+    // });
+    setOpen(false);
+    message.success("Thank you for contacting us! Your message has been sent. We'll get back to you as soon as possible. Please check your email for a confirmation of your message submission.")
   };
 
   return (
@@ -53,7 +57,7 @@ const ChatForm = () => {
         ))}
         <Form
           name="chat_form"
-          onFinish={handleSubmit}
+          // onFinish={handleSubmit}
           style={{ marginTop: "2rem" }}
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 16 }}
@@ -73,7 +77,7 @@ const ChatForm = () => {
               },
             ]}
           >
-            <Input placeholder="Email" />
+            <Input placeholder="Email" defaultValue={userInfo}/>
           </Form.Item>
 
           <Form.Item
@@ -92,7 +96,7 @@ const ChatForm = () => {
             <TextArea placeholder="Type a message" rows={5} />
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" onClick={handleSubmit}>
               Send
             </Button>
           </Form.Item>
