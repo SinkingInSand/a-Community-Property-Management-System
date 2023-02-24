@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Button, Form, Typography, Layout, message, Modal, Space} from "antd";
 import Sider from "antd/lib/layout/Sider";
-import { getAnnouncements,getDiscussions,createPost } from "../utils";
+import { getAnnouncements,getDiscussions,deleteAnnoucement } from "../utils";
 import Paragraph from "antd/lib/skeleton/Paragraph";
 import PostForm from "./PostForm";
 const { Title } = Typography;
@@ -35,13 +35,15 @@ const AnnouncementForm = (props) => {
     setEditDisplayModal(true);
   };
 
-
-  const onFinish = () => {
-    createPost()
+  
+  const onSuccess = () => {
+    let j = 18
+    console.log(j)
+    deleteAnnoucement(j)
       .then(() => {
 
         setDisplayModal(false);
-        message.success(`Your announcement just posted!`);
+        message.success('Your annoucement has been deleted!');
       })
       .catch((err) => {
         message.error(err.message);
@@ -64,7 +66,7 @@ const AnnouncementForm = (props) => {
             <Button key="back" onClick={handleCancel}>
               No
             </Button>,
-            <Button key="submit" type="primary" onClick={onFinish}>
+            <Button key="submit" type="primary" onClick={onSuccess}>
               Yes
             </Button>
           ]}
@@ -82,7 +84,7 @@ const AnnouncementForm = (props) => {
             <Button key="back" onClick={handleCancel_edit}>
               No
             </Button>,
-            <Button key="submit" type="primary" onClick={onFinish}>
+            <Button key="submit" type="primary" onClick={onSuccess}>
               Yes
             </Button>
           ]}

@@ -142,8 +142,9 @@ export const login = (credential) => {
     });
   };
 
-  export const deleteAnnoucement = (AnnoucementId) => {
-    return fetch("/announcements/${AnnoucementId}/delete", {
+  export const deleteAnnoucement = (aId) => {
+
+    return fetch(`/announcements/${aId}/delete`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
