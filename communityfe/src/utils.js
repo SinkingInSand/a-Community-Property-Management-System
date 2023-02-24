@@ -110,37 +110,37 @@ export const login = (credential) => {
     });
   };
   
-  export const getCart = () => {
-    return fetch("/cart").then((response) => {
-      if (response.status < 200 || response.status >= 300) {
-        throw Error("Fail to get shopping cart data");
-      }
+  // export const getCart = () => {
+  //   return fetch("/cart").then((response) => {
+  //     if (response.status < 200 || response.status >= 300) {
+  //       throw Error("Fail to get shopping cart data");
+  //     }
   
-      return response.json();
-    });
-  };
+  //     return response.json();
+  //   });
+  // };
   
-  export const checkout = () => {
-    return fetch("/checkout").then((response) => {
-      if (response.status < 200 || response.status >= 300) {
-        throw Error("Fail to checkout");
-      }
-    });
-  };
+  // export const checkout = () => {
+  //   return fetch("/checkout").then((response) => {
+  //     if (response.status < 200 || response.status >= 300) {
+  //       throw Error("Fail to checkout");
+  //     }
+  //   });
+  // };
   
-  export const addItemToCart = (itemId) => {
-    return fetch(`/order/${itemId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    }).then((response) => {
-      if (response.status < 200 || response.status >= 300) {
-        throw Error("Fail to add menu item to shopping cart");
-      }
-    });
-  };
+  // export const addItemToCart = (itemId) => {
+  //   return fetch(`/order/${itemId}`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     credentials: "include",
+  //   }).then((response) => {
+  //     if (response.status < 200 || response.status >= 300) {
+  //       throw Error("Fail to add menu item to shopping cart");
+  //     }
+  //   });
+  // };
 
   export const deleteAnnoucement = (aId) => {
 

@@ -34,9 +34,11 @@ const AdminHome = (props) => {
     setAdminChat(false);
   };
   const handleAdminChat = () => {
+   
     setAnouncement(false);
     setReservation(false);
-    setAdminChat(true);
+    !asAdmin ? setAdminChat(false) : setAdminChat(true);
+    //setAdminChat(true);
   };
 
   const showReservation = () => {
@@ -66,10 +68,7 @@ const AdminHome = (props) => {
             // items={items}
           >
             <Menu.Item onClick={handleAnnouncement}>Announcement</Menu.Item>
-            {asAdmin && isLoggedIn ? <ChatForm /> : null}
-            <Menu.Item onClick={handleAdminChat}>Chat</Menu.Item>
-            {/* {<ChatForm />}
-            <Menu.Item onClick={handleAdminChat}>Chat</Menu.Item> */}
+            {asAdmin ? <Menu.Item onClick={handleAdminChat}>Messages</Menu.Item> : <ChatForm />}
             <Menu.Item onClick={showReservation}>Reservation</Menu.Item>
           </Menu>
         </Sider>
@@ -81,7 +80,7 @@ const AdminHome = (props) => {
         >
           {Reservation && <ReservationForm />}
           {showAnnouncement && <AnnouncementForm isAdmin={asAdmin} />}
-          {showAdminChat && <AdminChat />}
+          {showAdminChat && <AdminChat isAdmin={asAdmin}/>}
         </Layout>
       </Layout>
     </>

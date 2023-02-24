@@ -11,6 +11,10 @@ const AdminChat = () => {
 
   const [chatMessages, setAdminChat] = useState([]);
 
+  const handleCompleted = () => {
+      //placeholder for task complete
+  };
+
 //   useEffect(() => {
 //       setLoadingAdminChat(true);
 //       getAdminChat()
@@ -29,31 +33,31 @@ const AdminChat = () => {
 
   return (
      <>
-     <Form
-     >
+     <Form>
        <Title level={3}>Messages: </Title>
         {chatMessages.map(
           (item) => {
             return <><Form.Item className="postItem">
               <Title level={3}>{"Subject: " + item.subject}</Title>
               <p>{item.content}</p>
-              <p>{item.timestamp.month}</p>
               {/* {renderDeletButton()} */}              
-    
+              <Checkbox>Task Completed</Checkbox>
             </Form.Item>
             </>
           }
         )}
-      <Checkbox
-    //     checked={componentDisabled}
-    //     onChange={(e) => setComponentDisabled(e.target.checked)}
-      >
-        Task Completed
-            </Checkbox>
+      
+    {/* checked={componentDisabled}
+    onChange={(e) => setComponentDisabled(e.target.checked)} */}  
 
-     </Form>
-    
-     
+    <><Form.Item className="postItem">
+        <Title level={3}>{"Subject: " }</Title>
+        <p>content</p>
+        {/* {renderDeletButton()} */}              
+        <Checkbox onClick={handleCompleted}>Task Completed</Checkbox>
+      </Form.Item>
+      </>
+     </Form>     
    </>
   );
 };
