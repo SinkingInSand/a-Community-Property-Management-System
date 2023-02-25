@@ -16,6 +16,7 @@ import {
   getDiscussions,
   createPost,
   getComments,
+  deleteAnnoucement,
 } from "../utils";
 import Paragraph from "antd/lib/skeleton/Paragraph";
 import PostForm from "./PostForm";
@@ -70,10 +71,24 @@ const AnnouncementForm = (props) => {
         message.error(err.message);
       });
   };
+  console.log(props)
+  const onDelete = (id) => {
+    console.log(id)
+    deleteAnnoucement(id)
+      .then(() => {
+        setDisplayModal(false);
+        message.success(`Your announcement has been deleted. Id = ` + id);
+      })
+      .catch((err) => {
+        message.error(err.message);
+      });
+  };
 
-  const renderDeletButton = () => {
+  const renderDeletButton = (item) => {
+    console.log(item.id)
     if (isAdmin) {
       return (
+        
         <Space>
           <Button
             type="primary"
@@ -101,13 +116,15 @@ const AnnouncementForm = (props) => {
               <Button key="back" onClick={handleCancel}>
                 No
               </Button>,
-              <Button key="submit" type="primary" onClick={onFinish}>
+              <Button key="submit" type="primary" onClick={() => onDelete(item.id)}>
                 Yes
               </Button>,
             ]}
           >
+            
             <p>Are you sure you want to delete this post?</p>
           </Modal>
+          
 
           <Modal
             title="Edit Post"
@@ -195,7 +212,7 @@ const AnnouncementForm = (props) => {
               " " +
               item.timestamp.dayOfWeek}
           </p>
-          {renderDeletButton()}
+          {renderDeletButton(item)}
           <Button
             type="primary"
             style={{ background: "lightgreen" }}
@@ -260,7 +277,7 @@ const AnnouncementForm = (props) => {
                     " " +
                     item.timestamp.dayOfWeek}
                 </p>
-                {renderDeletButton(false)}
+                {renderDeletButton(item)}
               </Form.Item>
             </>
           );
