@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
-import { Button, Form, Input } from "antd";
+import React, { useState, useEffect } from 'react';
+import { Button, Form, Input, List } from "antd";
+import { getAmenities } from '../utils';
+import AmenityCard from './AmenityCard';
 
 const ReservationForm = () => {
   const [name, setName] = useState('');
   const [date, setDate] = useState('');
   const [numberOfGuests, setNumberOfGuests] = useState('');
+  const [amenityList, setAmenityList] = useState([]);
+  const [loadingAmenities, setLoadingAmenties] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,37 +18,29 @@ const ReservationForm = () => {
     console.log(`Number of guests: ${numberOfGuests}`);
   };
 
+  useEffect(() => {
+    setLoadingAmenties(true);
+    getAmenities()
+      .then((data) => {
+        setAmenityList(data);
+      })
+      .finally(() => {
+        setLoadingAmenties(false);
+      });
+  }, []);
+
   return (
-    <Form onSubmit={handleSubmit}>
-      <label>
-        Name:
-        <Input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Date:
-        <Input
-          type="text"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        Number of guests:
-        <Input
-          type="text"
-          value={numberOfGuests}
-          onChange={(e) => setNumberOfGuests(e.target.value)}
-        />
-      </label>
-      <br />
-      <Button type="submit">Submit</Button>
-    </Form>
+    <>
+      <Button style={{margin: '50px'}}>My Reservation</Button>
+      <div style={{marginLeft: '50px'}}>
+        {amenityList.map(amenity => (
+          <AmenityCard
+            key={amenity.id}
+            amenity={amenity}
+          />
+        ))}
+    </div>
+    </>
   );
 };
 

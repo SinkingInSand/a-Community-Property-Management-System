@@ -16,6 +16,7 @@ const { Content, Sider } = Layout;
 
 const AdminHome = (props) => {
   const [Reservation, setReservation] = useState(false);
+  const [Amenity, setAmenity] = useState([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [showAnnouncement, setAnouncement] = useState(true);
   const [showAdminChat, setAdminChat] = useState(true);

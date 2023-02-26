@@ -185,3 +185,27 @@ export const login = (credential) => {
       return response.json();
     });
   };
+
+  export const getAmenities = () => {
+    const getAmenitiesUrl = "/amenity";
+  
+    return fetch(getAmenitiesUrl).then((response) => {
+      if (response.status < 200 || response.status >= 300) {
+        throw Error("Fail to get amenities");
+      }
+
+      return response.json();
+    });
+  };
+
+  export const getReservations = () => {
+    const getReservationsUrl = "/myreservations";
+  
+    return fetch(getReservationsUrl).then((response) => {
+      if (response.status < 200 || response.status >= 300) {
+        throw Error("Fail to get amenities");
+      }
+
+      return response.json();
+    });
+  };
