@@ -14,11 +14,8 @@ public class Users implements Serializable{
     private static final long serialVersionUID = 1L;
     @Id
     private String email;
-    @JsonIgnore
     private String userName;
-    @JsonIgnore
     private String password;
-    @JsonIgnore
     private String unit;
     //if true, user is admin; or user is resident.
     //The default value of boolean type data is false. As we don't have a setter for admin,
@@ -47,6 +44,19 @@ public class Users implements Serializable{
     @Fetch(value = FetchMode.SUBSELECT)
     @JsonIgnore
     private List<Reservation> reservation;
+
+    public List<Chat> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Chat> messages) {
+        this.messages = messages;
+    }
+
+    @OneToMany(mappedBy = "userEmail",  cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @JsonIgnore
+    private List<Chat> messages;
     public String getEmail() {
         return email;
     }
@@ -73,9 +83,6 @@ public class Users implements Serializable{
         this.password = password;
     }
 
-    /*public void setAnnouncementList(List<Announcement> announcementList) { this.announcementList = announcementList; }
-
-    public List<Announcement> getAnnouncementList() { return announcementList;}*/
 
     public List<Post> getPostList() { return postList; }
 

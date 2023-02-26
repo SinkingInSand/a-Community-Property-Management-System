@@ -30,7 +30,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureForwardUrl("/login?error=true");
         http
                 .authorizeRequests()
-                .antMatchers("/announcements/create","/announcements/*/delete").hasAuthority("ADMIN")
+                .antMatchers("/announcements/create","/announcements/*/delete","announcements/*/edit").hasAuthority("ADMIN")
+                .antMatchers("/announcements","/announcements/*").hasAnyAuthority("RESIDENT","ADMIN")
+                .antMatchers("/discussion","/discussion/*","/discussion/*/delete").hasAnyAuthority("RESIDENT","ADMIN")
+                .antMatchers("/discussion/yourPosts","/discussion/post","/discussion/*/edit","discussion/*/comment").hasAuthority("RESIDENT")
+                .antMatchers("/myreservations","/reserve").hasAuthority("RESIDENT")
+                .antMatchers("/deletereservations","messages/*/delete").hasAnyAuthority("RESIDENT","ADMIN")
+                .antMatchers("/sendMessage","/messages").hasAuthority("RESIDENT")
+                .antMatchers("/allMessages","/allMessages/*/read").hasAuthority("ADMIN")
+
+
                 //.antMatchers().hasAuthority("RESIDENT")
                 .anyRequest().permitAll();
         //Need to be modified after deciding the certain url pattern

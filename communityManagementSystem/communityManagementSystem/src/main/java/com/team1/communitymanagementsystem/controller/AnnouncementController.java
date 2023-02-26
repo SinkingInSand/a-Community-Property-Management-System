@@ -46,4 +46,13 @@ public class AnnouncementController {
         announcementService.deleteAnnouncement(announcementId);
     }
 
+    @RequestMapping(value = "/announcements/{announcementId}/edit", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.ACCEPTED)
+    public void editAnnouncement(@PathVariable(value = "announcementId") int announcementId,
+                                 @RequestBody Announcement announcement) {
+        announcementService.deleteAnnouncement(announcementId);
+        announcementService.addAnnouncement(announcement);
+    }
+
+
 }

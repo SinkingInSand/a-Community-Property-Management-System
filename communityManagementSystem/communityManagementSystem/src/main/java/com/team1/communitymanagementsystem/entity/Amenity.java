@@ -12,7 +12,6 @@ public class Amenity implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @JsonIgnore
     private int id;
     private String amenityName;
     @JsonIgnore
