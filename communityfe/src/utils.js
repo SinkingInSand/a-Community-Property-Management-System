@@ -209,3 +209,25 @@ export const login = (credential) => {
       return response.json();
     });
   };
+
+  export const checkAvailability = (rid, dateString, timeslot) => {
+    return fetch(`reserve?amenity_id=${rid}&date=${dateString}&timeslot=${timeslot}`)
+      .then((response) => {
+        if (response.status < 200 || response.status >= 300) {
+          throw Error("Fail to get comments");
+      }
+  
+      return response.json();
+    });
+  };
+
+  export const makeReservation = (rid, dateString, timeslot) => {
+    return fetch(`reserve?amenity_id=${rid}&date=${dateString}&timeslot=${timeslot}`)
+      .then((response) => {
+        if (response.status < 200 || response.status >= 300) {
+          throw Error("Fail to get comments");
+      }
+  
+      return response.json();
+    });
+  };

@@ -1,12 +1,12 @@
 import React from 'react';
+import { Modal, DatePicker} from 'antd';
+import moment from 'moment';
+import { useState } from 'react';
 
 function AmenityCard({ amenity }) {
-  const [isHovered, setIsHovered] = React.useState(false);
-
-  function handleClick() {
-    alert(`You clicked the ${amenity.amenityName} amenity`);
-    // Do something else here when a card is clicked
-  }
+  const [isHovered, setIsHovered] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
 
   function handleMouseEnter() {
     setIsHovered(true);
@@ -16,13 +16,27 @@ function AmenityCard({ amenity }) {
     setIsHovered(false);
   }
 
+  function handleCardClick() {
+    // get detail
+    setIsModalVisible(true);
+  }
+
+  function handleModalCancel() {
+    setIsModalVisible(false);
+  }
+
+  function handleDateChange(date, dateString) {
+    setSelectedDate(dateString);
+    // here
+    
+  }
+
   const cardStyle = {
     position: 'relative',
     display: 'inline-block',
-    width: 'calc(50% - 100px)',
-    height: '450px',
-    margin: '50px',
-    marginBottom: '10px',
+    width: '300px',
+    height: '240px',
+    margin: '20px',
     border: '1px solid #ccc',
     borderRadius: '5px',
     overflow: 'hidden',
@@ -34,30 +48,37 @@ function AmenityCard({ amenity }) {
     }),
   };
 
-  const titleStyle = {
-    fontSize: '16px',
-    margin: '10px',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  };
-
-  const imageStyle = {
-    display: 'block',
-    width: '100%',
-    height: 'auto',
-    maxHeight: '100%',
-  };
-
   return (
-    <div
-      onClick={handleClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      style={cardStyle}
-    >
-      <h2 style={titleStyle}>{amenity.amenityName}</h2>
-      <img src={amenity.imageUrl} alt={amenity.amenityName} style={imageStyle} />
-    </div>
+    <>
+      <div
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onClick={handleCardClick}
+        style={cardStyle}
+      >
+        <h2 style={{ fontSize: '16px', margin: '10px', fontWeight: 'bold', textAlign: 'center' }}>
+          {amenity.amenityName}
+        </h2>
+        <img src={amenity.imageUrl} alt={amenity.amenityName} style={{ display: 'block', width: '100%', height: 'auto', maxHeight: '100%' }} />
+      </div>
+      <Modal
+        visible={isModalVisible}
+        onCancel={handleModalCancel}
+        footer={[
+          <button key="done" onClick={handleModalCancel} style={{ backgroundColor: '#007bff', color: '#fff', borderRadius: '5px', padding: '10px 20px', cursor: 'pointer' }}>
+            Done
+          </button>,
+        ]}
+      >
+        <h2 style={{ fontSize: '24px', fontWeight: 'bold', textAlign: 'center' }}>{amenity.amenityName}</h2>
+        <DatePicker
+          style={{ display: 'block', margin: '0 auto', marginBottom: '20px' }}
+          format="YYYY/MM/DD"
+          disabledDate={(current) => current && current < moment().endOf('day')}
+          onChange={handleDateChange}
+        />
+      </Modal>
+    </>
   );
 }
 
