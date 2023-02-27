@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { Button, Form, Input, List } from "antd";
 import { getAmenities } from '../utils';
 import AmenityCard from './AmenityCard';
+import ReservationDialog from './ReservationDialog';
 
 const ReservationForm = () => {
   const [name, setName] = useState('');
@@ -9,6 +11,7 @@ const ReservationForm = () => {
   const [numberOfGuests, setNumberOfGuests] = useState('');
   const [amenityList, setAmenityList] = useState([]);
   const [loadingAmenities, setLoadingAmenties] = useState(false);
+  const [reservationVisible, setReservationVisible] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,7 +20,15 @@ const ReservationForm = () => {
     console.log(`Date: ${date}`);
     console.log(`Number of guests: ${numberOfGuests}`);
   };
+  
+  // eslint-disable-next-line no-unused-vars
+  const handleReservationClick = () => {
+    setReservationVisible(true);
+  };
 
+  const handleReservationClose = () => {
+    setReservationVisible(false);
+  };
   useEffect(() => {
     setLoadingAmenties(true);
     getAmenities()
@@ -35,7 +46,10 @@ const ReservationForm = () => {
 
   return (
     <>
-      <Button style={{margin: '50px'}}>My Reservation</Button>
+      <ReservationDialog
+        visible={reservationVisible}
+        onClose={handleReservationClose}
+      />
       <div style={{marginLeft: '50px'}}>
         {amenityList.map(amenity => (
           <AmenityCard
