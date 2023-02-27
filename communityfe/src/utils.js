@@ -223,43 +223,51 @@ export const login = (credential) => {
 
 
   //Chat 
-  export const getMessage = (pid) => {
-    const chatUrl = `/chat/${pid}/getMessage`;
-  
-    return fetch(chatUrl, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((response) => {
-      if (response.status < 200 || response.status >= 300) {
-        throw Error("Fail to get message");
-      }
-      return response.json();
-    });
-  };
-  
-  export const sendMessage = async (data, pid) => {
-    try {
-      const message = {
-        contactEmail: data.email,
-        subject: data.subject,
-        content: data.message,
-        telNumber: data.telNumber,
-      };
-      const chatUrl = `/chat/${pid}/sendMessage`;
-      const response = await fetch(chatUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(message),
+  export const getMessage = () => {
+    const getMessageUrl = "/allMessages";
+    return fetch(getMessageUrl)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to get messages');
+        }
+        return response.json();
+      })
+      .catch((error) => {
+        console.error(error);
+        return [];
       });
-      if (response.status < 200 || response.status >= 300) {
-        throw Error("Fail to send Message");
-      }
-      return true;
-    } catch (error) {
-      throw Error(error.message);
-    }
   };
+
+export const sendMessage = (message) => {
+  const sendMessageUrl = "/sendMessage";
+  return fetch(sendMessageUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(message),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
+
+export const handleMessage = (id) => {
+  return fetch(`/allMessages/${id}/read`, {
+    method: 'POST',
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to mark message as complete');
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};

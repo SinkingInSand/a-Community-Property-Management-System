@@ -1,126 +1,64 @@
-import React, { useState, useEffect } from "react";
-import { Drawer, Menu, Input, Form, Button, message } from "antd";
-import { sendMessage, getMessage } from "../utils";
+import { useState } from 'react';
+import { Drawer, Input, Form, Button, message } from 'antd';
+import { sendMessage } from '../utils';
 
 const { TextArea } = Input;
 
-const ChatForm = (props) => {
-  const [isDrawerOpen, setOpen] = useState(false);
-  const [messages, setMessages] = useState([]);
-  const [form] = Form.useForm();
-  const [displayModal, setDisplayModal] = useState(false);
-  const [formData, setFormData] = useState({
-    contactEmail: "",
-    subject: "",
-    content: "",
-    telNumber: "",
-  });
-  const [chatId, setChatId] = useState(props);
-  const handleCancel = () => {
-    setOpen(false);
+const ChatForm = () => {
+  const [visible, setVisible] = useState(false);
+
+  const showDrawer = () => {
+    setVisible(true);
   };
 
-  const showChatDrawer = () => {
-    setOpen(true);
+  const onClose = () => {
+    setVisible(false);
   };
-
-  useEffect(() => {
-    if (chatId) {
-      getMessage(chatId)
-        .then((data) => {
-          setMessages(data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [chatId]);
 
   const onFinish = (values) => {
-    const { contactEmail, subject, content, telNumber } = values;
-    const data = { contactEmail, subject, content, telNumber };
-    sendMessage(data, chatId)
+    sendMessage(values)
       .then(() => {
-        setFormData({
-          contactEmail: "",
-          subject: "",
-          content: "",
-          telNumber: "",
-        });
-        setDisplayModal(false);
-        message.success(`Your message just sent!`);
+        message.success('Message sent');
+        onClose();
       })
-      .catch((err) => {
-        message.error(err.message);
-      })
-      .finally(() => {
-        setChatId(-1);
+      .catch((error) => {
+        console.error(error);
+        message.error('Failed to send message');
       });
   };
 
   return (
     <>
-      <Menu.Item key={3} onClick={showChatDrawer}>
-        Chat
-      </Menu.Item>
-
+      <Button type="primary" onClick={showDrawer}>
+        Contact Us
+      </Button>
       <Drawer
-        title="Chat"
-        width={400}
-        open={isDrawerOpen}
-        onClose={handleCancel}
+        title="Contact Us"
+        width={600}
+        placement="right"
+        closable={false}
+        onClose={onClose}
+        visible={visible}
       >
-        <h2>XXX Apartment</h2>
-        <p>xxx address</p>
-        {messages.map((message, index) => (
-          <div key={index}>
-            <p>{message.timestamp}</p>
-            <p>{message.text}</p>
-          </div>
-        ))}
-        <Form
-          form={form}
-          name="chat_form"
-          onFinish={onFinish}
-          initialValues={formData}
+        <Form 
+          name="chat-form" 
           style={{ marginTop: "2rem" }}
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 16 }}
-        >
-          <h2>Contact Us</h2>
-
-          <Form.Item
-            name="contactEmail"
-            label="Email"
-            rules={[              {                required: true,                message: "Please input your email address",              },              {                type: "email",                message: "Please enter a valid email address",              },            ]}
-          >
-            <Input placeholder="Email" />
+          onFinish={onFinish}>
+          <Form.Item name="contactEmail" label="Your email" rules={[{ required: true, message: 'Please enter your email' }]}>
+            <Input placeholder="Enter your email" />
           </Form.Item>
-
-          <Form.Item
-            name="telNumber"
-            label="Telephone"
-            rules={[{ required: true, message: "Please enter a telephone number" }]}
-          >
-            <Input placeholder="Telephone Number" />
+          <Form.Item name="telNumber" label="Your phone number">
+            <Input placeholder="Enter your phone number" />
           </Form.Item>
-
-          <Form.Item
-            name="subject"
-            label="Subject"
-            rules={[{ required: true, message: "Please enter a subject" }]}
-          >
-            <Input placeholder="Subject" />
+          <Form.Item name="subject" label="Subject" rules={[{ required: true, message: 'Please enter a subject' }]}>
+            <Input placeholder="Enter a subject" />
           </Form.Item>
-
-          <Form.Item
-            name="message"
-            label="Message"
-            rules={[{ required: true, message: "Please enter a message" }]}
-          >
-            <TextArea placeholder="Type a message" rows={5} />
+          <Form.Item name="content" label="Message" rules={[{ required: true, message: 'Please enter a message' }]}>
+            <TextArea placeholder="Enter your message" autoSize={{ minRows: 3, maxRows: 6 }} />
           </Form.Item>
-          <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
+          <Form.Item>
             <Button type="primary" htmlType="submit">
               Send
             </Button>
