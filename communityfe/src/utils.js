@@ -235,3 +235,19 @@ export const login = (credential) => {
       }
     });
   };
+
+  export const deleteReservation = (id) => {
+    const deleteReservationUrl = "/deletereservations?reservation_id=" + id;
+    console.log(deleteReservationUrl)
+    return fetch(deleteReservationUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }).then((response) => {
+      if (response.status < 200 || response.status >= 300) {
+        throw Error("Fail to delete annoucement");
+      }
+    });
+  };

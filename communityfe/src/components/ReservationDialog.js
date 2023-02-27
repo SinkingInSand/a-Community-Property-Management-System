@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Spin, Table } from 'antd';
-import { getReservations } from '../utils';
+import { getReservations, deleteReservation } from '../utils';
 
 const ReservationDialog = ({ content }) => {
   const [reservations, setReservations] = useState([]);
@@ -42,6 +42,15 @@ const ReservationDialog = ({ content }) => {
       dataIndex: 'timeSlot',
       key: 'timeSlot',
     },
+    {
+        title: 'Actions',
+        key: 'actions',
+        render: (_, record) => (
+          <Button type="primary" danger onClick={() => handleDelete(record.id)}>
+            Delete
+          </Button>
+        ),
+    },
   ];
 
   const formatDate = (date) => {
@@ -51,9 +60,23 @@ const ReservationDialog = ({ content }) => {
     return `${year}-${month}-${day}`;
   };
 
+  const handleDelete = (id) => {
+    setLoading(true);
+    deleteReservation(id)
+      .then(() => {
+        // 删除该行记录
+        setReservations(reservations.filter((r) => r.id !== id));
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
   return (
     <>
-      <Button style={{margin: '50px'}} onClick={showModal}>
+      <Button style={{ margin: '50px' }} onClick={showModal}>
         My Reservation
       </Button>
       <Modal
@@ -64,9 +87,6 @@ const ReservationDialog = ({ content }) => {
         footer={[
           <Button key="back" onClick={handleCancel}>
             Return
-          </Button>,
-          <Button key="submit" type="primary" onClick={handleOk}>
-            Submit
           </Button>,
         ]}
       >
