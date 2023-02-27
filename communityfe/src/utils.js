@@ -110,38 +110,7 @@ export const login = (credential) => {
       return response.json();
     });
   };
-  
-  // export const getCart = () => {
-  //   return fetch("/cart").then((response) => {
-  //     if (response.status < 200 || response.status >= 300) {
-  //       throw Error("Fail to get shopping cart data");
-  //     }
-  
-  //     return response.json();
-  //   });
-  // };
-  
-  // export const checkout = () => {
-  //   return fetch("/checkout").then((response) => {
-  //     if (response.status < 200 || response.status >= 300) {
-  //       throw Error("Fail to checkout");
-  //     }
-  //   });
-  // };
-  
-  // export const addItemToCart = (itemId) => {
-  //   return fetch(`/order/${itemId}`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     credentials: "include",
-  //   }).then((response) => {
-  //     if (response.status < 200 || response.status >= 300) {
-  //       throw Error("Fail to add menu item to shopping cart");
-  //     }
-  //   });
-  // };
+
 
   export const deleteAnnoucement = (aId) => {
 
@@ -250,4 +219,47 @@ export const login = (credential) => {
         throw Error("Fail to delete annoucement");
       }
     });
+  };
+
+
+  //Chat 
+  export const getMessage = (pid) => {
+    const chatUrl = `/chat/${pid}/getMessage`;
+  
+    return fetch(chatUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((response) => {
+      if (response.status < 200 || response.status >= 300) {
+        throw Error("Fail to get message");
+      }
+      return response.json();
+    });
+  };
+  
+  export const sendMessage = async (data, pid) => {
+    try {
+      const message = {
+        contactEmail: data.email,
+        subject: data.subject,
+        content: data.message,
+        telNumber: data.telNumber,
+      };
+      const chatUrl = `/chat/${pid}/sendMessage`;
+      const response = await fetch(chatUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(message),
+      });
+      if (response.status < 200 || response.status >= 300) {
+        throw Error("Fail to send Message");
+      }
+      return true;
+    } catch (error) {
+      throw Error(error.message);
+    }
   };

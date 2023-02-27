@@ -1,67 +1,56 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import { Button, Form, Typography, Layout, message, Checkbox} from "antd";
-//import { getAdminChat } from "../utils";
+import React, { useState } from "react";
+import { Button, Checkbox, Form, Layout, message, Typography } from "antd";
+// import { getAdminChat } from "../utils";
 
 const { Title } = Typography;
 
 const AdminChat = () => {
+  const [chatMessages, setChatMessages] = useState([]);
 
-  //console.log(getAdminChat())
+  // const handleCompleted = () => {
+  //   // placeholder for task complete
+  // };
 
-  const [chatMessages, setAdminChat] = useState([]);
+  // useEffect(() => {
+  //   setLoadingAdminChat(true);
+  //   getAdminChat()
+  //     .then((data) => {
+  //       setChatMessages(data);
+  //     })
+  //     .catch((err) => {
+  //       message.error(err.message);
+  //     })
+  //     .finally(() => {
+  //       setLoadingAdminChat(false);
+  //     });
+  // }, []);
 
-  const handleCompleted = () => {
-      //placeholder for task complete
+  const renderChatMessages = () => {
+    return chatMessages.map((item) => (
+      <Form.Item className="postItem" key={item.id}>
+        <Title level={3}>{"Subject: " + item.subject}</Title>
+        <p>{item.content}</p>
+        {/* {renderDeleteButton()} */}
+        <Checkbox>Task Completed</Checkbox>
+      </Form.Item>
+    ));
   };
 
-//   useEffect(() => {
-//       setLoadingAdminChat(true);
-//       getAdminChat()
-      
-//         .then((data) => {
-//           setAdminChat(data);
-//         })
-//         .catch((err) => {
-//           message.error(err.message);
-//         })
-//         .finally(() => {
-//           setLoadingAdminChat(false);
-//         });
-
-//     }, []);
-
   return (
-     <>
-     <Form>
-       <Title level={3}>Messages: </Title>
-        {chatMessages.map(
-          (item) => {
-            return <><Form.Item className="postItem">
-              <Title level={3}>{"Subject: " + item.subject}</Title>
-              <p>{item.content}</p>
-              {/* {renderDeletButton()} */}              
-              <Checkbox>Task Completed</Checkbox>
-            </Form.Item>
-            </>
-          }
-        )}
-      
-    {/* checked={componentDisabled}
-    onChange={(e) => setComponentDisabled(e.target.checked)} */}  
-
-    <><Form.Item className="postItem">
-        <Title level={3}>{"Subject: " }</Title>
-        <p>content</p>
-        {/* {renderDeletButton()} */}              
-        <Checkbox onClick={handleCompleted}>Task Completed</Checkbox>
-      </Form.Item>
-      </>
-     </Form>     
-   </>
+    <Layout>
+      <Title level={2}>Admin Chat</Title>
+      <Form>
+        <Title level={3}>Messages:</Title>
+        {renderChatMessages()}
+        <Form.Item className="postItem">
+          <Title level={3}>{"Subject: "}</Title>
+          <p>content</p>
+          {/* {renderDeleteButton()} */}
+          <Checkbox>Task Completed</Checkbox>
+        </Form.Item>
+      </Form>
+    </Layout>
   );
 };
 
-
 export default AdminChat;
-
