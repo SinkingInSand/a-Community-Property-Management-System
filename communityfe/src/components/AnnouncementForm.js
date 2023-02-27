@@ -87,9 +87,10 @@ const AnnouncementForm = (props) => {
       });
   };
 
-  const onAnnoucementEdit = (id) => {
+  const onAnnoucementEdit = (id, data) => {
     console.log(id)
-    editAnnoucement(id)
+    console.log(data)
+    editAnnoucement(id, data)
       .then(() => {
         setDisplayModal(false);
         message.success(`Your announcement has been updated. Id = ` + id);
