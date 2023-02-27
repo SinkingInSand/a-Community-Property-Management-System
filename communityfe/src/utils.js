@@ -127,6 +127,21 @@ export const login = (credential) => {
     });
   };
 
+  export const editAnnoucement = (aId, data) => {
+
+    return fetch(`/announcements/${aId}/edit`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(data)
+    }).then((response) => {
+      if (response.status < 200 || response.status >= 300) {
+        throw Error("Fail to edit annoucement");
+      }
+    });
+  };
     
   export const reply = (data, pid) => {
     const signupUrl = `/discussion/${pid}/createComment`;
