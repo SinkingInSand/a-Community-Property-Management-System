@@ -9,10 +9,12 @@ const ReservationDialog = ({ content }) => {
 
   const handleOk = () => {
     setVisible(false);
+    setReservations([]);
   };
 
   const handleCancel = () => {
     setVisible(false);
+    setReservations([]);
   };
 
   const showModal = () => {
@@ -43,13 +45,13 @@ const ReservationDialog = ({ content }) => {
       key: 'timeSlot',
     },
     {
-        title: 'Actions',
-        key: 'actions',
-        render: (_, record) => (
-          <Button type="primary" danger onClick={() => handleDelete(record.id)}>
-            Delete
-          </Button>
-        ),
+      title: 'Actions',
+      key: 'actions',
+      render: (_, record) => (
+        <Button type="primary" danger onClick={() => handleDelete(record.id)}>
+          Delete
+        </Button>
+      ),
     },
   ];
 
@@ -74,6 +76,7 @@ const ReservationDialog = ({ content }) => {
         setLoading(false);
       });
   };
+
   return (
     <>
       <Button style={{ margin: '50px' }} onClick={showModal}>
