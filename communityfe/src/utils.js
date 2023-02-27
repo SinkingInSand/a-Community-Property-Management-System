@@ -210,24 +210,28 @@ export const login = (credential) => {
     });
   };
 
-  export const checkAvailability = (rid, dateString, timeslot) => {
-    return fetch(`reserve?amenity_id=${rid}&date=${dateString}&timeslot=${timeslot}`)
+  export const checkAvailability = (rid, dateString) => {
+    return fetch(`checkAvailability?amenity_id=${rid}&date=${dateString}`)
       .then((response) => {
         if (response.status < 200 || response.status >= 300) {
-          throw Error("Fail to get comments");
+          throw Error("Fail to get timeslots!");
       }
-  
+
       return response.json();
     });
   };
 
   export const makeReservation = (rid, dateString, timeslot) => {
-    return fetch(`reserve?amenity_id=${rid}&date=${dateString}&timeslot=${timeslot}`)
-      .then((response) => {
-        if (response.status < 200 || response.status >= 300) {
-          throw Error("Fail to get comments");
+    const makeReservationUrl = "/reserve?amenity_id=" + rid + "&date=" + dateString + "&timeslot=" + timeslot;
+    console.log(makeReservationUrl);
+    return fetch(makeReservationUrl, {
+      method: "POST",
+      headers: { //request header
+        "Content-Type": "application/json",
+      },
+    }).then((response) => { 
+      if (response.status < 200 || response.status >= 300) { 
+        throw Error("Fail to make a reservation!");
       }
-  
-      return response.json();
     });
   };
