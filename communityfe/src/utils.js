@@ -238,21 +238,36 @@ export const login = (credential) => {
   };
 
 
-  //Chat 
-  export const getAllMessage = () => {
-    const getMessageUrl = "/allMessages";
-    return fetch(getMessageUrl)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to get messages');
-        }
-        return response.json();
-      })
-      .catch((error) => {
-        console.error(error);
-        return [];
-      });
-  };
+//Chat 
+export const getAllMessage = () => {
+  const getMessageUrl = "/allMessages";
+  return fetch(getMessageUrl)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to get messages');
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error(error);
+      return [];
+    });
+};
+
+export const getOwnMessage = () => {
+  const getMessageUrl = "/messages";
+  return fetch(getMessageUrl)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to get messages');
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error(error);
+      return [];
+    });
+};
 
 export const sendMessage = (message) => {
   const sendMessageUrl = "/sendMessage";
@@ -282,6 +297,20 @@ export const handleMessage = (id) => {
     .then((response) => {
       if (!response.ok) {
         throw new Error('Failed to mark message as complete');
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
+export const deleteChat = (id) => {
+  return fetch(`/messages/${id}/delete`, {
+    method: 'POST',
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to delete message');
       }
     })
     .catch((error) => {
