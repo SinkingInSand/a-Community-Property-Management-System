@@ -223,7 +223,7 @@ export const login = (credential) => {
 
 
   //Chat 
-  export const getMessage = () => {
+  export const getAllMessage = () => {
     const getMessageUrl = "/allMessages";
     return fetch(getMessageUrl)
       .then((response) => {
@@ -246,6 +246,7 @@ export const sendMessage = (message) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(message),
+    
   })
     .then((response) => {
       if (!response.ok) {
