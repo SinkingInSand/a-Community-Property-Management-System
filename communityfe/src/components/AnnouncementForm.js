@@ -9,6 +9,7 @@ import {
   Modal,
   Space,
   List,
+  Input
 } from "antd";
 import Sider from "antd/lib/layout/Sider";
 import {
@@ -17,6 +18,7 @@ import {
   createPost,
   getComments,
   deleteAnnoucement,
+  editAnnoucement
 } from "../utils";
 import Paragraph from "antd/lib/skeleton/Paragraph";
 import PostForm from "./PostForm";
@@ -72,7 +74,8 @@ const AnnouncementForm = (props) => {
       });
   };
   console.log(props)
-  const onDelete = (id) => {
+
+  const onAnnoucementDelete = (id) => {
     console.log(id)
     deleteAnnoucement(id)
       .then(() => {
@@ -84,12 +87,25 @@ const AnnouncementForm = (props) => {
       });
   };
 
+  const onAnnoucementEdit = (id, data) => {
+    console.log(id)
+    console.log(data)
+    editAnnoucement(id, data)
+      .then(() => {
+        setDisplayModal(false);
+        message.success(`Your announcement has been updated. Id = ` + id);
+      })
+      .catch((err) => {
+        message.error(err.message);
+      });
+  };
+
   const renderDeletButton = (item) => {
     console.log(item.id)
     if (isAdmin) {
       return (
         
-        <Space>
+        <Space.Compact>
           <Button
             type="primary"
             size="middle"
@@ -116,7 +132,7 @@ const AnnouncementForm = (props) => {
               <Button key="back" onClick={handleCancel}>
                 No
               </Button>,
-              <Button key="submit" type="primary" onClick={() => onDelete(item.id)}>
+              <Button key="submit" type="primary" onClick={() => onAnnoucementDelete(item.id)}>
                 Yes
               </Button>,
             ]}
@@ -124,25 +140,51 @@ const AnnouncementForm = (props) => {
             
             <p>Are you sure you want to delete this post?</p>
           </Modal>
-          
 
           <Modal
-            title="Edit Post"
-            open={displayEditModal}
-            onCancel={handleCancel_edit}
-            destroyOnClose={true} //destroy the content inside modal
-            footer={[
-              <Button key="back" onClick={handleCancel_edit}>
-                No
-              </Button>,
-              <Button key="submit" type="primary" onClick={onFinish}>
-                Yes
-              </Button>,
-            ]}
+          title="Edit an Annoucement"
+          open={displayEditModal}
+          onCancel={handleCancel_edit}
+          footer = {null}
+          destroyOnClose={true} //destroy the content inside modal
+        >
+          <Form
+            // name="normal_register"
+            // initialValues={{ remember: true }}
+            // onFinish={onFinish}
+            // preserve={false}
           >
-            <p>Are you sure you want to edit this post?</p>
-          </Modal>
-        </Space>
+            <Form.Item
+              name="category"
+              rules={[{ required: true, message: "Please choose category" }]}
+            >
+              <Input  placeholder="Category" />
+            </Form.Item>
+            <Form.Item
+              name="title"
+              rules={[{ required: true, message: "Please input the title" }]}
+            >
+              <Input placeholder="Title" />
+            </Form.Item>
+            <Form.Item
+              name="content"
+              rules={[
+                { required: true, message: "Please input your content" },
+              ]}
+            >
+              <Input placeholder="Content" />
+            </Form.Item>
+            
+
+            <Form.Item>
+              <Button type="primary" htmlType="submit" onClick={() => onAnnoucementEdit(item.id)}>
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
+          
+        </Space.Compact>
       );
     }
   };
