@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Form, Layout, Typography, Row, Col } from "antd";
+import { Form, Layout, Typography, Row, Col, Button, List } from "antd";
 import { getAllMessage, sendMessage, deleteChat, handleMessage } from "../utils";
+import {
+  CheckCircleOutlined,
+  SyncOutlined,
+  DeleteOutlined,
+  CheckOutlined
+} from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -52,33 +58,30 @@ const AdminChat = () => {
   const renderChatMessages = () => {
     return chatMessages
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-      .map((item) => (
-        <Row gutter={[0, 16]} key={item.id} className="postItem">
-        <Col span={24}>
-          <Title level={3}>{"Subject: " + item.subject}</Title>
-        </Col>
-        <Col span={12}>
-          <Form.Item>
-            <p>{item.content}</p>
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item style={{ textAlign: "left" }}>
-            <p>Resident Email:</p>
-            <p>{item.userEmail}</p>
-            <p>{item.createdAt}</p>
-            <button
-              onClick={() => handleMessageClick(item.id)}
-              disabled={item.read}
-            >
-              Mark as Read
-            </button>
-            <button onClick={() => handleDeleteClick(item.id)}>Delete</button>
-          </Form.Item>
-        </Col>
-      </Row>
+      .map((item, index) => (
+        <List.Item key={item.id} className='chatItem'>
+          <List.Item.Meta
+            title={<Title level={5}>{`${index + 1}. ${item.subject}`}</Title>}
+            description={
+              <>
+                <p style={{ marginBottom: 0, marginTop: 0, fontSize: 'small' }}>From: {item.contactEmail} | Sent On: {item.chatDate.month} {item.chatDate.dayOfMonth} {item.chatDate.year}</p>
+                <p>{item.content}</p>
+              </>
+            }
+          />
+          <Button
+            type='link'
+            icon={<CheckOutlined />}
+            onClick={() => handleMessageClick(item.id)}
+            disabled={item.read}
+          >
+            Mark as Completed
+          </Button>
+          <Button type='link' icon={<DeleteOutlined />} onClick={() => handleDeleteClick(item.id)}>Delete</Button>
+        </List.Item>
       ));
   };
+  
 
   return (
     <Layout>

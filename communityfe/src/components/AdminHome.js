@@ -19,7 +19,8 @@ const AdminHome = (props) => {
   const [Amenity, setAmenity] = useState([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [showAnnouncement, setAnouncement] = useState(true);
-  const [showAdminChat, setAdminChat] = useState(true);
+  const [adminChatVisible, setAdminChatVisible] = useState(false);
+  const [UserChat, setUserChat] = useState(false);
 
   const [userInfo, setUserInfo] = useState(props.userInfo);
   const [isLoggedIn, setLogin] = useState(props.isLoggedIn);
@@ -32,20 +33,27 @@ const AdminHome = (props) => {
   const handleAnnouncement = () => {
     setAnouncement(true);
     setReservation(false);
-    setAdminChat(false);
+    setAdminChatVisible(false);
+    setUserChat(false);
   };
-  const handleAdminChat = () => {
-   
+  const showAdminChat = () => {   
     setAnouncement(false);
     setReservation(false);
-    !asAdmin ? setAdminChat(false) : setAdminChat(true);
-    //setAdminChat(true);
+    setAdminChatVisible(true);
+    setUserChat(false);
+  };
+  const showChat = () => {
+    setAnouncement(false);
+    setReservation(false);
+    setAdminChatVisible(false);
+    setUserChat(true);
   };
 
   const showReservation = () => {
     setReservation(true);
     setAnouncement(false);
-    setAdminChat(false);
+    setAdminChatVisible(false);
+    setUserChat(false);
   };
 
   return (
@@ -69,7 +77,8 @@ const AdminHome = (props) => {
             // items={items}
           >
             <Menu.Item onClick={handleAnnouncement}>Announcement</Menu.Item>
-            {asAdmin ? <Menu.Item onClick={handleAdminChat}>Messages</Menu.Item> : <ChatForm />}
+            {asAdmin ? <Menu.Item onClick={showAdminChat}>Messages</Menu.Item> :
+            <Menu.Item onClick={showChat}>Messages</Menu.Item>}
             <Menu.Item onClick={showReservation}>Reservation</Menu.Item>
           </Menu>
         </Sider>
@@ -81,7 +90,8 @@ const AdminHome = (props) => {
         >
           {Reservation && <ReservationForm />}
           {showAnnouncement && <AnnouncementForm isAdmin={asAdmin} />}
-          {showAdminChat && <AdminChat isAdmin={asAdmin}/>}
+          {adminChatVisible && <AdminChat isAdmin={asAdmin}/>}
+          {UserChat && <ChatForm />}
         </Layout>
       </Layout>
     </>

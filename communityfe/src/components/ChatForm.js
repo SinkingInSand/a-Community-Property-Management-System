@@ -1,70 +1,111 @@
-import { useState } from 'react';
-import { Drawer, Input, Form, Button, message } from 'antd';
-import { sendMessage } from '../utils';
+import { useState, useEffect } from 'react';
+import { Typography, List, Tag, Button, Modal } from 'antd';
+import { getOwnMessage, deleteChat } from '../utils';
+import ChatDialog from './ChatDialog';
+import {
+  CheckCircleOutlined,
+  SyncOutlined,
+  DeleteOutlined
+} from '@ant-design/icons';
 
-const { TextArea } = Input;
+
+const { Title } = Typography;
 
 const ChatForm = () => {
-  const [visible, setVisible] = useState(false);
+  const [chatFormVisible, setChatFormVisible] = useState(false);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [deleteMessageId, setDeleteMessageId] = useState(null);
 
-  const showDrawer = () => {
-    setVisible(true);
+  useEffect(() => {
+    getOwnMessage().then((data) => {
+      console.log(data);
+      setChatMessages(data);
+    });
+  }, []);
+
+  const handleChatFormClose = () => {
+    setChatFormVisible(false);
   };
 
-  const onClose = () => {
-    setVisible(false);
+  const handleDeleteClick = (id) => {
+    setDeleteMessageId(id);
+    setDeleteModalVisible(true);
   };
 
-  const onFinish = (values) => {
-    sendMessage(values)
-      .then(() => {
-        message.success('Message sent');
-        onClose();
-      })
-      .catch((error) => {
-        console.error(error);
-        message.error('Failed to send message');
+  const handleDeleteOk = () => {
+    deleteChat(deleteMessageId).then(() => {
+      setDeleteModalVisible(false);
+      getOwnMessage().then((data) => {
+        setChatMessages(data);
       });
+    });
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteMessageId(null);
+    setDeleteModalVisible(false);
+  };
+
+  const TaskStatus = ({ finish }) => {
+    let icon;
+    let color;
+    let status;
+
+    if (finish) {
+      icon = <CheckCircleOutlined />;
+      color = 'success';
+      status = 'Success';
+    } else {
+      icon = <SyncOutlined spin />;
+      color = 'processing';
+      status = 'Processing';
+    }
+
+    return (
+      <Tag icon={icon} color={color}>
+        {status}
+      </Tag>
+    );
+  };
+
+  const renderItem = (item, index) => {
+    return (
+      <List.Item key={item.id} className='chatItem'>
+        <List.Item.Meta
+          title=<Title level={5}>{`${index + 1}. ${item.subject}`}</Title>
+          description={
+            <>
+              <p style={{ marginBottom: 0, marginTop: 0, fontSize: 'small' }}>From: {item.contactEmail} | Sent On: {item.chatDate.month} {item.chatDate.dayOfMonth} {item.chatDate.year}</p>
+              <p>{item.content}</p>
+            </>
+          }
+        />
+        <TaskStatus status={item.finished ? 'success' : 'processing'} />
+        <Button type='link' icon={<DeleteOutlined />} onClick={() => handleDeleteClick(item.id)}>Delete</Button>
+      </List.Item>
+    );
   };
 
   return (
     <>
-      <Button type="primary" onClick={showDrawer}>
-        Contact Us
-      </Button>
-      <Drawer
-        title="Contact Us"
-        width={600}
-        placement="right"
-        closable={false}
-        onClose={onClose}
-        visible={visible}
+      <ChatDialog
+        visible={chatFormVisible}
+        onClose={handleChatFormClose}
+      />
+      <List
+        style={{ width: '100%' }}
+        dataSource={chatMessages.sort((a, b) => new Date(b.chatDate) - new Date(a.chatDate))}
+        renderItem={renderItem}
+      />
+      <Modal
+        visible={deleteModalVisible}
+        onOk={handleDeleteOk}
+        onCancel={handleDeleteCancel}
+        title='Are you sure you want to delete this message?'
       >
-        <Form 
-          name="chat-form" 
-          style={{ marginTop: "2rem" }}
-          labelCol={{ span: 6 }}
-          wrapperCol={{ span: 16 }}
-          onFinish={onFinish}>
-          <Form.Item name="contactEmail" label="Your email" rules={[{ required: true, message: 'Please enter your email' }]}>
-            <Input placeholder="Enter your email" />
-          </Form.Item>
-          <Form.Item name="telNumber" label="Your phone number">
-            <Input placeholder="Enter your phone number" />
-          </Form.Item>
-          <Form.Item name="subject" label="Subject" rules={[{ required: true, message: 'Please enter a subject' }]}>
-            <Input placeholder="Enter a subject" />
-          </Form.Item>
-          <Form.Item name="content" label="Message" rules={[{ required: true, message: 'Please enter a message' }]}>
-            <TextArea placeholder="Enter your message" autoSize={{ minRows: 3, maxRows: 6 }} />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Send
-            </Button>
-          </Form.Item>
-        </Form>
-      </Drawer>
+        <p>This action cannot be undone.</p>
+      </Modal>
     </>
   );
 };
