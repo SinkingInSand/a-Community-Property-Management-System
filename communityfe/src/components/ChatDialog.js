@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Modal, Button, Form, Input, message } from 'antd';
 import { sendMessage } from '../utils';
 
-const { TextArea } = Input;
-
 const ChatDialog = ({ visible, onClose, onSendMessage, userInfo }) => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
@@ -14,9 +12,10 @@ const ChatDialog = ({ visible, onClose, onSendMessage, userInfo }) => {
           const values = await form.validateFields();
           const chatMessage = {
             subject: values.subject,
-            contactEmail: values.email, // Set the contactEmail field using the email field value
+            contactEmail: values.contactEmail, // Set the contactEmail field using the email field value
             telNumber: values.telNumber,
-            content: values.message
+            content: values.content,
+            
           };
           await sendMessage(chatMessage);
           message.success('Message sent successfully!');
@@ -51,7 +50,7 @@ const ChatDialog = ({ visible, onClose, onSendMessage, userInfo }) => {
       onCancel={handleCancel}
       closable={true}
     >
-      <Form form={form} layout="vertical">
+      <Form form={form} layout="vertical" >
         <Form.Item
           label="Subject"
           name="subject"
@@ -61,7 +60,7 @@ const ChatDialog = ({ visible, onClose, onSendMessage, userInfo }) => {
         </Form.Item>
         <Form.Item
           label="Email"
-          name="email"
+          name="contactEmail"
           rules={[
             { required: true, message: 'Please enter your email' },
             { type: 'email', message: 'Please enter a valid email' }
@@ -73,8 +72,8 @@ const ChatDialog = ({ visible, onClose, onSendMessage, userInfo }) => {
           <Input placeholder="Enter your phone number" />
         </Form.Item>
         <Form.Item
-          label="ChatMessage"
-          name="chatMessage"
+          label="Content"
+          name="content"
           rules={[{ required: true, message: 'Please enter a message' }]}
         >
           <Input.TextArea 

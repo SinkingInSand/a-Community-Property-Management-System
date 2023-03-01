@@ -101,17 +101,6 @@ export const login = (credential) => {
     });
   };
 
-  export const getDiscussions = () => {
-    return fetch("/discussion").then((response) => {
-      if (response.status < 200 || response.status >= 300) {
-        throw Error("Fail to get discussions");
-      }
-  
-      return response.json();
-    });
-  };
-
-
   export const deleteAnnoucement = (aId) => {
 
     return fetch(`/announcements/${aId}/delete`, {
@@ -143,6 +132,53 @@ export const login = (credential) => {
       }
     });
   };
+
+
+  //Disscussion
+  //post on discussion
+  export const postDiscussion = (message) => {
+    const disPostUrl = "/discussion/post";
+    return fetch(disPostUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(message),
+      
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to send message');
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+//get dis by resident
+export const getDiscussionPosts = () => {
+  return fetch("/discussion/yourPosts")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to get messages');
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error(error);
+      return [];
+    });
+};
+
+  export const getDiscussions = () => {
+    return fetch("/discussion").then((response) => {
+      if (response.status < 200 || response.status >= 300) {
+        throw Error("Fail to get discussions");
+      }
+  
+      return response.json();
+    });
+  };
     
   export const reply = (data, pid) => {
     const signupUrl = `/discussion/${pid}/createComment`;
@@ -171,6 +207,7 @@ export const login = (credential) => {
     });
   };
 
+//Reservation  
   export const getAmenities = () => {
     const getAmenitiesUrl = "/amenity";
   

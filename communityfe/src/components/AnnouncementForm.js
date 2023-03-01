@@ -326,7 +326,7 @@ const AnnouncementForm = (props) => {
         })}
         <p></p>
       </Form>
-      <Title level={3}>Discussions: </Title>
+      {/* <Title level={3}>Discussions: </Title>
       {discussions.map((item) => {
         return (
           <>
@@ -335,7 +335,7 @@ const AnnouncementForm = (props) => {
         );
       })}
 
-      {isAdmin && <PostForm />}
+      {isAdmin && <PostForm />} */}
     </>
   );
 };

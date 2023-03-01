@@ -5,6 +5,7 @@
 @import "./styles/Home.css";
 @import "./styles/Announcement.css";
 @import "./styles/Chat.css";
+@import "./styles/Discussion.css";
 
 body {
   margin: 0;

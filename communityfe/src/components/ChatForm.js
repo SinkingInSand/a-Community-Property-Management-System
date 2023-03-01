@@ -11,11 +11,12 @@ import {
 
 const { Title } = Typography;
 
-const ChatForm = () => {
+const ChatForm = () => {  
   const [chatFormVisible, setChatFormVisible] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [deleteMessageId, setDeleteMessageId] = useState(null);
+  
 
   const fetchChatMessages = () => {
     getOwnMessage().then((data) => {
@@ -76,15 +77,15 @@ const ChatForm = () => {
       <List.Item key={item.id} className='chatItem'>
         <List.Item.Meta
           title=<Title level={5}>{`${index + 1}. ${item.subject}`}</Title>
-          description={
-            <>
-              <p style={{ marginBottom: 0, marginTop: 0, fontSize: 'small' }}>Sent On: {item.chatDate.month} {item.chatDate.dayOfMonth} {item.chatDate.year} | Sent From: {item.contactEmail} </p>
-              <p>{item.content}</p>
-            </>
-          }
-        />
+          description={ 
+          <>                      
+          <p style={{ marginBottom: 0, marginTop: 0, fontSize: 'small' }}>Sent On: {item.chatDate.month} {item.chatDate.dayOfMonth} {item.chatDate.year} | Sent From: {item.contactEmail} </p>
+          <p>{item.content}</p> 
+          </>}          
+        />        
         <TaskStatus finish={item.finished} />
         <Button type='link' icon={<DeleteOutlined />} onClick={() => handleDeleteClick(item.id)}>Delete</Button>
+        
       </List.Item>
     );
   };
@@ -99,8 +100,8 @@ const ChatForm = () => {
   
   return (
     <>
-      <Button style={{ margin: '50px' }} onClick={showModal}>
-        Contact Us
+      <Button className="customButton" style={{ margin: '50px' }} onClick={showModal}>
+        Got A Question? Get In Touch
       </Button>
       <ChatDialog
         visible={chatFormVisible}
