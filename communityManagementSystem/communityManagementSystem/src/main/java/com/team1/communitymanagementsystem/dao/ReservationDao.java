@@ -83,6 +83,7 @@ public class ReservationDao {
         Session session = null;
 
         try{
+            reservation.setAmenityName(reservation.getAmenity().getAmenityName());
             session = sessionFactory.openSession();
             session.beginTransaction();
             session.save(reservation);

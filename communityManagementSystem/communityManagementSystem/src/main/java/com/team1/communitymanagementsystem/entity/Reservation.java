@@ -26,6 +26,7 @@ public class Reservation implements Serializable {
     @JsonIgnore
     private Amenity amenity;
 
+    private String amenityName;
     private short timeSlot; //8:00 - 8:59 encoded to 1, 9:00-9:59 encoded to 2, ..., 19:00 - 19:59 encoded to 12
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate reservationDate;
@@ -65,7 +66,16 @@ public class Reservation implements Serializable {
         return amenity;
     }
 
+
     public void setAmenity(Amenity amenity) {
         this.amenity = amenity;
+    }
+
+    public String getAmenityName() {
+        return amenityName;
+    }
+
+    public void setAmenityName(String amenityName) {
+        this.amenityName = amenityName;
     }
 }

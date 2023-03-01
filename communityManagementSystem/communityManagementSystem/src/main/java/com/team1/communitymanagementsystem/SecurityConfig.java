@@ -42,6 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 //.antMatchers().hasAuthority("RESIDENT")
                 .anyRequest().permitAll();
+        http.logout()
+                .logoutSuccessUrl("/");
         //Need to be modified after deciding the certain url pattern
     }
 

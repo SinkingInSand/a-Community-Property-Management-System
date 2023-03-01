@@ -34,6 +34,7 @@ public class SignInController {
         response.getOutputStream()
                 .println(objectMapper.writeValueAsString(data));
     }
+
     @RequestMapping(value = "/home", method = RequestMethod.GET)
     @ResponseBody
     public String[] getUserInfo(){
