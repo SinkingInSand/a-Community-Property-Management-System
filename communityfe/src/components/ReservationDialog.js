@@ -34,15 +34,14 @@ const ReservationDialog = ({ content }) => {
 
   const columns = [
     {
-      title: 'Reservation Date',
-      dataIndex: 'reservationDate',
-      key: 'reservationDate',
-      render: (date) => formatDate(date),
-    },
-    {
-      title: 'Time Slot',
-      dataIndex: 'timeSlot',
-      key: 'timeSlot',
+      title: 'Reservation Date and Time',
+      key: 'reservationDateTime',
+      render: (record) => (
+        <span>
+          {formatDate(record.reservationDate)} 
+          {renderTimeSlot(record.timeSlot)}
+        </span>
+      )
     },
     {
       title: 'Actions',
@@ -59,8 +58,14 @@ const ReservationDialog = ({ content }) => {
     const year = date.year;
     const month = date.monthValue.toString().padStart(2, '0');
     const day = date.dayOfMonth.toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
+    return `${year}-${month}-${day} `;
   };
+
+  const renderTimeSlot = (slot) => {
+    const startTime = slot + 7;
+    const endTime = slot + 8;
+    return `${startTime}:00-${endTime}:00`;
+  }
 
   const handleDelete = (id) => {
     setLoading(true);
