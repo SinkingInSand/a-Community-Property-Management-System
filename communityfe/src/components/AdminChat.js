@@ -57,7 +57,7 @@ const AdminChat = () => {
 
   const renderChatMessages = () => {
     return chatMessages
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .sort((a, b) => new Date(b.id) - new Date(a.id))
       .map((item, index) => (
         <List.Item key={item.id} className='chatItem'>
           <List.Item.Meta

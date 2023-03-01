@@ -17,11 +17,15 @@ const ChatForm = () => {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [deleteMessageId, setDeleteMessageId] = useState(null);
 
-  useEffect(() => {
+  const fetchChatMessages = () => {
     getOwnMessage().then((data) => {
       console.log(data);
       setChatMessages(data);
     });
+  };
+
+  useEffect(() => {
+    fetchChatMessages();
   }, []);
 
   const handleChatFormClose = () => {
@@ -36,9 +40,7 @@ const ChatForm = () => {
   const handleDeleteOk = () => {
     deleteChat(deleteMessageId).then(() => {
       setDeleteModalVisible(false);
-      getOwnMessage().then((data) => {
-        setChatMessages(data);
-      });
+      fetchChatMessages();
     });
   };
 
@@ -55,7 +57,7 @@ const ChatForm = () => {
     if (finish) {
       icon = <CheckCircleOutlined />;
       color = 'success';
-      status = 'Success';
+      status = 'Completed';
     } else {
       icon = <SyncOutlined spin />;
       color = 'processing';
@@ -76,26 +78,38 @@ const ChatForm = () => {
           title=<Title level={5}>{`${index + 1}. ${item.subject}`}</Title>
           description={
             <>
-              <p style={{ marginBottom: 0, marginTop: 0, fontSize: 'small' }}>From: {item.contactEmail} | Sent On: {item.chatDate.month} {item.chatDate.dayOfMonth} {item.chatDate.year}</p>
+              <p style={{ marginBottom: 0, marginTop: 0, fontSize: 'small' }}>Sent On: {item.chatDate.month} {item.chatDate.dayOfMonth} {item.chatDate.year} | Sent From: {item.contactEmail} </p>
               <p>{item.content}</p>
             </>
           }
         />
-        <TaskStatus status={item.finished ? 'success' : 'processing'} />
+        <TaskStatus finish={item.finished} />
         <Button type='link' icon={<DeleteOutlined />} onClick={() => handleDeleteClick(item.id)}>Delete</Button>
       </List.Item>
     );
   };
 
+  const handleSendMessage = () => {
+    fetchChatMessages();
+  };
+
+  const showModal = () => {
+    setChatFormVisible(true);
+  };
+  
   return (
     <>
+      <Button style={{ margin: '50px' }} onClick={showModal}>
+        Contact Us
+      </Button>
       <ChatDialog
         visible={chatFormVisible}
         onClose={handleChatFormClose}
+        onSendMessage={handleSendMessage} // <-- pass this function to the ChatDialog component
       />
       <List
         style={{ width: '100%' }}
-        dataSource={chatMessages.sort((a, b) => new Date(b.chatDate) - new Date(a.chatDate))}
+        dataSource={chatMessages.sort((a, b) => new Date(b.id) - new Date(a.id))}
         renderItem={renderItem}
       />
       <Modal
