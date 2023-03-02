@@ -45,7 +45,7 @@ const ChatDialog = ({ visible, onClose, onSendMessage, userInfo }) => {
   return (
     <Modal
       title="Send Message"
-      visible={visible}
+      open={visible}
       footer={modalFooter}
       onCancel={handleCancel}
       closable={true}

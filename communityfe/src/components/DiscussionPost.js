@@ -3,87 +3,112 @@ import { Modal, Input, Form, Button, message } from "antd";
 import { FileTextOutlined } from "@ant-design/icons";
 import { createDiscussion } from "../utils";
 
+const DiscussionPost = ({ visible, onClose, onSendMessage }) => {
+    const [form] = Form.useForm();
+    const [loading, setLoading] = useState(false);
 
-const DiscussionPost = ({ onSendMessage }) => {
+    const handleOk = async () => {
+        setLoading(true);
+        try {
+          const values = await form.validateFields();
+          const discussionMessage = {
+            subject: values.subject,
+            content: values.content          
+          };
+          await createDiscussion(discussionMessage);
+          message.success('Post sent successfully!');
+          form.resetFields();
+          onClose();
+          onSendMessage(); // <-- call this prop function to update the state of chatMessages
+        } catch (error) {
+          message.error(error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
 
-    const [displayModal, setDisplayModal] = useState(false);
-    const [discussionPosts, setDiscussionPosts] = useState([]);
+      const handleCancel = () => {
+        form.resetFields();
+        onClose();
+      };
 
-    const handleCancel = () => {
-      setDisplayModal(false);
-    };
+      const modalFooter = (
+        <div>
+          <Button key="submit" type="primary" onClick={handleCancel} loading={loading}>
+            Cancel
+          </Button>
+          <Button key="submit" type="primary" onClick={handleOk} loading={loading}>
+            Send
+          </Button>
+        </div>
+      );
 
-    const fetchDiscussionPosts = () => {
-      createDiscussion().then((data) => {
-        setDiscussionPosts(data);
-      }).catch((err) => {
-        console.log(err);
-      });
-    };
+    // const [displayModal, setDisplayModal] = useState(false);
+    // const [discussionPosts, setDiscussionPosts] = useState([]);
 
-    useEffect(() => {
-      fetchDiscussionPosts();
-    }, []);
+    // const handleCancel = () => {
+    //   setDisplayModal(false);
+    // };
 
-    const createPostOnClick = () => {  
-      setDisplayModal(true);
-    };
+    // const fetchDiscussionPosts = () => {
+    //   createDiscussion().then((data) => {
+    //     setDiscussionPosts(data);
+    //   }).catch((err) => {
+    //     console.log(err);
+    //   });
+    // };
+
+    // useEffect(() => {
+    //   fetchDiscussionPosts();
+    // }, []);
+
+    // const createPostOnClick = () => {  
+    //   setDisplayModal(true);
+    // };
   
-    const onFinish = (data) => {
-        createDiscussion(data)
-        .then(() => {  
-          setDisplayModal(false);
-          message.success(`Your post just posted!`);
-          fetchDiscussionPosts();
-          onSendMessage(); // <-- call the onSendMessage prop function to update the state of discussionPosts
-        })
-        .catch((err) => {
-          message.error(err.message);
-        });
-    };
+    // const onFinish = (data) => {
+    //     createDiscussion(data)
+    //     .then(() => {  
+    //       setDisplayModal(false);
+    //       message.success(`Your post just posted!`);
+    //       fetchDiscussionPosts();
+    //       onSendMessage(); // <-- call the onSendMessage prop function to update the state of discussionPosts
+    //     })
+    //     .catch((err) => {
+    //       message.error(err.message);
+    //     });
+    // };
 
 
   return (
-    <>
-      <Button
-        className="floatPost"
-        icon={<FileTextOutlined />}
-        description="Create Post"
-        onClick={createPostOnClick}
-      >
-        Create Post
-      </Button>
+    <>      
       <Modal
           title="Create a Post"
-          open={displayModal}
+          open={visible}
           onCancel={handleCancel}
-          footer={null}
-          destroyOnClose={true} //destroy the content inside modal
+          footer={modalFooter}      
+          closable={true}
         >
-          <Form
-            initialValues={{ remember: true }}
-            onFinish={onFinish}
-            preserve={false}
-          >
+          <Form form={form} layout="vertical" >
             <Form.Item
+              label="Subject"
               name="subject"
               rules={[{ required: true, message: "Please input the subject" }]}
             >
-              <Input placeholder="Subject" />
+              <Input placeholder="Enter a subject" />
             </Form.Item>
             <Form.Item
+              label="Content"
               name="content"
               rules={[
                 { required: true, message: "Please input your content" },
               ]}
             >
-              <Input placeholder="Content" />
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Form.Item>
+              <Input.TextArea 
+                placeholder="Enter your message"
+                autoSize={{ minRows: 3, maxRows: 6 }}
+                />
+            </Form.Item>            
           </Form>
         </Modal>
     </>

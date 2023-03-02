@@ -1,8 +1,4 @@
-// import {
-//   LaptopOutlined,
-//   NotificationOutlined,
-//   UserOutlined,
-// } from "@ant-design/icons";
+
 import { Breadcrumb, Layout, Menu } from "antd";
 import React from "react";
 import { useState, useEffect } from "react";
@@ -12,6 +8,7 @@ import Discussion from "./Discussion";
 import AdminChat from "./AdminChat";
 import ChatForm from "./ChatForm";
 import ReservationForm from "./ReservationForm";
+import { Header } from "antd/lib/layout/layout";
 const { Content, Sider } = Layout;
 
 const AdminHome = (props) => {
@@ -70,33 +67,29 @@ const AdminHome = (props) => {
   };
 
   return (
-    <>
+  
+  <Layout>
+
+    <Header>
       <TopBar isLoggedIn={isLoggedIn} userInfo={userInfo} asAdmin={asAdmin} />
-      <Layout>
-        <Sider
-          className="site-layout-background"
-          style={{ width: "200", minHeight: "100%", background: "#011529" }}
+    </Header>
+      
+    <Layout>
+      <Sider style={{background:"white" }}>
+        <Menu
+          mode="inline"
+          defaultSelectedKeys={["1"]}
+          defaultOpenKeys={["sub1"]}            
         >
-          <Menu
-            // mode="inline"
-            defaultSelectedKeys={["1"]}
-            defaultOpenKeys={["sub1"]}
-            style={{
-              // height: "100vh",
-              height: "auto",
-              height: "100%",
-              borderRight: 0,
-            }}
-            // items={items}
-          >
-            <Menu.Item onClick={handleAnnouncement}>Announcement</Menu.Item>
-            <Menu.Item onClick={handleDiscussion}>Discussion</Menu.Item>
-            {asAdmin ? <Menu.Item onClick={showAdminChat}>Messages</Menu.Item> :
-            <Menu.Item onClick={showChat}>Contact Us</Menu.Item>}
-            <Menu.Item onClick={showReservation}>Reservation</Menu.Item>
-          </Menu>
-        </Sider>
-        {/* the layout below should changed depend on authorization */}
+          <Menu.Item onClick={handleAnnouncement}>Announcement</Menu.Item>
+          <Menu.Item onClick={handleDiscussion}>Discussion</Menu.Item>
+          {asAdmin ? <Menu.Item onClick={showAdminChat}>Messages</Menu.Item> :
+          <Menu.Item onClick={showChat}>Contact Us</Menu.Item>}
+          <Menu.Item onClick={showReservation}>Reservation</Menu.Item>
+        </Menu>
+      </Sider>
+
+      <Content>
         <Layout
           style={{
             padding: "0 24px 24px",
@@ -108,8 +101,11 @@ const AdminHome = (props) => {
           {adminChatVisible && <AdminChat isAdmin={asAdmin}/>}
           {UserChat && <ChatForm />}
         </Layout>
-      </Layout>
-    </>
+      </Content>
+    </Layout>
+
+</Layout>
+    
   );
 };
 export default AdminHome;

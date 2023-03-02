@@ -1,20 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Button, Comment,
-  Form,
-  Typography,
-  Layout,
-  message,
-  Modal,
-  Space,
-  List } from 'antd';
-import {
-  CheckCircleOutlined,
-  SyncOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  FormOutlined,
-  ArrowsAltOutlined
-} from '@ant-design/icons';
+import { Button, Comment, Form, Typography, Layout, message, Modal, Space, List } from 'antd';
+import { DeleteOutlined, EditOutlined, FormOutlined, ArrowsAltOutlined } from '@ant-design/icons';
 import { getDiscussions, getComments, deleteAnnoucement, createDiscussion } from '../utils';
 import ReplyForm from "./ReplyForm";
 import DiscussionPost from "./DiscussionPost";
@@ -30,16 +16,90 @@ const Discussion = (props) => {
   const [replyId, setReplyID] = useState(-1);
   const [commentId, setCommentId] = useState(-1);
   const [comments, setComments] = useState([]);
+  const [discussionVisible, setDiscussionVisible] = useState(false);
 
+  const fetchDiscussionMessages = () => {
+    getDiscussions()
+      .then((data) => {
+        setDiscussions(data);
+      })
+      // .catch((err) => {
+      //   message.error(err.message);
+      // })
+      // .finally(() => {
+      //   setLoadingDiscussions(false);
+      // });
+  };
+
+  useEffect(() => {
+    fetchDiscussionMessages();
+  }, []); 
+
+  const handleDiscussionClose = () => {
+    setDiscussionVisible(false);
+  };
+  const handleSendMessage = () => {
+    fetchDiscussionMessages();
+  };
+
+  const showModal = () => {
+    setDiscussionVisible(true);
+  };
   
+
+  const renderItem = (item) => {
+    console.log(item);
+    return (
+      <>
+      <List className="postItem">
+      <Comment
+        actions={item.actions}
+        author={item.author}
+        avatar={item.avatar}
+        content={item.content}
+        datetime={item.datetime}
+      />
+      <List.Item.Meta
+        title={<Title level={5}>{item.subject}</Title>}
+        description={
+          <>
+          <p>
+            Sent On: {item.timestamp.month} {item.timestamp.dayOfMonth}{" "}
+            {item.timestamp.dayOfWeek}
+          </p>
+          <p style={{color: "black"}}>{item.content}</p>
+          </>
+        }
+      />      
+      <div className="postItem-buttons">
+        <Button
+          className="button-group"
+          icon={<FormOutlined />}
+          onClick={() => handleReply(item)}
+        >
+          Reply
+        </Button>
+        <Button
+          className="button-group"
+          icon={<ArrowsAltOutlined />}
+          onClick={() => handleGetComments(item.id)}
+        >
+          Check Replys
+        </Button>
+      {renderDeletButton(item)} 
+      </div>
+      <Parent item={item} addChildren={addChildren(item.id)} />    
+      </List>      
+      </>
+    );
+  };
 
   const Parent = ({ item }) => {
     return (
-      <Form >
-      
+      <>      
       <p>{addComments(item.id)}</p>
       <p>{addChildren(item.id)}</p>    
-      </Form>
+      </>
     );
   };
   const addChildren = (id) => {
@@ -119,8 +179,7 @@ const Discussion = (props) => {
   };
   const renderDeletButton = (item) => {
     if (isAdmin) {
-      return (
-        
+      return (        
         <Space>
           <Button
             className="button-group"
@@ -176,84 +235,22 @@ const Discussion = (props) => {
       );
     }
   };
-
-  const renderItem = (item) => {
-    console.log(item);
-    return (
-      <div className="postItem">
-      <List.Item >
-      <List.Item.Meta
-        title={<Title level={5}>{item.subject}</Title>}
-        description={
-          <p>
-            {item.timestamp.month} {item.timestamp.dayOfMonth}{" "}
-            {item.timestamp.dayOfWeek}
-          </p>
-        }
-      />
-      
-      <div className="postItem-buttons">
-        <Button
-          className="button-group"
-          icon={<FormOutlined />}
-          onClick={() => handleReply(item)}
-        >
-          Reply
-        </Button>
-        <Button
-          className="button-group"
-          icon={<ArrowsAltOutlined />}
-          onClick={() => handleGetComments(item.id)}
-        >
-          Check Replys
-        </Button>
-      </div>
-      {renderDeletButton(item)}      
-      </List.Item>
-      <Parent item={item} addChildren={addChildren(item.id)} />
-      </div>
-    );
-  };
-  const [discussionVisible, setDiscussionVisible] = useState(false);
-
-  const fetchDiscussionMessages = () => {
-    getDiscussions()
-      .then((data) => {
-        setDiscussions(data);
-      })
-      // .catch((err) => {
-      //   message.error(err.message);
-      // })
-      // .finally(() => {
-      //   setLoadingDiscussions(false);
-      // });
-  };
-
-
-  useEffect(() => {
-    fetchDiscussionMessages();
-  }, []); 
-
-  const handleSendMessage = () => {
-    fetchDiscussionMessages();
-  };
-  const handleDiscussionClose = () => {
-    setDiscussionVisible(false);
-  };
+  
   return (
     <>
+    <Button className="floatPost" onClick={showModal}>
+      Create Post
+    </Button>
     <DiscussionPost
-        visible={discussionVisible}
-        onClose={handleDiscussionClose}
-        onSendMessage={handleSendMessage} // <-- pass this function to the DiscussionDialog component
-      />
-      <Title level={3}>Discussions: </Title>
+      visible={discussionVisible}
+      onClose={handleDiscussionClose}
+      onSendMessage={handleSendMessage} // <-- pass this function to the DiscussionDialog component
+    />
     <List
       style={{ width: '100%' }}
       dataSource={discussions.sort((a, b) => new Date(b.id) - new Date(a.id))}
       renderItem={renderItem}
-    >
-    </List>     
+    />
     </>
   );
 };

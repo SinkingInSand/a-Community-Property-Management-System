@@ -2,12 +2,7 @@ import { useState, useEffect } from 'react';
 import { Typography, List, Tag, Button, Modal } from 'antd';
 import { getOwnMessage, deleteChat } from '../utils';
 import ChatDialog from './ChatDialog';
-import {
-  CheckCircleOutlined,
-  SyncOutlined,
-  DeleteOutlined
-} from '@ant-design/icons';
-
+import { CheckCircleOutlined, SyncOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -72,20 +67,19 @@ const ChatForm = () => {
     );
   };
 
-  const renderItem = (item, index) => {
+  const renderItem = (item) => {
     return (
       <List.Item key={item.id} className='postItem'>
         <List.Item.Meta
-          title=<Title level={5}>{`${index + 1}. ${item.subject}`}</Title>
+          title=<Title level={5}>{item.subject}</Title>
           description={ 
           <>                      
-          <p style={{ marginBottom: 0, marginTop: 0, fontSize: 'small' }}>Sent On: {item.chatDate.month} {item.chatDate.dayOfMonth} {item.chatDate.year} | Sent From: {item.contactEmail} </p>
+          <p>Sent On: {item.chatDate.month} {item.chatDate.dayOfMonth} {item.chatDate.year} | Sent From: {item.contactEmail} </p>
           <p>{item.content}</p> 
           </>}          
         />        
         <TaskStatus finish={item.finished} />
         <Button icon={<DeleteOutlined />} onClick={() => handleDeleteClick(item.id)}>Delete</Button>
-        
       </List.Item>
     );
   };
