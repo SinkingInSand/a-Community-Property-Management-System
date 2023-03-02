@@ -3,9 +3,7 @@
 @import "./styles/Main.css";
 @import "./styles/Register.css";
 @import "./styles/Home.css";
-@import "./styles/Announcement.css";
-@import "./styles/Chat.css";
-@import "./styles/Discussion.css";
+@import "./styles/AllStyle.css";
 
 body {
   margin: 0;
@@ -21,3 +19,6 @@ code {
     monospace;
 }
 
+.ReactGridGallery_custom-overlay {
+  pointer-events: auto !important;
+}

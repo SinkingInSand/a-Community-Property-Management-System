@@ -8,11 +8,11 @@ const ReplyForm = (props) => {
 
   const [displayModal, setDisplayModal] = useState("");
 
-  //   const handleCancel = () => {
-  //     // setPostId(false);
-  //     setDisplayModal("none");
-  //     console.log("postId = ", postId);
-  //   };
+    const handleCancel = () => {
+      // setPostId(false);
+      setDisplayModal("none");
+      console.log("postId = ", postId);
+    };
 
   const onFinish = (data) => {
     console.log("Reply content", data);
@@ -37,11 +37,13 @@ const ReplyForm = (props) => {
       style={{ display: displayModal }}
     >
       <Form.Item name="content">
-        <Input.TextArea rows={4} placeholder="Add your comment here" style={{margin: "24px"}} />
+      <Input.TextArea 
+      rows={4} placeholder="Add your comment here" 
+      style={{ marginRight: "20px" }} />
       </Form.Item>
 
       <Form.Item>
-        {/* <Button onClick={()=>handleCancel}>Cancel</Button> */}
+        <Button onClick={()=>handleCancel}>Cancel</Button>
         <Button type="primary" htmlType="submit">
           Submit
         </Button>

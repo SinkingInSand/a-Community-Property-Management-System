@@ -74,7 +74,7 @@ const ChatForm = () => {
 
   const renderItem = (item, index) => {
     return (
-      <List.Item key={item.id} className='chatItem'>
+      <List.Item key={item.id} className='postItem'>
         <List.Item.Meta
           title=<Title level={5}>{`${index + 1}. ${item.subject}`}</Title>
           description={ 
@@ -84,7 +84,7 @@ const ChatForm = () => {
           </>}          
         />        
         <TaskStatus finish={item.finished} />
-        <Button type='link' icon={<DeleteOutlined />} onClick={() => handleDeleteClick(item.id)}>Delete</Button>
+        <Button icon={<DeleteOutlined />} onClick={() => handleDeleteClick(item.id)}>Delete</Button>
         
       </List.Item>
     );
@@ -100,8 +100,10 @@ const ChatForm = () => {
   
   return (
     <>
-      <Button className="customButton" style={{ margin: '50px' }} onClick={showModal}>
-        Got A Question? Get In Touch
+      <Button className="floatPost" onClick={showModal}>
+        Got A Question?
+        <br />
+        Get In Touch
       </Button>
       <ChatDialog
         visible={chatFormVisible}

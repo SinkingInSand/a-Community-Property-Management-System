@@ -333,9 +333,9 @@ const AnnouncementForm = (props) => {
             <Parent item={item} addChildren={addChildren(item.id)} />
           </>
         );
-      })}
+      })} */}
 
-      {isAdmin && <PostForm />} */}
+      {isAdmin && <PostForm />}
     </>
   );
 };

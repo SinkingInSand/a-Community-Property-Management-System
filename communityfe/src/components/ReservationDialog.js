@@ -84,7 +84,7 @@ const ReservationDialog = ({ content }) => {
 
   return (
     <>
-      <Button style={{ margin: '50px' }} onClick={showModal}>
+      <Button className="floatPost" onClick={showModal}>
         My Reservation
       </Button>
       <Modal

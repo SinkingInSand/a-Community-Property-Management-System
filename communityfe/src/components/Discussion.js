@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button,
+import { Button, Comment,
   Form,
   Typography,
   Layout,
@@ -15,14 +15,13 @@ import {
   FormOutlined,
   ArrowsAltOutlined
 } from '@ant-design/icons';
-import { getDiscussionPosts, getDiscussions, reply, getComments,createPost,deleteAnnoucement, } from '../utils';
+import { getDiscussions, getComments, deleteAnnoucement, createDiscussion } from '../utils';
 import ReplyForm from "./ReplyForm";
-import PostForm from "./PostForm";
+import DiscussionPost from "./DiscussionPost";
 
 const { Title } = Typography;
 
 const Discussion = (props) => {
-  console.log("Announcement Form Is Admin? = ", props.isAdmin);
   const [isAdmin, setAdmin] = useState(props.isAdmin);
   const [discussions, setDiscussions] = useState([]);
   const [loadingDiscussions, setLoadingDiscussions] = useState(false);
@@ -32,74 +31,34 @@ const Discussion = (props) => {
   const [commentId, setCommentId] = useState(-1);
   const [comments, setComments] = useState([]);
 
-  useEffect(() => {
-    setLoadingDiscussions(true);
-    getDiscussions()
-      .then((data) => {
-        setDiscussions(data);
-      })
-      .catch((err) => {
-        message.error(err.message);
-      })
-      .finally(() => {
-        setLoadingDiscussions(false);
-      });
-  }, []); //can we get discussion and announcement at once
+  
 
   const Parent = ({ item }) => {
     return (
-      <>
-        <Form.Item id={item.id}>
-          <Title level={5}>{"Subject: " + item.subject}</Title>
-          <p>{item.content}</p>
-          <p>
-            {item.timestamp.month +
-              " " +
-              item.timestamp.dayOfMonth +
-              " " +
-              item.timestamp.dayOfWeek}
-          </p>
-          {renderDeletButton(item)}
-          <Button
-            class="button-group"
-            icon={<FormOutlined />}
-            onClick={() => handleReply(item)}
-          >
-            Reply
-          </Button>
-          <Button class="button-group" icon={<ArrowsAltOutlined />} onClick={() => handleGetComments(item.id)}>
-            Check Replys
-          </Button>
-          {addChildren(item.id)}
-        </Form.Item>
-        {addComments(item.id)}
-      </>
+      <Form >
+      
+      <p>{addComments(item.id)}</p>
+      <p>{addChildren(item.id)}</p>    
+      </Form>
     );
   };
-
   const addChildren = (id) => {
     if (id === replyId) {
-      console.log("reply ID is ", replyId);
-
       return <ReplyForm postId={id} />;
     }
   };
   const handleGetComments = (id) => {
     if (commentId === -1) {
-      console.log("Getting comments from post ", id);
       setCommentId(id);
       getComments(id).then((data) => {
         setComments(data);
       });
-
-      console.log("Comments is ", comments);
     } else {
       setCommentId(-1);
     }
   };
   const addComments = (id) => {
     if (id === commentId) {
-      console.log("reply ID is ", replyId);
       return <Comment />;
     }
   };
@@ -108,7 +67,7 @@ const Discussion = (props) => {
       <List>
         {comments.map((item) => {
           return (
-            <List.Item style={{ color: "black" }}>
+            <List.Item>
               Reply: {item.content}
             </List.Item>
           );
@@ -118,8 +77,6 @@ const Discussion = (props) => {
   };
   const handleReply = (props) => {
     if (replyId === -1) {
-      console.log("onclick reply ", props.id);
-      // windows.DOM.getElementById(id)
       setReplyID(props.id);
     } else {
       setReplyID(-1);
@@ -141,17 +98,16 @@ const Discussion = (props) => {
   };
 
   const onFinish = () => {
-    createPost()
+    createDiscussion()
       .then(() => {
         setDisplayModal(false);
-        message.success(`Your announcement just posted!`);
+        message.success(`Your discussion just posted!`);
       })
       .catch((err) => {
         message.error(err.message);
       });
   };
   const onDelete = (id) => {
-    console.log(id)
     deleteAnnoucement(id)
       .then(() => {
         setDisplayModal(false);
@@ -162,20 +118,19 @@ const Discussion = (props) => {
       });
   };
   const renderDeletButton = (item) => {
-    console.log(item.id)
     if (isAdmin) {
       return (
         
         <Space>
           <Button
-            class="button-group"
+            className="button-group"
             icon={<EditOutlined />}
             onClick={editPostOnClick}
           >
             Edit
           </Button>
           <Button
-            class="button-group"
+            className="button-group"
             icon={<DeleteOutlined />}
             onClick={deletePostOnClick}
           >
@@ -222,18 +177,83 @@ const Discussion = (props) => {
     }
   };
 
+  const renderItem = (item) => {
+    console.log(item);
+    return (
+      <div className="postItem">
+      <List.Item >
+      <List.Item.Meta
+        title={<Title level={5}>{item.subject}</Title>}
+        description={
+          <p>
+            {item.timestamp.month} {item.timestamp.dayOfMonth}{" "}
+            {item.timestamp.dayOfWeek}
+          </p>
+        }
+      />
+      
+      <div className="postItem-buttons">
+        <Button
+          className="button-group"
+          icon={<FormOutlined />}
+          onClick={() => handleReply(item)}
+        >
+          Reply
+        </Button>
+        <Button
+          className="button-group"
+          icon={<ArrowsAltOutlined />}
+          onClick={() => handleGetComments(item.id)}
+        >
+          Check Replys
+        </Button>
+      </div>
+      {renderDeletButton(item)}      
+      </List.Item>
+      <Parent item={item} addChildren={addChildren(item.id)} />
+      </div>
+    );
+  };
+  const [discussionVisible, setDiscussionVisible] = useState(false);
+
+  const fetchDiscussionMessages = () => {
+    getDiscussions()
+      .then((data) => {
+        setDiscussions(data);
+      })
+      // .catch((err) => {
+      //   message.error(err.message);
+      // })
+      // .finally(() => {
+      //   setLoadingDiscussions(false);
+      // });
+  };
+
+
+  useEffect(() => {
+    fetchDiscussionMessages();
+  }, []); 
+
+  const handleSendMessage = () => {
+    fetchDiscussionMessages();
+  };
+  const handleDiscussionClose = () => {
+    setDiscussionVisible(false);
+  };
   return (
     <>
-            <Title level={3}>Discussions: </Title>
-      {discussions.map((item) => {
-        return (
-          <>
-            <Parent item={item} addChildren={addChildren(item.id)} />
-          </>
-        );
-      })}
-
-      {isAdmin && <PostForm />}
+    <DiscussionPost
+        visible={discussionVisible}
+        onClose={handleDiscussionClose}
+        onSendMessage={handleSendMessage} // <-- pass this function to the DiscussionDialog component
+      />
+      <Title level={3}>Discussions: </Title>
+    <List
+      style={{ width: '100%' }}
+      dataSource={discussions.sort((a, b) => new Date(b.id) - new Date(a.id))}
+      renderItem={renderItem}
+    >
+    </List>     
     </>
   );
 };

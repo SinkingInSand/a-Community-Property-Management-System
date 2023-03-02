@@ -1,30 +1,41 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Input, Form, Button, message } from "antd";
 import { FileTextOutlined } from "@ant-design/icons";
-import { createPost } from "../utils";
+import { createDiscussion } from "../utils";
 
 
-const PostForm = () => {
-    // const [asAdmin, setAdmin] = useState(props);
+const DiscussionPost = ({ onSendMessage }) => {
 
     const [displayModal, setDisplayModal] = useState(false);
+    const [discussionPosts, setDiscussionPosts] = useState([]);
 
     const handleCancel = () => {
       setDisplayModal(false);
     };
-  
-    const createPostOnClick = () => {
-  
+
+    const fetchDiscussionPosts = () => {
+      createDiscussion().then((data) => {
+        setDiscussionPosts(data);
+      }).catch((err) => {
+        console.log(err);
+      });
+    };
+
+    useEffect(() => {
+      fetchDiscussionPosts();
+    }, []);
+
+    const createPostOnClick = () => {  
       setDisplayModal(true);
     };
   
     const onFinish = (data) => {
-      createPost(data)
-        .then(() => {
-  
+        createDiscussion(data)
+        .then(() => {  
           setDisplayModal(false);
-          message.success(`Your announcement just posted!`);
+          message.success(`Your post just posted!`);
+          fetchDiscussionPosts();
+          onSendMessage(); // <-- call the onSendMessage prop function to update the state of discussionPosts
         })
         .catch((err) => {
           message.error(err.message);
@@ -32,47 +43,33 @@ const PostForm = () => {
     };
 
 
-
-//   const handleCreatePost = () => {
-        
-//   }
-
   return (
     <>
-
       <Button
         className="floatPost"
         icon={<FileTextOutlined />}
         description="Create Post"
-        // shape="square"
         onClick={createPostOnClick}
       >
-        Create Announcement
+        Create Post
       </Button>
       <Modal
-          title="Create an Announcement"
+          title="Create a Post"
           open={displayModal}
           onCancel={handleCancel}
           footer={null}
           destroyOnClose={true} //destroy the content inside modal
         >
           <Form
-            // name="normal_register"
             initialValues={{ remember: true }}
             onFinish={onFinish}
             preserve={false}
           >
             <Form.Item
-              name="category"
-              rules={[{ required: true, message: "Please choose category" }]}
+              name="subject"
+              rules={[{ required: true, message: "Please input the subject" }]}
             >
-              <Input  placeholder="Category" />
-            </Form.Item>
-            <Form.Item
-              name="title"
-              rules={[{ required: true, message: "Please input the title" }]}
-            >
-              <Input placeholder="Title" />
+              <Input placeholder="Subject" />
             </Form.Item>
             <Form.Item
               name="content"
@@ -82,8 +79,6 @@ const PostForm = () => {
             >
               <Input placeholder="Content" />
             </Form.Item>
-            
-
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 Submit
@@ -94,4 +89,4 @@ const PostForm = () => {
     </>
   );
 };
-export default PostForm;
+export default DiscussionPost;

@@ -33,29 +33,6 @@ export const login = (credential) => {
     //console.log(resp); -> not sure if there will be a response
   };
   
-
-  export const createPost = (data) => {
-    const signupUrl = "/announcements/create";
-  
-    return fetch(signupUrl, {
-      method: "POST",
-      headers: { //request header
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    }).then((response) => { 
-      if (response.status < 200 || response.status >= 300) { 
-        throw Error("Fail to make a post");
-      }
-    });
-
-  };
-
-  
-
-
-
-
   // export const getUser = () => {
   //   return fetch("/home").then((response) => {
   //     if (response.status < 200 || response.status >= 300) {
@@ -75,10 +52,7 @@ export const login = (credential) => {
       return response.json();
     });
   };
-
-
-
-  
+ 
 
   // need to modify based on backend API
   // export const getMenus = (restId) => {
@@ -132,10 +106,39 @@ export const login = (credential) => {
       }
     });
   };
+  export const createPost = (data) => {
+    const signupUrl = "/announcements/create";
+  
+    return fetch(signupUrl, {
+      method: "POST",
+      headers: { //request header
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }).then((response) => { 
+      if (response.status < 200 || response.status >= 300) { 
+        throw Error("Fail to make a post");
+      }
+    });
 
+  };
 
   //Disscussion
   //post on discussion
+  export const createDiscussion = (data) => {
+    return fetch("/discussion/post", {
+      method: "POST",
+      headers: { //request header
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }).then((response) => { 
+      if (response.status < 200 || response.status >= 300) { 
+        throw Error("Fail to make a post");
+      }
+    });
+
+  };
   export const postDiscussion = (message) => {
     const disPostUrl = "/discussion/post";
     return fetch(disPostUrl, {
