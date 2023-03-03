@@ -12,14 +12,12 @@ const SignupForm = (props) => {
   };
 
   const signupOnClick = () => {
-
     setDisplayModal(true);
   };
 
   const onFinish = (data) => {
     signup(data)
       .then(() => {
-
         setDisplayModal(false);
         message.success(`Successfully signed up`);
       })
@@ -32,7 +30,7 @@ const SignupForm = (props) => {
     return (
       <>
         <Button shape="round" type="link" onClick={signupOnClick}>
-          Register
+          register now!
         </Button>
         <Modal
           title="Register"

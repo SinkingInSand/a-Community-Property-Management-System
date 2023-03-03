@@ -1,14 +1,12 @@
 
-import { Breadcrumb, Layout, Menu } from "antd";
+import { Layout, Menu } from "antd";
 import React from "react";
-import { useState, useEffect } from "react";
-import TopBar from "./TopBar";
+import { useState } from "react";
 import AnnouncementForm from "./AnnouncementForm";
 import Discussion from "./Discussion";
 import AdminChat from "./AdminChat";
 import ChatForm from "./ChatForm";
 import ReservationForm from "./ReservationForm";
-import { Header } from "antd/lib/layout/layout";
 const { Content, Sider } = Layout;
 
 const AdminHome = (props) => {
@@ -28,7 +26,7 @@ const AdminHome = (props) => {
   console.log("user info on AdminHome: ", userInfo);
   const [asAdmin, setAdmin] = useState(props.asAdmin);
 
-  console.log("Amin Home, is Admin = ", asAdmin);
+  console.log("Amin Home, is Admin = ", props.asAdmin);
 
   const handleAnnouncement = () => {
     setAnouncement(true);
@@ -68,13 +66,7 @@ const AdminHome = (props) => {
 
   return (
   
-  <Layout>
-
-    <Header>
-      <TopBar isLoggedIn={isLoggedIn} userInfo={userInfo} asAdmin={asAdmin} />
-    </Header>
-      
-    <Layout>
+  <Layout>   
       <Sider style={{background:"white" }}>
         <Menu
           mode="inline"
@@ -102,8 +94,6 @@ const AdminHome = (props) => {
           {UserChat && <ChatForm />}
         </Layout>
       </Content>
-    </Layout>
-
 </Layout>
     
   );

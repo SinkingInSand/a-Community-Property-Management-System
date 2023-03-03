@@ -43,43 +43,6 @@ const DiscussionPost = ({ visible, onClose, onSendMessage }) => {
         </div>
       );
 
-    // const [displayModal, setDisplayModal] = useState(false);
-    // const [discussionPosts, setDiscussionPosts] = useState([]);
-
-    // const handleCancel = () => {
-    //   setDisplayModal(false);
-    // };
-
-    // const fetchDiscussionPosts = () => {
-    //   createDiscussion().then((data) => {
-    //     setDiscussionPosts(data);
-    //   }).catch((err) => {
-    //     console.log(err);
-    //   });
-    // };
-
-    // useEffect(() => {
-    //   fetchDiscussionPosts();
-    // }, []);
-
-    // const createPostOnClick = () => {  
-    //   setDisplayModal(true);
-    // };
-  
-    // const onFinish = (data) => {
-    //     createDiscussion(data)
-    //     .then(() => {  
-    //       setDisplayModal(false);
-    //       message.success(`Your post just posted!`);
-    //       fetchDiscussionPosts();
-    //       onSendMessage(); // <-- call the onSendMessage prop function to update the state of discussionPosts
-    //     })
-    //     .catch((err) => {
-    //       message.error(err.message);
-    //     });
-    // };
-
-
   return (
     <>      
       <Modal

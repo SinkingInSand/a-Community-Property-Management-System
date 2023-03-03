@@ -2,10 +2,11 @@ import { Button, Checkbox, Form, Input, message } from "antd";
 import React, { useState, useEffect } from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { login, getUser } from "../utils";
+import { Link } from "react-router-dom";
 import SignupForm from "./SignupForm";
 
-
 const LoginForm = (props) => {
+  const { handleLoggedIn } = props;
   // const [isLoggedIn, setLogin] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userInfo, setUserInfo] = useState([]);
@@ -33,46 +34,24 @@ const LoginForm = (props) => {
         setLoadingUser(false);
           
       });
-
   }, []);
   
   
   const onFinish = (data) => {
-    props.handelTempLogin(true); //temp solution for testing
     setLoading(true);
-    props.onSuccess(userInfo);
-    // if (userInfo[1] === "ADMIN"){
-    //   // setAdmin(true);//set the admin is true
-      
-    //   props.onSuccess(userInfo);
-    //   // console.log("If Admin after login: ", asAdmin);
-    // }
-
+  
     login(data)
       .then(() => {
         message.success(`Login Successful`);
-        // props.onSuccess(); 
-        // console.log("user info: ", userInfo[1])
-        // console.log("user info: ", userInfo);  
- 
-        // if (userInfo[1] === "ADMIN"){
-        //   setAdmin(true);//set the admin is true
-        //   console.log("If Admin after login: ", asAdmin);
-        // }
+        handleLoggedIn(true, data);
       })
       .catch((err) => {
         message.error(err.message);
       })
       .finally(() => {
         setLoading(false);
-
-        
       });
   };
-
-
-
-
 
   return (
     <>
@@ -100,15 +79,16 @@ const LoginForm = (props) => {
         </Form.Item>
 
         <Form.Item>
-          <SignupForm />
           <Button
             type="primary"
             shape="round"
             htmlType="submit"
             loading={loading}
+            style={{ marginRight: '20px' }}
           >
             Login
           </Button>
+          Or <SignupForm />
         </Form.Item>
       </Form>
     </>

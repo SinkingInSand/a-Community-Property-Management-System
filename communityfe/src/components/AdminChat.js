@@ -59,7 +59,7 @@ const AdminChat = () => {
     return chatMessages
       .sort((a, b) => new Date(b.id) - new Date(a.id))
       .map((item, index) => (
-        <List.Item key={item.id} className='chatItem'>
+        <List.Item key={item.id} className='postItem'>
           <List.Item.Meta
             title={<Title level={5}>{`${index + 1}. ${item.subject}`}</Title>}
             description={

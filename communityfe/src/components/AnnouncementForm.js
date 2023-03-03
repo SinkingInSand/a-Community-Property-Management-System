@@ -11,7 +11,6 @@ import {
   List,
   Input
 } from "antd";
-import Sider from "antd/lib/layout/Sider";
 import {
   getAnnouncements,
   getDiscussions,
@@ -20,13 +19,11 @@ import {
   deleteAnnoucement,
   editAnnoucement
 } from "../utils";
-import Paragraph from "antd/lib/skeleton/Paragraph";
 import PostForm from "./PostForm";
 import ReplyForm from "./ReplyForm";
-import { append } from "domutils";
-import TextArea from "antd/lib/input/TextArea";
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+
 const { Title } = Typography;
-const { Content } = Layout;
 
 const AnnouncementForm = (props) => {
   console.log("Announcement Form Is Admin? = ", props.isAdmin);
@@ -103,22 +100,18 @@ const AnnouncementForm = (props) => {
   const renderDeletButton = (item) => {
     console.log(item.id)
     if (isAdmin) {
-      return (
-        
+      return (        
         <Space.Compact>
           <Button
-            type="primary"
-            size="middle"
-            style={{ background: "lightblue" }}
+            className="button-group"
+            icon={<EditOutlined />}
             onClick={editPostOnClick}
           >
             Edit
           </Button>
           <Button
-            type="primary"
-            size="middle"
-            style={{ background: "pink" }}
             onClick={deletePostOnClick}
+            icon={<DeleteOutlined />}
           >
             Delete{" "}
           </Button>
