@@ -87,10 +87,10 @@ const AnnouncementForm = (props) => {
       });
   };
 
-  const onAnnoucementEdit = (id) => {
+  const onAnnoucementEdit = (id, data) => {
     console.log(id)
-    
-    editAnnoucement(id)
+    console.log(data)
+    editAnnoucement(id, data)
       .then(() => {
         setDisplayModal(false);
         message.success(`Your announcement has been updated. Id = ` + id);
@@ -132,7 +132,7 @@ const AnnouncementForm = (props) => {
               <Button key="back" onClick={handleCancel}>
                 No
               </Button>,
-              <Button key="submit" type="primary" onClick={() => onAnnoucementDelete(item.id)}>
+              <Button key="submit" type="primary" onClick={() => onAnnoucementDelete(item.id,props.data)}>
                 Yes
               </Button>,
             ]}
@@ -185,6 +185,7 @@ const AnnouncementForm = (props) => {
         </Modal>
           
         </Space.Compact>
+        
       );
     }
   };
