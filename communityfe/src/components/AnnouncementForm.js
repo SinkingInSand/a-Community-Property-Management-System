@@ -38,6 +38,7 @@ const AnnouncementForm = (props) => {
   const [replyId, setReplyID] = useState(-1);
   const [commentId, setCommentId] = useState(-1);
   const [comments, setComments] = useState([]);
+  const [form] = Form.useForm();
 
   const handleCancel = () => {
     setDisplayModal(false);
@@ -84,12 +85,17 @@ const AnnouncementForm = (props) => {
       });
   };
 
-  const onAnnoucementEdit = (id, data) => {
+  const onAnnoucementEdit = (id,form) => {
+    const data = {
+      category: "Activity",
+      title: "Test",
+      content: "This is the content"
+    }
     console.log(id)
     console.log(data)
     editAnnoucement(id, data)
       .then(() => {
-        setDisplayModal(false);
+        setEditDisplayModal(false);
         message.success(`Your announcement has been updated. Id = ` + id);
       })
       .catch((err) => {
@@ -125,15 +131,16 @@ const AnnouncementForm = (props) => {
               <Button key="back" onClick={handleCancel}>
                 No
               </Button>,
-              <Button key="submit" type="primary" onClick={() => onAnnoucementDelete(item.id,props.data)}>
+              <Button key="submit" type="primary" onClick={() => onAnnoucementDelete(item.id)}>
                 Yes
               </Button>,
             ]}
+
           >
             
             <p>Are you sure you want to delete this post?</p>
           </Modal>
-
+            
           <Modal
           title="Edit an Annoucement"
           open={displayEditModal}
@@ -144,7 +151,7 @@ const AnnouncementForm = (props) => {
           <Form
             // name="normal_register"
             initialValues={{ remember: true }}
-            onFinish={() => onAnnoucementEdit(item.id)}
+            onFinish={() => onAnnoucementEdit(item.id, form)}
             preserve={false}
           >
             <Form.Item
