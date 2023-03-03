@@ -87,10 +87,10 @@ const AnnouncementForm = (props) => {
       });
   };
 
-  const onAnnoucementEdit = (id, data) => {
+  const onAnnoucementEdit = (id) => {
     console.log(id)
-    console.log(data)
-    editAnnoucement(id, data)
+    
+    editAnnoucement(id)
       .then(() => {
         setDisplayModal(false);
         message.success(`Your announcement has been updated. Id = ` + id);
@@ -150,9 +150,9 @@ const AnnouncementForm = (props) => {
         >
           <Form
             // name="normal_register"
-            // initialValues={{ remember: true }}
-            // onFinish={onFinish}
-            // preserve={false}
+            initialValues={{ remember: true }}
+            onFinish={() => onAnnoucementEdit(item.id)}
+            preserve={false}
           >
             <Form.Item
               name="category"
@@ -177,7 +177,7 @@ const AnnouncementForm = (props) => {
             
 
             <Form.Item>
-              <Button type="primary" htmlType="submit" onClick={() => onAnnoucementEdit(item.id)}>
+              <Button type="primary" htmlType="submit">
                 Submit
               </Button>
             </Form.Item>
