@@ -125,7 +125,7 @@ const AnnouncementForm = (props) => {
               <Button key="back" onClick={handleCancel}>
                 No
               </Button>,
-              <Button key="submit" type="primary" onClick={() => onAnnoucementDelete(item.id)}>
+              <Button key="submit" type="primary" onClick={() => onAnnoucementDelete(item.id,props.data)}>
                 Yes
               </Button>,
             ]}
@@ -143,9 +143,9 @@ const AnnouncementForm = (props) => {
         >
           <Form
             // name="normal_register"
-            // initialValues={{ remember: true }}
-            // onFinish={onFinish}
-            // preserve={false}
+            initialValues={{ remember: true }}
+            onFinish={() => onAnnoucementEdit(item.id)}
+            preserve={false}
           >
             <Form.Item
               name="category"
@@ -170,7 +170,7 @@ const AnnouncementForm = (props) => {
             
 
             <Form.Item>
-              <Button type="primary" htmlType="submit" onClick={() => onAnnoucementEdit(item.id)}>
+              <Button type="primary" htmlType="submit">
                 Submit
               </Button>
             </Form.Item>
@@ -178,6 +178,7 @@ const AnnouncementForm = (props) => {
         </Modal>
           
         </Space.Compact>
+        
       );
     }
   };

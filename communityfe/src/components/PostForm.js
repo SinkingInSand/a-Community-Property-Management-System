@@ -20,6 +20,7 @@ const PostForm = () => {
     };
   
     const onFinish = (data) => {
+      console.log(data)
       createPost(data)
         .then(() => {
   
