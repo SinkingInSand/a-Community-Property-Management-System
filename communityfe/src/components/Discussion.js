@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button, Input, Form, Typography, Layout, message, Modal, Space, List } from 'antd';
 import { DeleteOutlined, EditOutlined, FormOutlined, ArrowsAltOutlined } from '@ant-design/icons';
-import { getDiscussions, getComments, deleteAnnoucement, createDiscussion, editDiscussion } from '../utils';
+import { getDiscussions, getComments, deleteAnnoucement, createDiscussion, editDiscussion, deleteDiscussion} from '../utils';
 import ReplyForm from "./ReplyForm";
 import DiscussionPost from "./DiscussionPost";
 
@@ -10,6 +10,9 @@ const { Title } = Typography;
 const Discussion = (props) => {
   const [isAdmin, setAdmin] = useState(props.isAdmin);
   const [discussions, setDiscussions] = useState([]);
+
+  const [editId, setEditId] = useState(null);
+
   const [loadingDiscussions, setLoadingDiscussions] = useState(false);
   const [displayModal, setDisplayModal] = useState(false);
   const [displayEditModal, setEditDisplayModal] = useState(false);
@@ -120,11 +123,12 @@ const Discussion = (props) => {
         message.error(err.message);
       });
   };
-  const onDelete = (id) => {
-    deleteAnnoucement(id)
+  const onDelete = () => {
+    deleteDiscussion(editId)
       .then(() => {
         setDisplayModal(false);
-        message.success(`Your announcement has been deleted. Id = ` + id);
+        setDiscussions(discussions.filter(item => item.id !== editId));
+        message.success(`Your discussion has been deleted. Id = ` + editId);
       })
       .catch((err) => {
         message.error(err.message);
@@ -149,7 +153,13 @@ const Discussion = (props) => {
           <Button
             className="button-group"
             icon={<DeleteOutlined />}
-            onClick={deletePostOnClick}
+            onClick={
+              
+              () => {
+                setDisplayModal(true);
+                setEditId(item.id);
+            }}
+            
           >
             Delete{" "}
           </Button>
@@ -162,7 +172,7 @@ const Discussion = (props) => {
               <Button key="back" onClick={handleCancel}>
                 No
               </Button>,
-              <Button key="submit" type="primary" onClick={() => onDelete(item.id)}>
+              <Button key="submit" type="primary" onClick={onDelete}>
                 Yes
               </Button>,
             ]}

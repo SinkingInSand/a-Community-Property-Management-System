@@ -154,6 +154,22 @@ export const login = (credential) => {
       }
     });
   };
+
+
+  export const deleteDiscussion = (aId) => {
+
+    return fetch(`/discussion/${aId}/delete`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    }).then((response) => {
+      if (response.status < 200 || response.status >= 300) {
+        throw Error("Fail to delete discussion");
+      }
+    });
+  };
 //get dis by resident
 export const getDiscussionPosts = () => {
   return fetch("/discussion/yourPosts")
