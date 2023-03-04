@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Form, Layout, Typography, Row, Col, Button, List } from "antd";
+import { Form, Layout, Typography, Button, List, Modal } from "antd";
 import { getAllMessage, sendMessage, deleteChat, handleMessage } from "../utils";
 import {
   CheckCircleOutlined,
@@ -12,25 +12,13 @@ const { Title } = Typography;
 
 const AdminChat = () => {
   const [chatMessages, setChatMessages] = useState([]);
-
+  const [displayModal, setDisplayModal] = useState(false);
   useEffect(() => {
     getAllMessage().then((data) => {
       console.log(data);
       setChatMessages(data);
     });
   }, []);
-
-  const updateMessage = (item) => {
-    const updatedItem = { ...item, finished: !item.finished };
-    setChatMessages((prevMessages) =>
-      prevMessages.map((oldItem) =>
-        oldItem.id === item.id ? updatedItem : oldItem
-      )
-    );
-    sendMessage(updatedItem).then(() => {
-      console.log("checked = ", updatedItem);
-    });
-  };
 
   const handleMessageClick = (id) => {
     handleMessage(id).then(() => {
@@ -53,8 +41,15 @@ const AdminChat = () => {
         prevMessages.filter((message) => message.id !== id)
       );
     });
+    setDisplayModal(false);
   };
 
+  const deletePostOnClick = () => {
+    setDisplayModal(true);
+  };
+  const handleCancel = () => {
+    setDisplayModal(false);
+  };
   const renderChatMessages = () => {
     return chatMessages
       .sort((a, b) => new Date(b.id) - new Date(a.id))
@@ -77,7 +72,25 @@ const AdminChat = () => {
           >
             Mark as Completed
           </Button>
-          <Button type='link' icon={<DeleteOutlined />} onClick={() => handleDeleteClick(item.id)}>Delete</Button>
+          <Button type='link' icon={<DeleteOutlined />} onClick={deletePostOnClick}>
+            Delete
+          </Button>
+          
+          <Modal
+            title="Delete Post"
+            open={displayModal}
+            onCancel={handleCancel}
+            destroyOnClose={true} //destroy the content inside modal
+            footer={[
+              <Button key="back" onClick={handleCancel}>
+                No
+              </Button>,
+              <Button key="submit" type="primary" onClick={() => handleDeleteClick(item.id)}>
+                Yes
+              </Button>
+            ]}>
+            <p>Are you sure you want to delete this post?</p>
+          </Modal>
         </List.Item>
       ));
   };

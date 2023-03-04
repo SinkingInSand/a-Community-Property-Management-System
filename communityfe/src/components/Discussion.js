@@ -47,52 +47,7 @@ const Discussion = (props) => {
   };
   
 
-  const renderItem = (item) => {
-    console.log(item);
-    return (
-      <>
-      <List className="postItem">
-      <Comment
-        actions={item.actions}
-        author={item.author}
-        avatar={item.avatar}
-        content={item.content}
-        datetime={item.datetime}
-      />
-      <List.Item.Meta
-        title={<Title level={5}>{item.subject}</Title>}
-        description={
-          <>
-          <p>
-            Sent On: {item.timestamp.month} {item.timestamp.dayOfMonth}{" "}
-            {item.timestamp.dayOfWeek}
-          </p>
-          <p style={{color: "black"}}>{item.content}</p>
-          </>
-        }
-      />      
-      <div className="postItem-buttons">
-        <Button
-          className="button-group"
-          icon={<FormOutlined />}
-          onClick={() => handleReply(item)}
-        >
-          Reply
-        </Button>
-        <Button
-          className="button-group"
-          icon={<ArrowsAltOutlined />}
-          onClick={() => handleGetComments(item.id)}
-        >
-          Check Replys
-        </Button>
-      {renderDeletButton(item)} 
-      </div>
-      <Parent item={item} addChildren={addChildren(item.id)} />    
-      </List>      
-      </>
-    );
-  };
+
 
   const Parent = ({ item }) => {
     return (
@@ -124,15 +79,13 @@ const Discussion = (props) => {
   };
   const Comment = () => {
     return (
-      <List>
+      <Form style={{ marginLeft: 40 }}>      
         {comments.map((item) => {
           return (
-            <List.Item>
-              Reply: {item.content}
-            </List.Item>
+            <>{item.content}</>            
           );
         })}
-      </List>
+      </Form>
     );
   };
   const handleReply = (props) => {
@@ -146,14 +99,14 @@ const Discussion = (props) => {
     setDisplayModal(true);
   };
 
-  const editPostOnClick = () => {
+  const editPostOnClick = () => {  //edit
     setEditDisplayModal(true);
   };
   const handleCancel = () => {
     setDisplayModal(false);
   };
 
-  const handleCancel_edit = () => {
+  const handleCancel_edit = () => {  //edit
     setEditDisplayModal(false);
   };
 
@@ -178,7 +131,7 @@ const Discussion = (props) => {
       });
   };
 
-  const onDiscussionEdit = (data, item) => {
+  const onDiscussionEdit = (data, item) => {  //edit
     editDiscussion(item.id, data)
       .then(() => {
         setEditDisplayModal(false);
@@ -188,17 +141,11 @@ const Discussion = (props) => {
         message.error(err.message);
       });
   };
+  
   const renderDeletButton = (item) => {
     if (isAdmin) {
       return (        
         <Space.Compact>
-          <Button
-            className="button-group"
-            icon={<EditOutlined />}
-            onClick={editPostOnClick}
-          >
-            Edit
-          </Button>
           <Button
             className="button-group"
             icon={<DeleteOutlined />}
@@ -206,7 +153,6 @@ const Discussion = (props) => {
           >
             Delete{" "}
           </Button>
-
           <Modal
             title="Delete Post"
             open={displayModal}
@@ -222,57 +168,70 @@ const Discussion = (props) => {
             ]}
           >            
             <p>Are you sure you want to delete this post?</p>
-          </Modal>
-          
-          <Modal
-            title="Edit Post"
-            open={displayEditModal}
-            onCancel={handleCancel_edit}
-            destroyOnClose={true} //destroy the content inside modal
-            footer={null}
-          >
-          <Form
-            onFinish={(data) => {
-              onDiscussionEdit(data, item);
-            }}
-            preserve={false}
-          >
-            <Form.Item
-              name="subject"
-              rules={[{ required: true, message: "Please input the subject" }]}
-            >
-              <Input placeholder="Subject" />
-            </Form.Item>
-            <Form.Item
-              name="content"
-              rules={[
-                { required: true, message: "Please input your content" },
-              ]}
-            >
-              <Input placeholder="Content" />
-            </Form.Item> 
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Form.Item>
-          </Form>
-          </Modal>
+          </Modal>      
         </Space.Compact>
       );
     }
   };
-  
+
+  const renderItem = (item) => {
+    console.log(item);
+    return (
+      <>
+      <List className="postItem">      
+      <List.Item.Meta
+        title={<Title level={5}>{item.subject}</Title>}
+        description={
+          <>
+          <p>
+            Sent On: {item.timestamp.month} {item.timestamp.dayOfMonth}{" "}
+            {item.timestamp.dayOfWeek}
+          </p>
+          <p>{item.content}</p>
+          </>
+        }
+      />      
+      <div className="postItem-buttons">
+        <Button
+          className="button-group"
+          icon={<FormOutlined />}
+          onClick={() => handleReply(item)}
+        >
+          Reply
+        </Button>
+        <Button
+          className="button-group"
+          icon={<ArrowsAltOutlined />}
+          onClick={() => handleGetComments(item.id)}
+        >
+          Check Replys
+        </Button>
+      {renderDeletButton(item)} 
+      </div>
+      <Parent item={item} addChildren={addChildren(item.id)} />    
+      </List>      
+      </>
+    );
+  };
+
   return (
     <>
+    <Form>
+    <Title level={3}>Discussion: </Title>
+    </Form>
+
+
+
     <Button className="floatPost" onClick={showModal}>
       Create Post
     </Button>
+    
     <DiscussionPost
       visible={discussionVisible}
       onClose={handleDiscussionClose}
       onSendMessage={handleSendMessage} // <-- pass this function to the DiscussionDialog component
     />
+    
     <List
       style={{ width: '100%' }}
       dataSource={discussions.sort((a, b) => new Date(b.id) - new Date(a.id))}

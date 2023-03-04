@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Typography, List, Tag, Button, Modal } from 'antd';
+import { Typography, List, Tag, Button, Modal,message } from 'antd';
 import { getOwnMessage, deleteChat } from '../utils';
 import ChatDialog from './ChatDialog';
 import { CheckCircleOutlined, SyncOutlined, DeleteOutlined } from '@ant-design/icons';
@@ -79,7 +79,10 @@ const ChatForm = () => {
           </>}          
         />        
         <TaskStatus finish={item.finished} />
-        <Button icon={<DeleteOutlined />} onClick={() => handleDeleteClick(item.id)}>Delete</Button>
+        <Button icon={<DeleteOutlined />} 
+        onClick={() => handleDeleteClick(item.id)}>
+        Delete
+        </Button>
       </List.Item>
     );
   };
@@ -92,6 +95,18 @@ const ChatForm = () => {
     setChatFormVisible(true);
   };
   
+  const onPostDelete = (id) => {
+    setDeleteModalVisible(true);
+    deleteChat(id)
+      .then(() => {
+        setDeleteModalVisible(false);
+        message.success(`Your message has been deleted.`);
+      })
+      .catch((err) => {
+        message.error(err.message);
+      });
+  };
+
   return (
     <>
       <Button className="floatPost" onClick={showModal}>
@@ -110,7 +125,7 @@ const ChatForm = () => {
         renderItem={renderItem}
       />
       <Modal
-        visible={deleteModalVisible}
+        open={deleteModalVisible}
         onOk={handleDeleteOk}
         onCancel={handleDeleteCancel}
         title='Are you sure you want to delete this message?'

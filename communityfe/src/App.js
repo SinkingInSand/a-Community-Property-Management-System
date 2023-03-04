@@ -6,48 +6,47 @@ import Main from "./components/Main";
 import { TOKEN_KEY } from "./constants";
 
 function App() {
-  const [asAdmin, setAdmin] = useState(false); //uncomment previous line. temp solution for testing.
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem(TOKEN_KEY) ? true : false
+  // Setting up intial values.
+  const initialStorage = JSON.parse(localStorage.getItem(TOKEN_KEY));
+  const [asAdmin, setAdmin] = useState(
+    initialStorage? initialStorage.savedAdmin : false
   );
-  const [userInfo, setUserInfo] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    initialStorage ? true : false
+  );
+  const [userInfo, setUserInfo] = useState(
+    initialStorage ? initialStorage.userInfo : {}
+  );
 
   console.log("Launch the website, is logged in", isLoggedIn);
   console.log("Launch the website, is admin", asAdmin);
   console.log("Launch the website, get user information: ", userInfo);
 
   useEffect(() => {
-    const storedData = localStorage.getItem(TOKEN_KEY);
-    if (storedData) {
-      const { token, userInfo, asAdmin } = JSON.parse(storedData);
+    console.log("New use effect");
+    if (Object.keys(userInfo).length !== 0) {
+      const savedAdmin = (userInfo.username === 'admin@gmail.com');
+      setAdmin(savedAdmin);
       setIsLoggedIn(true);
-      setUserInfo(userInfo);
-      setAdmin(asAdmin);
+      const data = { userInfo, savedAdmin };
+      console.log("setting data = ", data); 
+      localStorage.setItem(TOKEN_KEY, JSON.stringify(data));
+    } else {
+      setAdmin(false);
+      setIsLoggedIn(false);
+      console.log("removing data"); 
+      localStorage.removeItem(TOKEN_KEY);
     }
-  }, []);
+  }, [userInfo]);
 
   const logout = () => {
     console.log("log out");
-    localStorage.removeItem(TOKEN_KEY);
-    setIsLoggedIn(false);
+    setUserInfo({});
   };
 
-  const loggedIn = (token, userInfo, asAdmin) => {
-    if (token) {
-      const data = { token, userInfo, asAdmin };      
-      setIsLoggedIn(true);
-      setUserInfo(userInfo);
-      if (userInfo.username === 'admin@gmail.com'){  //hardcode????
-        setAdmin(true);
-      } else {
-        setAdmin(false);
-      }
-      console.log("after handle, user info = ", userInfo)
-      localStorage.setItem(TOKEN_KEY, JSON.stringify(data));
-    }    
+  const loggedIn = (token, userInfo) => {
+    setUserInfo(userInfo);
   };
-
-  console.log("If Admin after login: ", asAdmin);
 
   return (
     <div className="App">
