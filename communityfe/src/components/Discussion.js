@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Button, Comment, Form, Typography, Layout, message, Modal, Space, List } from 'antd';
+import { Button, Input, Form, Typography, Layout, message, Modal, Space, List } from 'antd';
 import { DeleteOutlined, EditOutlined, FormOutlined, ArrowsAltOutlined } from '@ant-design/icons';
-import { getDiscussions, getComments, deleteAnnoucement, createDiscussion } from '../utils';
+import { getDiscussions, getComments, deleteAnnoucement, createDiscussion, editDiscussion } from '../utils';
 import ReplyForm from "./ReplyForm";
 import DiscussionPost from "./DiscussionPost";
 
@@ -177,10 +177,21 @@ const Discussion = (props) => {
         message.error(err.message);
       });
   };
+
+  const onDiscussionEdit = (data, item) => {
+    editDiscussion(item.id, data)
+      .then(() => {
+        setEditDisplayModal(false);
+        message.success(`Your announcement has been updated.`);
+      })
+      .catch((err) => {
+        message.error(err.message);
+      });
+  };
   const renderDeletButton = (item) => {
     if (isAdmin) {
       return (        
-        <Space>
+        <Space.Compact>
           <Button
             className="button-group"
             icon={<EditOutlined />}
@@ -209,29 +220,45 @@ const Discussion = (props) => {
                 Yes
               </Button>,
             ]}
-          >
-            
+          >            
             <p>Are you sure you want to delete this post?</p>
           </Modal>
           
-
           <Modal
             title="Edit Post"
             open={displayEditModal}
             onCancel={handleCancel_edit}
             destroyOnClose={true} //destroy the content inside modal
-            footer={[
-              <Button key="back" onClick={handleCancel_edit}>
-                No
-              </Button>,
-              <Button key="submit" type="primary" onClick={onFinish}>
-                Yes
-              </Button>,
-            ]}
+            footer={null}
           >
-            <p>Are you sure you want to edit this post?</p>
+          <Form
+            onFinish={(data) => {
+              onDiscussionEdit(data, item);
+            }}
+            preserve={false}
+          >
+            <Form.Item
+              name="subject"
+              rules={[{ required: true, message: "Please input the subject" }]}
+            >
+              <Input placeholder="Subject" />
+            </Form.Item>
+            <Form.Item
+              name="content"
+              rules={[
+                { required: true, message: "Please input your content" },
+              ]}
+            >
+              <Input placeholder="Content" />
+            </Form.Item> 
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
           </Modal>
-        </Space>
+        </Space.Compact>
       );
     }
   };

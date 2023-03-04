@@ -33,16 +33,6 @@ export const login = (credential) => {
     //console.log(resp); -> not sure if there will be a response
   };
   
-  // export const getUser = () => {
-  //   return fetch("/home").then((response) => {
-  //     if (response.status < 200 || response.status >= 300) {
-  //       throw Error("Fail to get user");
-  //     }
-  
-  //     return response.json();
-  //   });
-  // };
-
   export const getUser = () => {
     return fetch("/home").then((response) => {
       if (response.status < 200 || response.status >= 300) {
@@ -54,16 +44,6 @@ export const login = (credential) => {
   };
  
 
-  // need to modify based on backend API
-  // export const getMenus = (restId) => {
-  //   return fetch(`/restaurant/${restId}/menu`).then((response) => {
-  //     if (response.status < 200 || response.status >= 300) {
-  //       throw Error("Fail to get menus");
-  //     }
-  
-  //     return response.json();
-  //   });
-  // };
   
   export const getAnnouncements = () => {
     return fetch("/announcements").then((response) => {
@@ -91,7 +71,7 @@ export const login = (credential) => {
   };
 
   export const editAnnoucement = (aId,data) => {
-
+    console.log("ID before request ", aId);
     return fetch(`/announcements/${aId}/edit`, {
       method: "POST",
       headers: {
@@ -157,6 +137,22 @@ export const login = (credential) => {
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  export const editDiscussion = (aId,data) => {
+    return fetch(`/discussion/${aId}/edit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+      credentials: "include",
+      
+    }).then((response) => {
+      if (response.status < 200 || response.status >= 300) {
+        throw Error("Fail to edit Discussion");
+      }
+    });
   };
 //get dis by resident
 export const getDiscussionPosts = () => {

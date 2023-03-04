@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import { Modal, Input, Form, Button, message } from "antd";
-import { FileTextOutlined } from "@ant-design/icons";
 import { createPost } from "../utils";
 
 
@@ -43,12 +42,11 @@ const PostForm = () => {
 
       <Button
         className="floatPost"
-        icon={<FileTextOutlined />}
         description="Create Post"
         // shape="square"
         onClick={createPostOnClick}
       >
-        Create Announcement
+        Post Announcement
       </Button>
       <Modal
           title="Create an Announcement"

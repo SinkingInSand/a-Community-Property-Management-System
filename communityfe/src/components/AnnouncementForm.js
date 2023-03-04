@@ -60,37 +60,36 @@ const AnnouncementForm = (props) => {
     setEditDisplayModal(true);
   };
 
-  const onFinish = () => {
-    createPost()
-      .then(() => {
-        setDisplayModal(false);
-        message.success(`Your announcement just posted!`);
-      })
-      .catch((err) => {
-        message.error(err.message);
-      });
-  };
-  console.log(props)
+  // const onFinish = () => {
+  //   createPost()
+  //     .then(() => {
+  //       setDisplayModal(false);
+  //       message.success(`Your announcement just posted!`);
+  //     })
+  //     .catch((err) => {
+  //       message.error(err.message);
+  //     });
+  // };
+  console.log("Pros from announcement: ", props)
 
   const onAnnoucementDelete = (id) => {
     console.log(id)
     deleteAnnoucement(id)
       .then(() => {
         setDisplayModal(false);
-        message.success(`Your announcement has been deleted. Id = ` + id);
+        message.success(`Your announcement has been deleted.`);
+        setLoadingAnnouncements(true);
       })
       .catch((err) => {
         message.error(err.message);
       });
   };
 
-  const onAnnoucementEdit = (id, data) => {
-    console.log(id)
-    console.log(data)
-    editAnnoucement(id, data)
+  const onAnnoucementEdit = (data, item) => {
+    editAnnoucement(item.id, data)
       .then(() => {
-        setDisplayModal(false);
-        message.success(`Your announcement has been updated. Id = ` + id);
+        setEditDisplayModal(false);
+        message.success(`Your announcement has been updated.`);
       })
       .catch((err) => {
         message.error(err.message);
@@ -98,14 +97,15 @@ const AnnouncementForm = (props) => {
   };
 
   const renderDeletButton = (item) => {
-    console.log(item.id)
     if (isAdmin) {
       return (        
         <Space.Compact>
           <Button
             className="button-group"
             icon={<EditOutlined />}
-            onClick={editPostOnClick}
+            onClick={() => {
+            setEditDisplayModal(true);
+          }}
           >
             Edit
           </Button>
@@ -125,12 +125,11 @@ const AnnouncementForm = (props) => {
               <Button key="back" onClick={handleCancel}>
                 No
               </Button>,
-              <Button key="submit" type="primary" onClick={() => onAnnoucementDelete(item.id,props.data)}>
+              <Button key="submit" type="primary" onClick={() => onAnnoucementDelete(item.id)}>
                 Yes
-              </Button>,
+              </Button>
             ]}
-          >
-            
+          >            
             <p>Are you sure you want to delete this post?</p>
           </Modal>
 
@@ -138,20 +137,20 @@ const AnnouncementForm = (props) => {
           title="Edit an Annoucement"
           open={displayEditModal}
           onCancel={handleCancel_edit}
-          footer = {null}
           destroyOnClose={true} //destroy the content inside modal
-        >
+          footer = {null}          
+          >
           <Form
-            // name="normal_register"
-            initialValues={{ remember: true }}
-            onFinish={() => onAnnoucementEdit(item.id)}
+            onFinish={(data) => {
+              onAnnoucementEdit(data, item);
+            }}
             preserve={false}
           >
             <Form.Item
               name="category"
               rules={[{ required: true, message: "Please choose category" }]}
             >
-              <Input  placeholder="Category" />
+              <Input placeholder="Category" />
             </Form.Item>
             <Form.Item
               name="title"
@@ -166,9 +165,7 @@ const AnnouncementForm = (props) => {
               ]}
             >
               <Input placeholder="Content" />
-            </Form.Item>
-            
-
+            </Form.Item> 
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 Submit
@@ -197,19 +194,6 @@ const AnnouncementForm = (props) => {
       });
   }, []);
 
-  useEffect(() => {
-    setLoadingDiscussions(true);
-    getDiscussions()
-      .then((data) => {
-        setDiscussions(data);
-      })
-      .catch((err) => {
-        message.error(err.message);
-      })
-      .finally(() => {
-        setLoadingDiscussions(false);
-      });
-  }, []); //can we get discussion and announcement at once
 
   const handleReply = (props) => {
     if (replyId === -1) {
@@ -300,7 +284,7 @@ const AnnouncementForm = (props) => {
     <>
       <Form>
         <Title level={3}>Annoucements: </Title>
-        {announcements.map((item) => {
+        {announcements.sort((a, b) => new Date(b.id) - new Date(a.id)).map((item) => {
           return (
             <>
               <Form.Item className="postItem">
@@ -320,15 +304,6 @@ const AnnouncementForm = (props) => {
         })}
         <p></p>
       </Form>
-      {/* <Title level={3}>Discussions: </Title>
-      {discussions.map((item) => {
-        return (
-          <>
-            <Parent item={item} addChildren={addChildren(item.id)} />
-          </>
-        );
-      })} */}
-
       {isAdmin && <PostForm />}
     </>
   );
