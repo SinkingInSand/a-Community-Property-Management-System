@@ -7,14 +7,6 @@ const SignupForm = (props) => {
 
   const [displayModal, setDisplayModal] = useState(false);
 
-  const handleCancel = () => {
-    setDisplayModal(false);
-  };
-
-  const signupOnClick = () => {
-    setDisplayModal(true);
-  };
-
   const onFinish = (data) => {
     signup(data)
       .then(() => {
@@ -26,22 +18,20 @@ const SignupForm = (props) => {
       });
   };
 
-
     return (
       <>
-        <Button shape="round" type="link" onClick={signupOnClick}>
+        <Button shape="round" type="link" onClick={() => {setDisplayModal(true)}}>
           register now!
         </Button>
         <Modal
           title="Register"
           open={displayModal}
-          onCancel={handleCancel}
+          onCancel={() => {setDisplayModal(false)}}
           footer={null}
           destroyOnClose={true} //destroy the content inside modal
         >
           <Form
             name="normal_register"
-            initialValues={{ remember: true }}
             onFinish={onFinish}
             preserve={false}
           >

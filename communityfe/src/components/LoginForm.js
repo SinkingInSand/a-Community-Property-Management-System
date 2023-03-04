@@ -1,13 +1,11 @@
-import { Button, Checkbox, Form, Input, message } from "antd";
+import { Button, Form, Input, message } from "antd";
 import React, { useState, useEffect } from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { login, getUser } from "../utils";
-import { Link } from "react-router-dom";
 import SignupForm from "./SignupForm";
 
 const LoginForm = (props) => {
   const { handleLoggedIn } = props;
-  // const [isLoggedIn, setLogin] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userInfo, setUserInfo] = useState([]);
   const [asAdmin, setAdmin] = useState(false);
@@ -16,13 +14,10 @@ const LoginForm = (props) => {
   //   // setLogin(true);
   //   // console.log("login form, isloggedin ", isLoggedIn)
   //   props.handelTempLogin(true);
-  // };
-
-  
+  // }; 
 
   useEffect(() => {//get user data
-    setLoadingUser(true);
-    
+    setLoadingUser(true);    
     getUser()
       .then((data) => {
         setUserInfo(data);
@@ -31,11 +26,9 @@ const LoginForm = (props) => {
         message.error(err.message);
       })
       .finally(() => {
-        setLoadingUser(false);
-          
+        setLoadingUser(false);          
       });
-  }, []);
-  
+  }, []);  
   
   const onFinish = (data) => {
     setLoading(true);

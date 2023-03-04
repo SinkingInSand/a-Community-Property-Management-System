@@ -4,26 +4,20 @@ import { Modal, Input, Form, Button, message } from "antd";
 import { createPost } from "../utils";
 
 
-const PostForm = () => {
-    // const [asAdmin, setAdmin] = useState(props);
+const PostForm = (props) => {
 
     const [displayModal, setDisplayModal] = useState(false);
-
-    const handleCancel = () => {
-      setDisplayModal(false);
-    };
   
-    const createPostOnClick = () => {
-  
+    const createPostOnClick = () => {  
       setDisplayModal(true);
     };
-  
-    const onFinish = (data) => {
-      console.log(data)
+
+    const onPostAnnouncement = (data) => {
+      console.log("post date ", data)
       createPost(data)
-        .then(() => {
-  
+        .then((item) => {
           setDisplayModal(false);
+          props.updateAnnounce([...props.announcements, item]);
           message.success(`Your announcement just posted!`);
         })
         .catch((err) => {
@@ -31,19 +25,11 @@ const PostForm = () => {
         });
     };
 
-
-
-//   const handleCreatePost = () => {
-        
-//   }
-
   return (
     <>
-
       <Button
         className="floatPost"
         description="Create Post"
-        // shape="square"
         onClick={createPostOnClick}
       >
         Post Announcement
@@ -51,14 +37,14 @@ const PostForm = () => {
       <Modal
           title="Create an Announcement"
           open={displayModal}
-          onCancel={handleCancel}
+          onCancel={() => {setDisplayModal(false)}}
           footer={null}
           destroyOnClose={true} //destroy the content inside modal
         >
           <Form
-            // name="normal_register"
-            initialValues={{ remember: true }}
-            onFinish={onFinish}
+            onFinish={(data) => {
+              onPostAnnouncement(data);
+            }}
             preserve={false}
           >
             <Form.Item
@@ -80,8 +66,7 @@ const PostForm = () => {
               ]}
             >
               <Input placeholder="Content" />
-            </Form.Item>
-            
+            </Form.Item>            
 
             <Form.Item>
               <Button type="primary" htmlType="submit">

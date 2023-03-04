@@ -4,7 +4,6 @@ import {
   Button,
   Form,
   Typography,
-  Layout,
   message,
   Modal,
   Space,
@@ -13,21 +12,15 @@ import {
 } from "antd";
 import {
   getAnnouncements,
-  getDiscussions,
-  createPost,
-  getComments,
   deleteAnnoucement,
   editAnnoucement
 } from "../utils";
 import PostForm from "./PostForm";
-import ReplyForm from "./ReplyForm";
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
-const AnnouncementForm = (props) => {
-  console.log("Announcement Form Is Admin? = ", props.isAdmin);
-  const [isAdmin, setAdmin] = useState(props.isAdmin);
+const AnnouncementForm = ({ isAdmin }) => {
   const [announcements, setAnnouncements] = useState([]);
   const [editId, setEditId] = useState(null);
   const [displayModal, setDisplayModal] = useState(false);
@@ -46,16 +39,6 @@ const AnnouncementForm = (props) => {
       .finally(() => {
       });
   }, []);
-
-  const handleCancel = () => {
-    setDisplayModal(false);
-  };
-
-  const handleCancel_edit = () => {
-    setEditDisplayModal(false);
-  };
-
-  console.log("Pros from announcement: ", props)
 
   const onAnnoucementDelete = () => {
     console.log("is going to delete", editId)
@@ -92,6 +75,10 @@ const AnnouncementForm = (props) => {
       });
   };
 
+  const updateAnnounce = (newAnounce) => {
+    setAnnouncements(newAnounce)
+  };
+
   const renderButton = (item) => {
     console.log("render item", item)
     if (isAdmin) {
@@ -124,7 +111,7 @@ const AnnouncementForm = (props) => {
               <Button key="submit" type="primary" onClick={onAnnoucementDelete}>
                 Yes
               </Button>,
-              <Button key="back" onClick={handleCancel}>
+              <Button key="back" onClick={() => {setDisplayModal(false)}}>
                 No
               </Button>              
             ]}
@@ -135,7 +122,7 @@ const AnnouncementForm = (props) => {
           <Modal
           title="Edit an Annoucement"
           open={displayEditModal}
-          onCancel={handleCancel_edit}
+          onCancel={() => {setEditDisplayModal(false)}}
           destroyOnClose={true} //destroy the content inside modal
           footer = {null}          
         >
@@ -171,109 +158,53 @@ const AnnouncementForm = (props) => {
               </Button>
             </Form.Item>
           </Form>
-        </Modal>
-          
-        </Space.Compact>
-        
+        </Modal>          
+        </Space.Compact>        
       );
     }
   };
 
-  
-
-  // const handleReply = (props) => {
-  //   if (replyId === -1) {
-  //     console.log("onclick reply ", props.id);
-  //     // windows.DOM.getElementById(id)
-  //     setReplyID(props.id);
-  //   } else {
-  //     setReplyID(-1);
-  //   }
-  // };
-
-  // const handleGetComments = (id) => {
-  //   if (commentId === -1) {
-  //     console.log("Getting comments from post ", id);
-  //     setCommentId(id);
-  //     getComments(id).then((data) => {
-  //       setComments(data);
-  //     });
-
-  //     console.log("Comments is ", comments);
-  //   } else {
-  //     setCommentId(-1);
-  //   }
-  // };
-
-  // const Parent = ({ item }) => {
-  //   return (
-  //     <>
-  //       <Form.Item id={item.id}>
-  //         <Title level={5}>{"Subject: " + item.subject}</Title>
-  //         <p>{item.content}</p>
-  //         <p>
-  //           {item.timestamp.month +
-  //             " " +
-  //             item.timestamp.dayOfMonth +
-  //             " " +
-  //             item.timestamp.dayOfWeek}
-  //         </p>
-  //         {renderDeletButton(item)}
-  //         <Button
-  //           type="primary"
-  //           style={{ background: "lightgreen" }}
-  //           onClick={() => handleReply(item)}
-  //         >
-  //           Reply
-  //         </Button>
-  //         <Button onClick={() => handleGetComments(item.id)}>
-  //           Check Replys
-  //         </Button>
-  //         {addChildren(item.id)}
-  //       </Form.Item>
-  //       {addComments(item.id)}
-  //     </>
-  //   );
-  // };
-
-  // const addChildren = (id) => {
-  //   if (id === replyId) {
-  //     console.log("reply ID is ", replyId);
-
-  //     return <ReplyForm postId={id} />;
-  //   }
-  // };
-
-  // const addComments = (id) => {
-  //   if (id === commentId) {
-  //     console.log("reply ID is ", replyId);
-  //     return <Comment />;
-  //   }
-  // };
-  // const Comment = () => {
-  //   return (
-  //     <List>
-  //       {comments.map((item) => {
-  //         return (
-  //           <List.Item style={{ color: "black" }}>
-  //             Reply: {item.content}
-  //           </List.Item>
-  //         );
-  //       })}
-  //     </List>
-  //   );
-  // };
-
-  
-
   return (
-    <>
+    <>      
+      <Title level={3}>Announcements: </Title>
       <Form>
-        <Title level={3}>Annoucements: </Title>
-        {announcements.map((item) => {
-          return (
-            <>
-              <Form.Item className="postItem">
+      {announcements.sort((a, b) => new Date(b.id) - new Date(a.id)).map((item) => {          
+        return (
+          <List.Item key={item.id} className='postItem'>
+            <List.Item.Meta
+              title={<Title level={5}>{item.title}</Title>}
+              description={
+                <>
+                  <p style={{fontSize: 'small' }}>
+                    Sent On: {item.timestamp.month +
+                      " " +
+                      item.timestamp.dayOfMonth +
+                      " " +
+                      item.timestamp.dayOfWeek}
+                  </p>
+                  <p style={{color: 'black'}}>
+                    {item.content}
+                  </p>
+                </>
+              }
+            />              
+            {renderButton(item)}
+          </List.Item>            
+        );
+      })}
+      </Form>
+      {isAdmin && <PostForm announcements={announcements} updateAnnounce={updateAnnounce}/>
+}
+    </>
+  );
+  
+  
+};
+
+export default AnnouncementForm;
+
+
+{/* <Form.Item className="postItem">
                 <Title level={5}>{item.title}</Title>
                 <p>{item.content}</p>
                 <p>
@@ -284,15 +215,4 @@ const AnnouncementForm = (props) => {
                     item.timestamp.dayOfWeek}
                 </p>
                 {renderButton(item)}
-              </Form.Item>
-            </>
-          );
-        })}
-        <p></p>
-      </Form>
-      {isAdmin && <PostForm />}
-    </>
-  );
-};
-
-export default AnnouncementForm;
+              </Form.Item> */}

@@ -21,7 +21,6 @@ const AdminHome = (props) => {
   const [Amenity, setAmenity] = useState([]);
 
   const [userInfo, setUserInfo] = useState(props.userInfo);
-  const [isLoggedIn, setLogin] = useState(props.isLoggedIn);
 
   console.log("user info on AdminHome: ", userInfo);
   const [asAdmin, setAdmin] = useState(props.asAdmin);
