@@ -43,7 +43,7 @@ const LoginForm = (props) => {
     login(data)
       .then(() => {
         message.success(`Login Successful`);
-        handleLoggedIn(true, data);
+        handleLoggedIn(data);
       })
       .catch((err) => {
         message.error(err.message);

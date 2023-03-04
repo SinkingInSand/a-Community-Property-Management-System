@@ -69,15 +69,16 @@ const AdminHome = (props) => {
   <Layout>   
       <Sider style={{background:"white" }}>
         <Menu
+          key='siderBar'
           mode="inline"
           defaultSelectedKeys={["1"]}
           defaultOpenKeys={["sub1"]}            
         >
-          <Menu.Item onClick={handleAnnouncement}>Announcement</Menu.Item>
-          <Menu.Item onClick={handleDiscussion}>Discussion</Menu.Item>
-          {asAdmin ? <Menu.Item onClick={showAdminChat}>Messages</Menu.Item> :
-          <Menu.Item onClick={showChat}>Contact Us</Menu.Item>}
-          <Menu.Item onClick={showReservation}>Reservation</Menu.Item>
+          <Menu.Item key='announcement' onClick={handleAnnouncement}>Announcement</Menu.Item>
+          <Menu.Item key='discussion' onClick={handleDiscussion}>Discussion</Menu.Item>
+          {asAdmin ? <Menu.Item key='adminChat' onClick={showAdminChat}>Messages</Menu.Item> :
+          <Menu.Item key='chat' onClick={showChat}>Contact Us</Menu.Item>}
+          <Menu.Item key='reservation' onClick={showReservation}>Reservation</Menu.Item>
         </Menu>
       </Sider>
 

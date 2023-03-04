@@ -29,16 +29,23 @@ const AnnouncementForm = (props) => {
   console.log("Announcement Form Is Admin? = ", props.isAdmin);
   const [isAdmin, setAdmin] = useState(props.isAdmin);
   const [announcements, setAnnouncements] = useState([]);
-  const [loadingAnnouncements, setLoadingAnnouncements] = useState(false);
-  const [discussions, setDiscussions] = useState([]);
-  const [loadingDiscussions, setLoadingDiscussions] = useState(false);
+  const [editId, setEditId] = useState(null);
   const [displayModal, setDisplayModal] = useState(false);
   const [displayEditModal, setEditDisplayModal] = useState(false);
-  // const [ReplyArea, setReplyAreaVisible] = useState()
-  const [replyId, setReplyID] = useState(-1);
-  const [commentId, setCommentId] = useState(-1);
-  const [comments, setComments] = useState([]);
-  const [form] = Form.useForm();
+
+
+  // Only execute once during initialization.
+  useEffect(() => {
+    getAnnouncements()
+      .then((data) => {
+        setAnnouncements(data);
+      })
+      .catch((err) => {
+        message.error(err.message);
+      })
+      .finally(() => {
+      });
+  }, []);
 
   const handleCancel = () => {
     setDisplayModal(false);
@@ -48,63 +55,45 @@ const AnnouncementForm = (props) => {
     setEditDisplayModal(false);
   };
 
-  const handleCancelReply = () => {
-    // setReplyAreaVisible(false);
-    setReplyID(-1);
-  };
-
-  const deletePostOnClick = () => {
-    setDisplayModal(true);
-  };
-
-  const editPostOnClick = () => {
-    setEditDisplayModal(true);
-  };
-
-  // const onFinish = () => {
-  //   createPost()
-  //     .then(() => {
-  //       setDisplayModal(false);
-  //       message.success(`Your announcement just posted!`);
-  //     })
-  //     .catch((err) => {
-  //       message.error(err.message);
-  //     });
-  // };
   console.log("Pros from announcement: ", props)
 
-  const onAnnoucementDelete = (id) => {
-    console.log(id)
-    deleteAnnoucement(id)
+  const onAnnoucementDelete = () => {
+    console.log("is going to delete", editId)
+    deleteAnnoucement(editId)
       .then(() => {
-        setDisplayModal(false);
+        setAnnouncements(announcements.filter(item => item.id !== editId));
         message.success(`Your announcement has been deleted.`);
-        setLoadingAnnouncements(true);
       })
       .catch((err) => {
         message.error(err.message);
       });
+    setDisplayModal(false);
   };
 
-  const onAnnoucementEdit = (id,form) => {
-    const data = {
-      category: "Activity",
-      title: "Test",
-      content: "This is the content"
-    }
-    console.log(id)
-    console.log(data)
-    editAnnoucement(id, data)
+  const onAnnoucementEdit = (data) => {
+    editAnnoucement(editId, data)
       .then(() => {
         setEditDisplayModal(false);
-        message.success(`Your announcement has been updated. Id = ` + id);
+        setAnnouncements(() => {
+          return announcements.map(item => {
+            if (item.id === editId) {
+              item.category = data.category;
+              item.content = data.content;
+              item.title = data.title;
+              return data;
+            }
+            return item;
+          });
+        });
+        message.success(`Your announcement has been updated.`);
       })
       .catch((err) => {
         message.error(err.message);
       });
   };
 
-  const renderDeletButton = (item) => {
+  const renderButton = (item) => {
+    console.log("render item", item)
     if (isAdmin) {
       return (        
         <Space.Compact>
@@ -113,54 +102,54 @@ const AnnouncementForm = (props) => {
             icon={<EditOutlined />}
             onClick={() => {
             setEditDisplayModal(true);
+            setEditId(item.id)
+            console.log('id: ', item.id)
           }}
-          >
-            Edit
-          </Button>
+          >Edit</Button>
+
           <Button
-            onClick={deletePostOnClick}
+            onClick={() => {
+              setDisplayModal(true);
+              setEditId(item.id);
+          }}
             icon={<DeleteOutlined />}
-          >
-            Delete{" "}
-          </Button>
+          >Delete</Button>
 
           <Modal
             title="Delete Post"
             open={displayModal}
-            onCancel={handleCancel}
+            onCancel={() => {setDisplayModal(false)}}
             destroyOnClose={true} //destroy the content inside modal
             footer={[
+              <Button key="submit" type="primary" onClick={onAnnoucementDelete}>
+                Yes
+              </Button>,
               <Button key="back" onClick={handleCancel}>
                 No
-              </Button>,
-              <Button key="submit" type="primary" onClick={() => onAnnoucementDelete(item.id)}>
-                Yes
-              </Button>
+              </Button>              
             ]}
-
-          >
-            
+            >            
             <p>Are you sure you want to delete this post?</p>
           </Modal>
-            
+
           <Modal
           title="Edit an Annoucement"
           open={displayEditModal}
           onCancel={handleCancel_edit}
           destroyOnClose={true} //destroy the content inside modal
           footer = {null}          
-          >
+        >
           <Form
-            // name="normal_register"
-            initialValues={{ remember: true }}
-            onFinish={() => onAnnoucementEdit(item.id, form)}
+            onFinish={(data) => {
+              onAnnoucementEdit(data);
+            }}
             preserve={false}
           >
             <Form.Item
               name="category"
               rules={[{ required: true, message: "Please choose category" }]}
             >
-              <Input placeholder="Category" />
+              <Input  placeholder="Category" />
             </Form.Item>
             <Form.Item
               name="title"
@@ -190,103 +179,90 @@ const AnnouncementForm = (props) => {
     }
   };
 
-  useEffect(() => {
-    setLoadingAnnouncements(true);
-    getAnnouncements()
-      .then((data) => {
-        setAnnouncements(data);
-      })
-      .catch((err) => {
-        message.error(err.message);
-      })
-      .finally(() => {
-        setLoadingAnnouncements(false);
-      });
-  }, []);
+  
 
+  // const handleReply = (props) => {
+  //   if (replyId === -1) {
+  //     console.log("onclick reply ", props.id);
+  //     // windows.DOM.getElementById(id)
+  //     setReplyID(props.id);
+  //   } else {
+  //     setReplyID(-1);
+  //   }
+  // };
 
-  const handleReply = (props) => {
-    if (replyId === -1) {
-      console.log("onclick reply ", props.id);
-      // windows.DOM.getElementById(id)
-      setReplyID(props.id);
-    } else {
-      setReplyID(-1);
-    }
-  };
+  // const handleGetComments = (id) => {
+  //   if (commentId === -1) {
+  //     console.log("Getting comments from post ", id);
+  //     setCommentId(id);
+  //     getComments(id).then((data) => {
+  //       setComments(data);
+  //     });
 
-  const handleGetComments = (id) => {
-    if (commentId === -1) {
-      console.log("Getting comments from post ", id);
-      setCommentId(id);
-      getComments(id).then((data) => {
-        setComments(data);
-      });
+  //     console.log("Comments is ", comments);
+  //   } else {
+  //     setCommentId(-1);
+  //   }
+  // };
 
-      console.log("Comments is ", comments);
-    } else {
-      setCommentId(-1);
-    }
-  };
+  // const Parent = ({ item }) => {
+  //   return (
+  //     <>
+  //       <Form.Item id={item.id}>
+  //         <Title level={5}>{"Subject: " + item.subject}</Title>
+  //         <p>{item.content}</p>
+  //         <p>
+  //           {item.timestamp.month +
+  //             " " +
+  //             item.timestamp.dayOfMonth +
+  //             " " +
+  //             item.timestamp.dayOfWeek}
+  //         </p>
+  //         {renderDeletButton(item)}
+  //         <Button
+  //           type="primary"
+  //           style={{ background: "lightgreen" }}
+  //           onClick={() => handleReply(item)}
+  //         >
+  //           Reply
+  //         </Button>
+  //         <Button onClick={() => handleGetComments(item.id)}>
+  //           Check Replys
+  //         </Button>
+  //         {addChildren(item.id)}
+  //       </Form.Item>
+  //       {addComments(item.id)}
+  //     </>
+  //   );
+  // };
 
-  const Parent = ({ item }) => {
-    return (
-      <>
-        <Form.Item id={item.id}>
-          <Title level={5}>{"Subject: " + item.subject}</Title>
-          <p>{item.content}</p>
-          <p>
-            {item.timestamp.month +
-              " " +
-              item.timestamp.dayOfMonth +
-              " " +
-              item.timestamp.dayOfWeek}
-          </p>
-          {renderDeletButton(item)}
-          <Button
-            type="primary"
-            style={{ background: "lightgreen" }}
-            onClick={() => handleReply(item)}
-          >
-            Reply
-          </Button>
-          <Button onClick={() => handleGetComments(item.id)}>
-            Check Replys
-          </Button>
-          {addChildren(item.id)}
-        </Form.Item>
-        {addComments(item.id)}
-      </>
-    );
-  };
+  // const addChildren = (id) => {
+  //   if (id === replyId) {
+  //     console.log("reply ID is ", replyId);
 
-  const addChildren = (id) => {
-    if (id === replyId) {
-      console.log("reply ID is ", replyId);
+  //     return <ReplyForm postId={id} />;
+  //   }
+  // };
 
-      return <ReplyForm postId={id} />;
-    }
-  };
-
-  const addComments = (id) => {
-    if (id === commentId) {
-      console.log("reply ID is ", replyId);
-      return <Comment />;
-    }
-  };
-  const Comment = () => {
-    return (
-      <List>
-        {comments.map((item) => {
-          return (
-            <List.Item style={{ color: "black" }}>
-              Reply: {item.content}
-            </List.Item>
-          );
-        })}
-      </List>
-    );
-  };
+  // const addComments = (id) => {
+  //   if (id === commentId) {
+  //     console.log("reply ID is ", replyId);
+  //     return <Comment />;
+  //   }
+  // };
+  // const Comment = () => {
+  //   return (
+  //     <List>
+  //       {comments.map((item) => {
+  //         return (
+  //           <List.Item style={{ color: "black" }}>
+  //             Reply: {item.content}
+  //           </List.Item>
+  //         );
+  //       })}
+  //     </List>
+  //   );
+  // };
 
   
 
@@ -294,7 +270,7 @@ const AnnouncementForm = (props) => {
     <>
       <Form>
         <Title level={3}>Annoucements: </Title>
-        {announcements.sort((a, b) => new Date(b.id) - new Date(a.id)).map((item) => {
+        {announcements.map((item) => {
           return (
             <>
               <Form.Item className="postItem">
@@ -307,7 +283,7 @@ const AnnouncementForm = (props) => {
                     " " +
                     item.timestamp.dayOfWeek}
                 </p>
-                {renderDeletButton(item)}
+                {renderButton(item)}
               </Form.Item>
             </>
           );

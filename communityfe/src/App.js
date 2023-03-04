@@ -1,4 +1,3 @@
-import { Layout, Typography, message } from "antd";
 import { useState, useEffect } from "react";
 
 import TopBar from "./components/TopBar";
@@ -18,10 +17,6 @@ function App() {
     initialStorage ? initialStorage.userInfo : {}
   );
 
-  console.log("Launch the website, is logged in", isLoggedIn);
-  console.log("Launch the website, is admin", asAdmin);
-  console.log("Launch the website, get user information: ", userInfo);
-
   useEffect(() => {
     console.log("New use effect");
     if (Object.keys(userInfo).length !== 0) {
@@ -29,12 +24,10 @@ function App() {
       setAdmin(savedAdmin);
       setIsLoggedIn(true);
       const data = { userInfo, savedAdmin };
-      console.log("setting data = ", data); 
       localStorage.setItem(TOKEN_KEY, JSON.stringify(data));
     } else {
       setAdmin(false);
       setIsLoggedIn(false);
-      console.log("removing data"); 
       localStorage.removeItem(TOKEN_KEY);
     }
   }, [userInfo]);
@@ -44,7 +37,7 @@ function App() {
     setUserInfo({});
   };
 
-  const loggedIn = (token, userInfo) => {
+  const loggedIn = (userInfo) => {
     setUserInfo(userInfo);
   };
 
