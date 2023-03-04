@@ -44,6 +44,13 @@ const ReservationDialog = ({ content }) => {
       )
     },
     {
+      title: 'Reservation Room',
+      key: 'reservationRoom',
+      render: (record) => (
+        record.amenityName
+      )
+    },
+    {
       title: 'Actions',
       key: 'actions',
       render: (_, record) => (

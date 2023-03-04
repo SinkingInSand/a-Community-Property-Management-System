@@ -38,6 +38,7 @@ const AnnouncementForm = (props) => {
   const [replyId, setReplyID] = useState(-1);
   const [commentId, setCommentId] = useState(-1);
   const [comments, setComments] = useState([]);
+  const [form] = Form.useForm();
 
   const handleCancel = () => {
     setDisplayModal(false);
@@ -85,11 +86,18 @@ const AnnouncementForm = (props) => {
       });
   };
 
-  const onAnnoucementEdit = (data, item) => {
-    editAnnoucement(item.id, data)
+  const onAnnoucementEdit = (id,form) => {
+    const data = {
+      category: "Activity",
+      title: "Test",
+      content: "This is the content"
+    }
+    console.log(id)
+    console.log(data)
+    editAnnoucement(id, data)
       .then(() => {
         setEditDisplayModal(false);
-        message.success(`Your announcement has been updated.`);
+        message.success(`Your announcement has been updated. Id = ` + id);
       })
       .catch((err) => {
         message.error(err.message);
@@ -129,10 +137,12 @@ const AnnouncementForm = (props) => {
                 Yes
               </Button>
             ]}
-          >            
+
+          >
+            
             <p>Are you sure you want to delete this post?</p>
           </Modal>
-
+            
           <Modal
           title="Edit an Annoucement"
           open={displayEditModal}
@@ -141,9 +151,9 @@ const AnnouncementForm = (props) => {
           footer = {null}          
           >
           <Form
-            onFinish={(data) => {
-              onAnnoucementEdit(data, item);
-            }}
+            // name="normal_register"
+            initialValues={{ remember: true }}
+            onFinish={() => onAnnoucementEdit(item.id, form)}
             preserve={false}
           >
             <Form.Item
