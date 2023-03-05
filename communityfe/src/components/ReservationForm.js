@@ -1,9 +1,11 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Input, List } from "antd";
+import { Typography, Button, Form, Input, List } from "antd";
 import { getAmenities } from '../utils';
 import AmenityCard from './AmenityCard';
 import ReservationDialog from './ReservationDialog';
+
+const { Title } = Typography;
 
 const ReservationForm = () => {
   const [name, setName] = useState('');
@@ -46,6 +48,7 @@ const ReservationForm = () => {
 
   return (
     <>
+      <Title level={3}>Reservation:</Title>
       <ReservationDialog
         visible={reservationVisible}
         onClose={handleReservationClose}

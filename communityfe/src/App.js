@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 
 import TopBar from "./components/TopBar";
-import Main from "./components/Main";
+import LoginForm from "./components/LoginForm";
+import AdminHome from "./components/AdminHome";
 import { TOKEN_KEY } from "./constants";
 
 function App() {
@@ -42,10 +43,11 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <>
       <TopBar isLoggedIn={isLoggedIn} handleLogout={logout} userInfo={userInfo} asAdmin={asAdmin}/>
-      <Main isLoggedIn={isLoggedIn} handleLoggedIn={loggedIn} asAdmin={asAdmin}/>
-    </div>
+      {isLoggedIn ? (<AdminHome userInfo={userInfo} asAdmin={asAdmin}/> )
+      : (<LoginForm handleLoggedIn={loggedIn}/>) }
+    </>
   );
 }
 

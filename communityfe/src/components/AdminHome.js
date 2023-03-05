@@ -11,22 +11,18 @@ const { Content, Sider } = Layout;
 
 const AdminHome = (props) => {
   const [showAnnouncement, setAnouncement] = useState(true);
-
   const [showDiscussion, setShowDiscussion] = useState(false);
-
   const [adminChatVisible, setAdminChatVisible] = useState(false);
   const [UserChat, setUserChat] = useState(false);
-
   const [Reservation, setReservation] = useState(false);
   const [Amenity, setAmenity] = useState([]);
 
   const [userInfo, setUserInfo] = useState(props.userInfo);
-
   console.log("user info on AdminHome: ", userInfo);
   const [asAdmin, setAdmin] = useState(props.asAdmin);
-
   console.log("Amin Home, is Admin = ", props.asAdmin);
-
+  const [isLoggedIn, setLogin] = useState(props.isLoggedIn);
+  
   const handleAnnouncement = () => {
     setAnouncement(true);
     setReservation(false);
@@ -63,13 +59,12 @@ const AdminHome = (props) => {
     setShowDiscussion(false);
   };
 
-  return (
-  
-  <Layout>   
-      <Sider style={{background:"white" }}>
+  return (  
+    <Layout>
+      <Sider style={{ height: "100vh"}}>
         <Menu
           key='siderBar'
-          mode="inline"
+          mode="vertical"
           defaultSelectedKeys={["1"]}
           defaultOpenKeys={["sub1"]}            
         >
@@ -80,22 +75,16 @@ const AdminHome = (props) => {
           <Menu.Item key='reservation' onClick={showReservation}>Reservation</Menu.Item>
         </Menu>
       </Sider>
-
-      <Content>
-        <Layout
-          style={{
-            padding: "0 24px 24px",
-          }}
-        >
+      <Layout>
+      <Content style={{ padding: "0 24px 24px" }}>       
           {Reservation && <ReservationForm />}
           {showAnnouncement && <AnnouncementForm isAdmin={asAdmin} />}
           {showDiscussion && <Discussion isAdmin={asAdmin}/>}
           {adminChatVisible && <AdminChat isAdmin={asAdmin}/>}
-          {UserChat && <ChatForm />}
-        </Layout>
+          {UserChat && <ChatForm />} 
       </Content>
-</Layout>
-    
+      </Layout> 
+    </Layout>    
   );
 };
 export default AdminHome;

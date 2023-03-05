@@ -193,8 +193,7 @@ const AnnouncementForm = ({ isAdmin }) => {
         );
       })}
       </Form>
-      {isAdmin && <PostForm announcements={announcements} updateAnnounce={updateAnnounce}/>
-}
+      {isAdmin && <PostForm announcements={announcements} updateAnnounce={updateAnnounce}/>}
     </>
   );
   

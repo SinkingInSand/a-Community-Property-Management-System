@@ -97,12 +97,10 @@ const AdminChat = () => {
   
 
   return (
-    <Layout>
-      <Form>
-        <Title level={3}>Messages:</Title>
-        {renderChatMessages()}
-      </Form>
-    </Layout>
+    <>
+    <Title level={3}>Messages:</Title>           
+    {renderChatMessages()}   
+    </>
   );
 };
 

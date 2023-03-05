@@ -8,13 +8,7 @@ const LoginForm = (props) => {
   const { handleLoggedIn } = props;
   const [loading, setLoading] = useState(false);
   const [userInfo, setUserInfo] = useState([]);
-  const [asAdmin, setAdmin] = useState(false);
   const [loadingUser, setLoadingUser] = useState(false);
-  // const handleLogin = () => {
-  //   // setLogin(true);
-  //   // console.log("login form, isloggedin ", isLoggedIn)
-  //   props.handelTempLogin(true);
-  // }; 
 
   useEffect(() => {//get user data
     setLoadingUser(true);    

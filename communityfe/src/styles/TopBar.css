@@ -5,6 +5,7 @@
     background-color: #011529;
     color: white;
     height: 100px;
+    padding: 10px 20px;
   }
   
   .App-logo {
@@ -29,7 +30,8 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    background-color: orange;
+    background-color: #1890ff;
     color: white;
     height: 100px;
+    padding: 10px 20px;
   }
