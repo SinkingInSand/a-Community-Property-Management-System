@@ -26,9 +26,9 @@ public class ApplicationConfig {
 
     @Bean(name = "dataSource")
     public DataSource dataSource() {
-        String RDS_ENDPOINT = "cpms-instance.cjducrmhp8ze.us-east-2.rds.amazonaws.com";
-        String USERNAME = "Team1";
-        String PASSWORD = "Project2023";
+        String RDS_ENDPOINT = "twitch.c54gogggxprz.us-east-1.rds.amazonaws.com";
+        String USERNAME = "admin";
+        String PASSWORD = "12345678!";
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://" + RDS_ENDPOINT + ":3306/managementSystem?createDatabaseIfNotExist=true&serverTimezone=UTC");
